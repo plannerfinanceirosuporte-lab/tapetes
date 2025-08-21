@@ -125,7 +125,7 @@ export const ProductPage: React.FC = () => {
         <div className="modern-card overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
-            <div style={{ width: 400, height: 400, position: 'relative', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 400, height: 400, position: 'relative', margin: '40px auto' }}>
               {/* Seta esquerda: só aparece se não for a primeira imagem */}
               {selectedImage > 0 && (
                 <button
@@ -141,7 +141,7 @@ export const ProductPage: React.FC = () => {
                 key={selectedImage}
                 src={productImages[selectedImage]}
                 alt={product.name}
-                style={{ width: '90%', height: '90%', objectFit: 'contain', borderRadius: 24, background: 'white', transition: 'all 0.5s ease-in-out', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                style={{ display: 'block', margin: '0 auto', width: '360px', height: '360px', objectFit: 'contain', borderRadius: '24px', background: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'all 0.5s ease-in-out' }}
               />
               {/* Seta direita: só aparece se não for a última imagem */}
               {selectedImage < productImages.length - 1 && (
