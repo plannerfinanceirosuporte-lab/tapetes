@@ -32,10 +32,10 @@ export const Header: React.FC = () => {
                   src={settings.logo_url}
                   alt={settings.store_name}
                   className="logo-image"
-                  style={{ maxHeight: '44px', maxWidth: '110px' }}
+                  style={{ maxHeight: '60px', maxWidth: '150px' }}
                 />
               ) : (
-                <Store className="h-8 w-8 text-blue-600" />
+                <Store className="h-10 w-10 text-blue-600" />
               )}
               <span className="logo-text hidden sm:block">
                 {settings?.store_name}
