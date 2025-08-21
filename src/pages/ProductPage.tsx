@@ -130,31 +130,31 @@ export const ProductPage: React.FC = () => {
               style={{ width: '100%', maxWidth: '360px', aspectRatio: '1/1', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr' }}
             >
               {/* Imagem principal ocupa a primeira coluna e duas linhas, quadrada */}
-              <div style={{ gridColumn: '1 / 2', gridRow: '1 / 3', aspectRatio: '1/1', width: '100%', height: '100%' }} className="overflow-hidden rounded-lg">
+              <div style={{ gridColumn: '1 / 2', gridRow: '1 / 3', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[0]}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center rounded-lg"
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%' }}
+                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                  className="rounded-lg"
                 />
               </div>
               {/* Imagem secundária superior (direita), quadrada */}
-              <div style={{ gridColumn: '2 / 3', gridRow: '1 / 2', aspectRatio: '1/1', width: '100%', height: '100%' }} className="overflow-hidden rounded-lg">
+              <div style={{ gridColumn: '2 / 3', gridRow: '1 / 2', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[1]}
                   alt={`${product.name} - Vista 2`}
-                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%' }}
+                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                  className="rounded-lg cursor-pointer"
                   onClick={() => setSelectedImage(1)}
                 />
               </div>
               {/* Imagem secundária inferior (direita), quadrada */}
-              <div style={{ gridColumn: '2 / 3', gridRow: '2 / 3', aspectRatio: '1/1', width: '100%', height: '100%' }} className="overflow-hidden rounded-lg">
+              <div style={{ gridColumn: '2 / 3', gridRow: '2 / 3', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[2]}
                   alt={`${product.name} - Vista 3`}
-                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%' }}
+                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                  className="rounded-lg cursor-pointer"
                   onClick={() => setSelectedImage(2)}
                 />
               </div>
