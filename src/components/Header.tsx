@@ -18,51 +18,53 @@ export const Header: React.FC = () => {
             src={settings.header_banner_url}
             alt="Banner"
             className="responsive-banner"
+            style={{ maxHeight: '48px' }}
           />
         </div>
       )}
 
-      <header className="modern-header">
-        <div className="modern-container">
-          <div className="header-content">
+      <header className="modern-header py-2">
+        <div className="modern-container px-2">
+          <div className="header-content gap-2" style={{ minHeight: '48px' }}>
             {/* Logo */}
             <Link to="/" className="logo-container">
               {settings?.logo_url ? (
                 <img
-                  src={settings.logo_url} 
+                  src={settings.logo_url}
                   alt={settings.store_name}
                   className="logo-image"
+                  style={{ maxHeight: '32px', maxWidth: '80px' }}
                 />
               ) : (
-                <Store className="h-8 w-8 text-blue-600" />
+                <Store className="h-6 w-6 text-blue-600" />
               )}
-              <span className="logo-text hidden sm:block">
+              <span className="logo-text hidden sm:block text-base">
                 {settings?.store_name}
               </span>
             </Link>
 
             {/* Busca */}
-            <div className="search-container hidden md:block">
-              <Search className="search-icon" />
+            <div className="search-container hidden md:block" style={{ minWidth: '120px' }}>
+              <Search className="search-icon h-4 w-4" />
               <input
                 type="text"
                 placeholder="Buscar produtos..."
-                className="search-input"
+                className="search-input text-sm px-2 py-1"
+                style={{ height: '28px', fontSize: '0.95rem' }}
               />
             </div>
 
             {/* Ações */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {/* Busca Mobile */}
-              <button className="md:hidden cart-button">
-                <Search className="h-5 w-5" />
+              <button className="md:hidden cart-button p-1">
+                <Search className="h-4 w-4" />
               </button>
-              
               {/* Carrinho */}
-              <Link to="/cart" className="cart-button">
-                <ShoppingCart className="h-5 w-5" />
+              <Link to="/cart" className="cart-button p-1">
+                <ShoppingCart className="h-4 w-4" />
                 {itemCount > 0 && (
-                  <span className="cart-badge">
+                  <span className="cart-badge text-xs px-1 py-0.5">
                     {itemCount}
                   </span>
                 )}
