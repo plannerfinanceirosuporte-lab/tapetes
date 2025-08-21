@@ -137,14 +137,14 @@ export const ProductPage: React.FC = () => {
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
                 </button>
               )}
-              {/* Imagem principal com efeito de transição, sem corte */}
-              <div className="overflow-hidden rounded-lg w-full h-full flex items-center justify-center">
+              {/* Imagem principal centralizada, nunca cortada, quadrado perfeito */}
+              <div className="overflow-hidden rounded-lg w-full h-full flex items-center justify-center bg-white" style={{ maxWidth: 400, maxHeight: 400 }}>
                 <img
                   key={selectedImage}
                   src={productImages[selectedImage]}
                   alt={product.name}
-                  className="object-contain w-full h-full transition-all duration-500 ease-in-out"
-                  style={{ aspectRatio: '1/1' }}
+                  className="transition-all duration-500 ease-in-out"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', aspectRatio: '1/1', background: 'white' }}
                 />
               </div>
               {/* Seta direita: só aparece se não for a última imagem */}
