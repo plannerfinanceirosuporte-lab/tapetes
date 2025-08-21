@@ -124,36 +124,36 @@ export const ProductPage: React.FC = () => {
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
           <div className="p-8">
-            {/* Galeria de Imagens - grid quadrado responsivo, todas iguais */}
+            {/* Galeria de Imagens - layout colunas: 1 grande à esquerda, 2 menores à direita */}
             <div
-              className="grid grid-cols-2 grid-rows-2 gap-2"
-              style={{ width: '100%', maxWidth: '380px', aspectRatio: '1/1', margin: '0 auto' }}
+              className="grid grid-cols-3 grid-rows-2 gap-2"
+              style={{ width: '100%', maxWidth: '420px', aspectRatio: '1/1', margin: '0 auto' }}
             >
-              {/* Imagem principal */}
-              <div className="row-span-2 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
+              {/* Imagem principal ocupa 2 linhas da primeira coluna */}
+              <div className="col-span-2 row-span-2 overflow-hidden rounded-lg">
                 <img
                   src={productImages[0]}
                   alt={product.name}
-                  className="w-full h-full object-contain object-center rounded-lg"
+                  className="w-full h-full object-cover object-center rounded-lg"
                   style={{ aspectRatio: '1/1' }}
                 />
               </div>
-              {/* Imagem secundária superior */}
-              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
+              {/* Imagem secundária superior (direita) */}
+              <div className="col-span-1 row-span-1 overflow-hidden rounded-lg">
                 <img
                   src={productImages[1]}
                   alt={`${product.name} - Vista 2`}
-                  className="w-full h-full object-contain object-center rounded-lg cursor-pointer"
+                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
                   style={{ aspectRatio: '1/1' }}
                   onClick={() => setSelectedImage(1)}
                 />
               </div>
-              {/* Imagem secundária inferior */}
-              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
+              {/* Imagem secundária inferior (direita) */}
+              <div className="col-span-1 row-span-1 overflow-hidden rounded-lg">
                 <img
                   src={productImages[2]}
                   alt={`${product.name} - Vista 3`}
-                  className="w-full h-full object-contain object-center rounded-lg cursor-pointer"
+                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
                   style={{ aspectRatio: '1/1' }}
                   onClick={() => setSelectedImage(2)}
                 />
