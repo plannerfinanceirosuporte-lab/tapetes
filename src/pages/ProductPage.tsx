@@ -126,8 +126,8 @@ export const ProductPage: React.FC = () => {
           <div className="p-8">
             {/* Galeria de Imagens - layout colunas: 1 grande à esquerda, 2 menores à direita */}
             <div
-              className="grid gap-2"
-              style={{ width: '100%', maxWidth: '360px', aspectRatio: '1/1', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr' }}
+              className="grid gap-2 mb-6"
+              style={{ width: '100%', maxWidth: '340px', aspectRatio: '1/1', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr', overflow: 'hidden' }}
             >
               {/* Imagem principal ocupa a primeira coluna e duas linhas, quadrada */}
               <div style={{ gridColumn: '1 / 2', gridRow: '1 / 3', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
