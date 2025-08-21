@@ -125,36 +125,35 @@ export const ProductPage: React.FC = () => {
         <div className="modern-card overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
-            <div className="flex flex-col lg:flex-row gap-6 items-start">
-              <div className="flex flex-col gap-4">
-                <div className="overflow-hidden rounded-lg" style={{ width: 320, height: 320 }}>
+            <div className="flex flex-row gap-6 items-start">
+              {/* Imagem Principal */}
+              <div className="overflow-hidden rounded-lg" style={{ width: 320, height: 320 }}>
+                <img
+                  src={productImages[selectedImage]}
+                  alt={product.name}
+                  className="object-cover w-full h-full cursor-pointer"
+                  style={{ aspectRatio: '1/1' }}
+                />
+              </div>
+              {/* Imagens Menores ao lado direito */}
+              <div className="flex flex-col gap-4 ml-2">
+                <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
                   <img
-                    src={productImages[selectedImage]}
-                    alt={product.name}
+                    src={productImages[1]}
+                    alt={`${product.name} - Vista 2`}
                     className="object-cover w-full h-full cursor-pointer"
                     style={{ aspectRatio: '1/1' }}
+                    onClick={() => setSelectedImage(1)}
                   />
                 </div>
-                {/* Se não conseguir layout desejado, imagens menores abaixo da principal */}
-                <div className="flex gap-4 mt-2">
-                  <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
-                    <img
-                      src={productImages[1]}
-                      alt={`${product.name} - Vista 2`}
-                      className="object-cover w-full h-full cursor-pointer"
-                      style={{ aspectRatio: '1/1' }}
-                      onClick={() => setSelectedImage(1)}
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
-                    <img
-                      src={productImages[2]}
-                      alt={`${product.name} - Vista 3`}
-                      className="object-cover w-full h-full cursor-pointer"
-                      style={{ aspectRatio: '1/1' }}
-                      onClick={() => setSelectedImage(2)}
-                    />
-                  </div>
+                <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
+                  <img
+                    src={productImages[2]}
+                    alt={`${product.name} - Vista 3`}
+                    className="object-cover w-full h-full cursor-pointer"
+                    style={{ aspectRatio: '1/1' }}
+                    onClick={() => setSelectedImage(2)}
+                  />
                 </div>
               </div>
             </div>
