@@ -125,13 +125,14 @@ export const ProductPage: React.FC = () => {
         <div className="modern-card overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
-            <div style={{ width: 400, height: 400, position: 'relative', margin: '40px auto' }}>
+            <div className="relative mx-auto my-8" style={{ width: 400, height: 400 }}>
               {/* Seta esquerda: só aparece se não for a primeira imagem */}
               {selectedImage > 0 && (
                 <button
-                  style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: 'rgba(255,255,255,0.7)', borderRadius: '50%', padding: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow"
                   onClick={() => setSelectedImage(selectedImage - 1)}
                   aria-label="Imagem anterior"
+                  style={{ zIndex: 2 }}
                 >
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
                 </button>
@@ -141,14 +142,16 @@ export const ProductPage: React.FC = () => {
                 key={selectedImage}
                 src={productImages[selectedImage]}
                 alt={product.name}
-                style={{ display: 'block', margin: '0 auto', width: '360px', height: '360px', objectFit: 'contain', borderRadius: '24px', background: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'all 0.5s ease-in-out' }}
+                className="block mx-auto rounded-2xl bg-white shadow transition-all duration-500"
+                style={{ width: '360px', height: '360px', objectFit: 'contain' }}
               />
               {/* Seta direita: só aparece se não for a última imagem */}
               {selectedImage < productImages.length - 1 && (
                 <button
-                  style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: 'rgba(255,255,255,0.7)', borderRadius: '50%', padding: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow"
                   onClick={() => setSelectedImage(selectedImage + 1)}
                   aria-label="Próxima imagem"
+                  style={{ zIndex: 2 }}
                 >
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                 </button>
