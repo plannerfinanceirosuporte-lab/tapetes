@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
 import { supabase, Product, Review, isSupabaseConfigured } from '../lib/supabase';
 import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
