@@ -127,7 +127,7 @@ export const ProductPage: React.FC = () => {
             {/* Galeria de Imagens */}
             <div className="flex flex-row gap-6 items-start">
               {/* Imagem Principal */}
-              <div className="overflow-hidden rounded-lg" style={{ width: 320, height: 320 }}>
+              <div className="overflow-hidden rounded-lg" style={{ width: 250, height: 250 }}>
                 <img
                   src={productImages[selectedImage]}
                   alt={product.name}
@@ -137,7 +137,7 @@ export const ProductPage: React.FC = () => {
               </div>
               {/* Imagens Menores ao lado direito */}
               <div className="flex flex-col gap-4 ml-2">
-                <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
+                <div className="overflow-hidden rounded-lg" style={{ width: 80, height: 80 }}>
                   <img
                     src={productImages[1]}
                     alt={`${product.name} - Vista 2`}
@@ -146,7 +146,7 @@ export const ProductPage: React.FC = () => {
                     onClick={() => setSelectedImage(1)}
                   />
                 </div>
-                <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
+                <div className="overflow-hidden rounded-lg" style={{ width: 80, height: 80 }}>
                   <img
                     src={productImages[2]}
                     alt={`${product.name} - Vista 3`}
