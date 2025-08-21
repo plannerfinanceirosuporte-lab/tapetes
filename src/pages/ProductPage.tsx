@@ -124,36 +124,36 @@ export const ProductPage: React.FC = () => {
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
           <div className="p-8">
-            {/* Galeria de Imagens - grid quadrado responsivo */}
+            {/* Galeria de Imagens - grid quadrado responsivo, todas iguais */}
             <div
               className="grid grid-cols-2 grid-rows-2 gap-2"
-              style={{ width: '100%', maxWidth: '500px', aspectRatio: '1/1', margin: '0 auto' }}
+              style={{ width: '100%', maxWidth: '380px', aspectRatio: '1/1', margin: '0 auto' }}
             >
-              {/* Imagem principal ocupa toda a primeira coluna */}
-              <div className="row-span-2 col-span-1 overflow-hidden rounded-lg">
+              {/* Imagem principal */}
+              <div className="row-span-2 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
                 <img
                   src={productImages[0]}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center rounded-lg"
+                  className="w-full h-full object-contain object-center rounded-lg"
                   style={{ aspectRatio: '1/1' }}
                 />
               </div>
               {/* Imagem secundária superior */}
-              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg">
+              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
                 <img
                   src={productImages[1]}
                   alt={`${product.name} - Vista 2`}
-                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
+                  className="w-full h-full object-contain object-center rounded-lg cursor-pointer"
                   style={{ aspectRatio: '1/1' }}
                   onClick={() => setSelectedImage(1)}
                 />
               </div>
               {/* Imagem secundária inferior */}
-              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg">
+              <div className="row-span-1 col-span-1 overflow-hidden rounded-lg flex items-center justify-center">
                 <img
                   src={productImages[2]}
                   alt={`${product.name} - Vista 3`}
-                  className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
+                  className="w-full h-full object-contain object-center rounded-lg cursor-pointer"
                   style={{ aspectRatio: '1/1' }}
                   onClick={() => setSelectedImage(2)}
                 />
