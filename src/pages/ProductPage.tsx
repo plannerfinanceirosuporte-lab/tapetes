@@ -126,11 +126,11 @@ export const ProductPage: React.FC = () => {
           <div className="p-8">
             {/* Galeria de Imagens - layout colunas: 1 grande à esquerda, 2 menores à direita */}
             <div
-              className="grid grid-cols-3 grid-rows-2 gap-2"
+              className="grid grid-cols-2 grid-rows-2 gap-2"
               style={{ width: '100%', maxWidth: '520px', aspectRatio: '1/1', margin: '0 auto', display: 'grid' }}
             >
-              {/* Imagem principal ocupa 2 linhas e 2 colunas à esquerda */}
-              <div style={{ gridColumn: '1 / span 2', gridRow: '1 / span 2', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
+              {/* Imagem principal ocupa a primeira coluna e duas linhas */}
+              <div style={{ gridColumn: '1 / 2', gridRow: '1 / 3', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[0]}
                   alt={product.name}
@@ -139,7 +139,7 @@ export const ProductPage: React.FC = () => {
                 />
               </div>
               {/* Imagem secundária superior (direita), quadrada */}
-              <div style={{ gridColumn: '3', gridRow: '1', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
+              <div style={{ gridColumn: '2 / 3', gridRow: '1 / 2', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[1]}
                   alt={`${product.name} - Vista 2`}
@@ -149,7 +149,7 @@ export const ProductPage: React.FC = () => {
                 />
               </div>
               {/* Imagem secundária inferior (direita), quadrada */}
-              <div style={{ gridColumn: '3', gridRow: '2', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
+              <div style={{ gridColumn: '2 / 3', gridRow: '2 / 3', aspectRatio: '1/1' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[2]}
                   alt={`${product.name} - Vista 3`}
