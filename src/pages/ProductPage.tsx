@@ -124,31 +124,37 @@ export const ProductPage: React.FC = () => {
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
-            {/* Galeria de Imagens */}
-            <div className="product-images-layout">
-              {/* Imagem Principal */}
-              <div className="main-image-container">
+            {/* Galeria de Imagens - layout customizado */}
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Imagem principal */}
+              <div className="flex-1 aspect-square overflow-hidden rounded-lg">
                 <img
-                  src={productImages[selectedImage]}
+                  src={productImages[0]}
                   alt={product.name}
-                  className="main-image"
+                  className="w-full h-full object-cover object-center rounded-lg"
+                  style={{ aspectRatio: '1/1' }}
                 />
               </div>
-              
-              {/* Imagens Secundárias */}
-              <div className="secondary-images-container">
-                <img
-                  src={productImages[1]}
-                  alt={`${product.name} - Vista 2`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(1)}
-                />
-                <img
-                  src={productImages[2]}
-                  alt={`${product.name} - Vista 3`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(2)}
-                />
+              {/* Coluna lateral com 2 imagens */}
+              <div className="flex flex-col gap-4 w-1/2 lg:w-48">
+                <div className="flex-1 aspect-square overflow-hidden rounded-lg">
+                  <img
+                    src={productImages[1]}
+                    alt={`${product.name} - Vista 2`}
+                    className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
+                    style={{ aspectRatio: '1/1' }}
+                    onClick={() => setSelectedImage(1)}
+                  />
+                </div>
+                <div className="flex-1 aspect-square overflow-hidden rounded-lg">
+                  <img
+                    src={productImages[2]}
+                    alt={`${product.name} - Vista 3`}
+                    className="w-full h-full object-cover object-center rounded-lg cursor-pointer"
+                    style={{ aspectRatio: '1/1' }}
+                    onClick={() => setSelectedImage(2)}
+                  />
+                </div>
               </div>
             </div>
 
@@ -160,11 +166,9 @@ export const ProductPage: React.FC = () => {
                   <span className="badge-new">Novo</span>
                   <span className="badge-stock">Em Estoque</span>
                 </div>
-                
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
                   {product.name}
                 </h1>
-                
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="rating-stars">
@@ -179,17 +183,8 @@ export const ProductPage: React.FC = () => {
                     {averageRating.toFixed(1)} ({reviews.length} avaliações)
                   </span>
                 </div>
-
                 <p className="modern-price-large mb-6">
                   R$ {product.price.toFixed(2).replace('.', ',')}
-                </p>
-              </div>
-
-              {/* Descrição */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
                 </p>
               </div>
 
@@ -213,7 +208,6 @@ export const ProductPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                
                 <div className="text-sm text-gray-600">
                   <span className="font-medium">{product.stock_quantity} unidades</span> disponíveis
                 </div>
@@ -231,26 +225,27 @@ export const ProductPage: React.FC = () => {
                   Comprar Agora
                   <Zap className="h-5 w-5" />
                 </button>
-
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handleAddToCart}
                     className="btn-primary py-3"
                   >
                     <ShoppingCart className="h-5 w-5" />
-                    Adicionar ao Carrinho
                   </button>
-                  
-                  <button className="btn-secondary py-3">
+                  <button
+                    className="btn-secondary py-3"
+                  >
                     <Heart className="h-5 w-5" />
-                    Favoritar
                   </button>
                 </div>
-                
-                <button className="btn-outline w-full py-3">
-                  <Share2 className="h-5 w-5" />
-                  Compartilhar Produto
-                </button>
+              </div>
+
+              {/* Descrição do Produto abaixo dos botões */}
+              <div className="bg-gray-50 rounded-lg p-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Benefícios */}
