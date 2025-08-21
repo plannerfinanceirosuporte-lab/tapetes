@@ -125,30 +125,37 @@ export const ProductPage: React.FC = () => {
         <div className="modern-card overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
-            <div className="product-images-layout">
-              {/* Imagem Principal */}
-              <div className="main-image-container">
-                <img
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="main-image"
-                />
-              </div>
-              
-              {/* Imagens Secundárias */}
-              <div className="secondary-images-container">
-                <img
-                  src={productImages[1]}
-                  alt={`${product.name} - Vista 2`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(1)}
-                />
-                <img
-                  src={productImages[2]}
-                  alt={`${product.name} - Vista 3`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(2)}
-                />
+            <div className="flex flex-col lg:flex-row gap-6 items-start">
+              <div className="flex flex-col gap-4">
+                <div className="overflow-hidden rounded-lg" style={{ width: 320, height: 320 }}>
+                  <img
+                    src={productImages[selectedImage]}
+                    alt={product.name}
+                    className="object-cover w-full h-full cursor-pointer"
+                    style={{ aspectRatio: '1/1' }}
+                  />
+                </div>
+                {/* Se não conseguir layout desejado, imagens menores abaixo da principal */}
+                <div className="flex gap-4 mt-2">
+                  <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
+                    <img
+                      src={productImages[1]}
+                      alt={`${product.name} - Vista 2`}
+                      className="object-cover w-full h-full cursor-pointer"
+                      style={{ aspectRatio: '1/1' }}
+                      onClick={() => setSelectedImage(1)}
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-lg" style={{ width: 100, height: 100 }}>
+                    <img
+                      src={productImages[2]}
+                      alt={`${product.name} - Vista 3`}
+                      className="object-cover w-full h-full cursor-pointer"
+                      style={{ aspectRatio: '1/1' }}
+                      onClick={() => setSelectedImage(2)}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -186,12 +193,7 @@ export const ProductPage: React.FC = () => {
               </div>
 
               {/* Descrição */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
+              {/* Descrição movida para abaixo dos botões */}
 
               {/* Controle de Quantidade */}
               <div className="flex items-center gap-6">
@@ -251,6 +253,14 @@ export const ProductPage: React.FC = () => {
                   <Share2 className="h-5 w-5" />
                   Compartilhar Produto
                 </button>
+              </div>
+
+              {/* Descrição abaixo dos botões */}
+              <div className="bg-gray-50 rounded-lg p-6 mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Benefícios */}
