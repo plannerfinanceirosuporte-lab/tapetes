@@ -138,14 +138,16 @@ export const ProductPage: React.FC = () => {
                 </button>
               )}
               {/* Imagem principal centralizada, nunca cortada, quadrado perfeito */}
-              <div className="overflow-hidden rounded-lg w-full h-full flex items-center justify-center bg-white" style={{ maxWidth: 400, maxHeight: 400 }}>
-                <img
-                  key={selectedImage}
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="transition-all duration-500 ease-in-out"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', aspectRatio: '1/1', background: 'white' }}
-                />
+              <div className="flex items-center justify-center w-full h-full">
+                <div className="border-4 border-gray-200 rounded-xl bg-white flex items-center justify-center" style={{ width: 360, height: 360 }}>
+                  <img
+                    key={selectedImage}
+                    src={productImages[selectedImage]}
+                    alt={product.name}
+                    className="transition-all duration-500 ease-in-out"
+                    style={{ width: '95%', height: '95%', objectFit: 'contain', aspectRatio: '1/1', background: 'white' }}
+                  />
+                </div>
               </div>
               {/* Seta direita: só aparece se não for a última imagem */}
               {selectedImage < productImages.length - 1 && (
