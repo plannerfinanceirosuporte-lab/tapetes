@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
+import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
 import { supabase, Product, Review, isSupabaseConfigured } from '../lib/supabase';
 import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
@@ -123,38 +123,30 @@ export const ProductPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
-          <div className="p-8">
-            {/* Galeria de Imagens - layout colunas: 1 grande à esquerda, 2 menores à direita */}
-            <div
-              className="grid gap-2 mb-6"
-              style={{ width: '100%', maxWidth: '340px', aspectRatio: '1/1', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr', overflow: 'hidden' }}
-            >
-              {/* Imagem principal ocupa a primeira coluna e duas linhas, quadrada */}
-              <div style={{ gridColumn: '1 / 2', gridRow: '1 / 3', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
+            {/* Galeria de Imagens */}
+            <div className="product-images-layout">
+              {/* Imagem Principal */}
+              <div className="main-image-container">
                 <img
-                  src={productImages[0]}
+                  src={productImages[selectedImage]}
                   alt={product.name}
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                  className="rounded-lg"
+                  className="main-image"
                 />
               </div>
-              {/* Imagem secundária superior (direita), quadrada */}
-              <div style={{ gridColumn: '2 / 3', gridRow: '1 / 2', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
+              
+              {/* Imagens Secundárias */}
+              <div className="secondary-images-container">
                 <img
                   src={productImages[1]}
                   alt={`${product.name} - Vista 2`}
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                  className="rounded-lg cursor-pointer"
+                  className="secondary-image"
                   onClick={() => setSelectedImage(1)}
                 />
-              </div>
-              {/* Imagem secundária inferior (direita), quadrada */}
-              <div style={{ gridColumn: '2 / 3', gridRow: '2 / 3', aspectRatio: '1/1', width: '100%', height: '100%', display: 'flex' }} className="overflow-hidden rounded-lg">
                 <img
                   src={productImages[2]}
                   alt={`${product.name} - Vista 3`}
-                  style={{ aspectRatio: '1/1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                  className="rounded-lg cursor-pointer"
+                  className="secondary-image"
                   onClick={() => setSelectedImage(2)}
                 />
               </div>
@@ -168,9 +160,11 @@ export const ProductPage: React.FC = () => {
                   <span className="badge-new">Novo</span>
                   <span className="badge-stock">Em Estoque</span>
                 </div>
+                
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
                   {product.name}
                 </h1>
+                
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="rating-stars">
@@ -185,8 +179,17 @@ export const ProductPage: React.FC = () => {
                     {averageRating.toFixed(1)} ({reviews.length} avaliações)
                   </span>
                 </div>
+
                 <p className="modern-price-large mb-6">
                   R$ {product.price.toFixed(2).replace('.', ',')}
+                </p>
+              </div>
+
+              {/* Descrição */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
                 </p>
               </div>
 
@@ -210,6 +213,7 @@ export const ProductPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+                
                 <div className="text-sm text-gray-600">
                   <span className="font-medium">{product.stock_quantity} unidades</span> disponíveis
                 </div>
@@ -227,27 +231,26 @@ export const ProductPage: React.FC = () => {
                   Comprar Agora
                   <Zap className="h-5 w-5" />
                 </button>
+
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handleAddToCart}
                     className="btn-primary py-3"
                   >
                     <ShoppingCart className="h-5 w-5" />
+                    Adicionar ao Carrinho
                   </button>
-                  <button
-                    className="btn-secondary py-3"
-                  >
+                  
+                  <button className="btn-secondary py-3">
                     <Heart className="h-5 w-5" />
+                    Favoritar
                   </button>
                 </div>
-              </div>
-
-              {/* Descrição do Produto abaixo dos botões */}
-              <div className="bg-gray-50 rounded-lg p-6 mt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
-                </p>
+                
+                <button className="btn-outline w-full py-3">
+                  <Share2 className="h-5 w-5" />
+                  Compartilhar Produto
+                </button>
               </div>
 
               {/* Benefícios */}
