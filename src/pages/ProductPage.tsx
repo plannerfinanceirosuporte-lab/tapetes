@@ -126,34 +126,38 @@ export const ProductPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
             <div className="relative flex items-center justify-center" style={{ width: 400, height: 400 }}>
-              {/* Seta esquerda */}
-              <button
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 transition"
-                onClick={() => setSelectedImage((selectedImage - 1 + productImages.length) % productImages.length)}
-                aria-label="Imagem anterior"
-                style={{ zIndex: 2 }}
-              >
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-              </button>
-              {/* Imagem principal com efeito de transição */}
+              {/* Seta esquerda: só aparece se não for a primeira imagem */}
+              {selectedImage > 0 && (
+                <button
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 transition"
+                  onClick={() => setSelectedImage(selectedImage - 1)}
+                  aria-label="Imagem anterior"
+                  style={{ zIndex: 2 }}
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                </button>
+              )}
+              {/* Imagem principal com efeito de transição, sem corte */}
               <div className="overflow-hidden rounded-lg w-full h-full flex items-center justify-center">
                 <img
                   key={selectedImage}
                   src={productImages[selectedImage]}
                   alt={product.name}
-                  className="object-cover w-full h-full transition-all duration-500 ease-in-out"
+                  className="object-contain w-full h-full transition-all duration-500 ease-in-out"
                   style={{ aspectRatio: '1/1' }}
                 />
               </div>
-              {/* Seta direita */}
-              <button
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 transition"
-                onClick={() => setSelectedImage((selectedImage + 1) % productImages.length)}
-                aria-label="Próxima imagem"
-                style={{ zIndex: 2 }}
-              >
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-              </button>
+              {/* Seta direita: só aparece se não for a última imagem */}
+              {selectedImage < productImages.length - 1 && (
+                <button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 transition"
+                  onClick={() => setSelectedImage(selectedImage + 1)}
+                  aria-label="Próxima imagem"
+                  style={{ zIndex: 2 }}
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                </button>
+              )}
             </div>
 
             {/* Detalhes do Produto */}
