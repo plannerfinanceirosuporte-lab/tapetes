@@ -175,7 +175,7 @@ export const Home: React.FC = () => {
               Descubra nossa seleção especial de produtos com a melhor qualidade e preços incríveis
             </p>
           </div>
-          
+
           {filteredProducts.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -184,13 +184,32 @@ export const Home: React.FC = () => {
               <p className="text-gray-500 text-lg">Nenhum produto em destaque.</p>
             </div>
           ) : (
-            <div className="products-grid">
-              {filteredProducts.slice(0, 8).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            (() => {
+              const destaque = filteredProducts.slice(0, 8);
+              const half = Math.ceil(destaque.length / 2);
+              const firstRow = destaque.slice(0, half);
+              const secondRow = destaque.slice(half);
+              return (
+                <>
+                  <div className="flex gap-6 overflow-x-auto pb-4 pl-12 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', minWidth: '100%' }}>
+                    {firstRow.map((product) => (
+                      <div key={product.id} className="min-w-[220px]">
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-6 overflow-x-auto pb-4 pl-12 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', minWidth: '100%' }}>
+                    {secondRow.map((product) => (
+                      <div key={product.id} className="min-w-[220px]">
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()
           )}
-          
+
           <div className="text-center mt-12">
             <Link to="/products" className="btn-primary px-8 py-4 text-lg">
               Ver Todos os Produtos
