@@ -144,20 +144,20 @@ export const Home: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Explore nossas categorias
           </h2>
-          <div className="flex gap-8 overflow-x-auto pb-4 px-2 md:px-0 justify-center">
+          <div className="flex gap-6 flex-wrap justify-center">
             {categories.map((category) => (
-              <div key={category.id} className="flex flex-col items-center min-w-[110px]">
+              <div key={category.id} className="flex flex-col items-center">
                 <button
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`w-24 h-24 rounded-full bg-white shadow-md flex items-center justify-center mb-2 border-2 transition-all duration-200 ${selectedCategory === category.id ? 'border-blue-500 scale-105' : 'border-transparent'}`}
+                  className={`w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center mb-2 border-2 transition-all duration-200 ${selectedCategory === category.id ? 'border-blue-500 scale-105' : 'border-transparent'}`}
                 >
                   {category.image_url ? (
-                    <img src={category.image_url} alt={category.name} className="w-20 h-20 rounded-full object-cover" />
+                    <img src={category.image_url} alt={category.name} className="w-14 h-14 rounded-full object-cover" />
                   ) : (
-                    <span className="text-gray-400 text-3xl"><Store /></span>
+                    <span className="text-gray-400 text-2xl"><Store /></span>
                   )}
                 </button>
-                <span className="text-sm font-medium text-gray-700 text-center truncate w-24">{category.name}</span>
+                <span className="text-sm font-medium text-gray-700 text-center w-20 whitespace-normal">{category.name}</span>
               </div>
             ))}
           </div>
