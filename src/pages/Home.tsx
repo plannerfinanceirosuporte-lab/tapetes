@@ -144,49 +144,23 @@ export const Home: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Explore nossas categorias
           </h2>
-          {(() => {
-            const half = Math.ceil(categories.length / 2);
-            const firstRow = categories.slice(0, half);
-            const secondRow = categories.slice(half);
-            return (
-              <>
-                <div className="flex gap-8 justify-center mb-6">
-                  {firstRow.map((category) => (
-                    <div key={category.id} className="flex flex-col items-center min-w-[110px]">
-                      <button
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={`w-24 h-24 rounded-full bg-white shadow-md flex items-center justify-center mb-2 border-2 transition-all duration-200 ${selectedCategory === category.id ? 'border-blue-500 scale-105' : 'border-transparent'}`}
-                      >
-                        {category.image_url ? (
-                          <img src={category.image_url} alt={category.name} className="w-20 h-20 rounded-full object-cover" />
-                        ) : (
-                          <span className="text-gray-400 text-3xl"><Store /></span>
-                        )}
-                      </button>
-                      <span className="text-sm font-medium text-gray-700 text-center w-24 whitespace-normal">{category.name}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-8 justify-center">
-                  {secondRow.map((category) => (
-                    <div key={category.id} className="flex flex-col items-center min-w-[110px]">
-                      <button
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={`w-24 h-24 rounded-full bg-white shadow-md flex items-center justify-center mb-2 border-2 transition-all duration-200 ${selectedCategory === category.id ? 'border-blue-500 scale-105' : 'border-transparent'}`}
-                      >
-                        {category.image_url ? (
-                          <img src={category.image_url} alt={category.name} className="w-20 h-20 rounded-full object-cover" />
-                        ) : (
-                          <span className="text-gray-400 text-3xl"><Store /></span>
-                        )}
-                      </button>
-                      <span className="text-sm font-medium text-gray-700 text-center w-24 whitespace-normal">{category.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            );
-          })()}
+          <div className="category-pills justify-center overflow-x-auto pb-4 px-2 md:px-0 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
+            >
+              Todos os Produtos
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`category-pill ${selectedCategory === category.id ? 'active' : ''}`}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
