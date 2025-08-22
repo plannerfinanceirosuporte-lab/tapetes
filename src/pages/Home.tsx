@@ -16,15 +16,7 @@ export const Home: React.FC = () => {
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat'
     };
-    const { settings } = useStore();
-    const backgroundStyle = {
-      background: settings?.banner_url
-        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
-        : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
-      backgroundPosition: 'center center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat'
-    };
+    // ...existing code...
     return (
       <div className="min-h-screen">
         {/* Hero Section Moderno */}
@@ -58,55 +50,8 @@ export const Home: React.FC = () => {
             </div>
           </div>
         </section>
-        {/* ...restante do conteúdo da Home (categorias, produtos em destaque, benefícios, footer) ... */}
       </div>
     );
-      <section 
-              const backgroundStyle = {
-                background: settings?.banner_url
-                  ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
-                  : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
-                backgroundPosition: 'center center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat'
-              };
-              return (
-                <div className="min-h-screen">
-                  {/* Hero Section Moderno */}
-                  <section
-                    className="relative text-white py-20 md:py-32 overflow-hidden"
-                    style={backgroundStyle}
-                  >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
-            </h1>
-            <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
-              {settings?.store_description}
-            </p>
-            {settings?.store_slogan && (
-              <p className="text-base md:text-lg mb-10 opacity-80 italic max-w-xl mx-auto">
-                "{settings.store_slogan}"
-              </p>
-            )}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/products" className="btn-primary px-8 py-4 text-lg">
-                Explorar Produtos
-                <ArrowRight className="h-5 w-5" />
-                <>
-                  <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide hide-scroll" style={{ WebkitOverflowScrolling: 'touch' }}>
-                    {firstRow.map((product) => (
-                      <div key={product.id} className="min-w-[260px]">
-                        <ProductCard product={product} />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide hide-scroll mt-8" style={{ WebkitOverflowScrolling: 'touch' }}>
-                    {secondRow.map((product) => (
-                      <div key={product.id} className="min-w-[260px]">
-                        <ProductCard product={product} />
-                      </div>
-                    ))}
-                  </div>
                 </>
             <button
               onClick={() => setSelectedCategory('all')}
