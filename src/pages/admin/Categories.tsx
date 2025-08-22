@@ -10,7 +10,6 @@ export const AdminCategories: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image_url: '',
   });
 
   useEffect(() => {
@@ -29,15 +28,12 @@ export const AdminCategories: React.FC = () => {
         .from('categories')
         .select('*')
         .order('created_at', { ascending: false });
+
       if (error) throw error;
       setCategories(data || []);
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
-      if (error instanceof Error) {
-        alert(`Erro ao buscar categorias: ${error.message}`);
-      } else {
-        alert('Erro ao buscar categorias: Verifique sua conexão com o Supabase.');
-      }
+      alert(`Erro ao buscar categorias: ${error.message || 'Verifique sua conexão com o Supabase.'}`);
     } finally {
       setLoading(false);
     }
@@ -52,34 +48,34 @@ export const AdminCategories: React.FC = () => {
     }
 
     try {
-      const categoryData = {
-        name: formData.name,
-        description: formData.description,
-        image_url: formData.image_url,
-      };
       if (editingCategory) {
         const { error } = await supabase!
           .from('categories')
-          .update(categoryData)
+          .update({
+            name: formData.name,
+            description: formData.description,
+          })
           .eq('id', editingCategory.id);
+        
         if (error) throw error;
       } else {
         const { error } = await supabase!
           .from('categories')
-          .insert(categoryData);
+          .insert({
+            name: formData.name,
+            description: formData.description,
+          });
+        
         if (error) throw error;
       }
+
       setShowModal(false);
       setEditingCategory(null);
-      setFormData({ name: '', description: '', image_url: '' });
+      setFormData({ name: '', description: '' });
       fetchCategories();
     } catch (error) {
       console.error('Erro ao salvar categoria:', error);
-      if (error instanceof Error) {
-        alert(`Erro ao salvar categoria: ${error.message}`);
-      } else {
-        alert('Erro ao salvar categoria: Tente novamente.');
-      }
+      alert(`Erro ao salvar categoria: ${error.message || 'Tente novamente.'}`);
     }
   };
 
@@ -88,7 +84,6 @@ export const AdminCategories: React.FC = () => {
     setFormData({
       name: category.name,
       description: category.description || '',
-      image_url: category.image_url || '',
     });
     setShowModal(true);
   };
@@ -105,16 +100,13 @@ export const AdminCategories: React.FC = () => {
           .from('categories')
           .delete()
           .eq('id', categoryId);
+
         if (error) throw error;
         fetchCategories();
         alert('Categoria excluída com sucesso!');
       } catch (error) {
         console.error('Erro ao excluir categoria:', error);
-        if (error instanceof Error) {
-          alert(`Erro ao excluir categoria: ${error.message}`);
-        } else {
-          alert('Erro ao excluir categoria: Tente novamente.');
-        }
+        alert(`Erro ao excluir categoria: ${error.message || 'Tente novamente.'}`);
       }
     }
   };
@@ -126,8 +118,6 @@ export const AdminCategories: React.FC = () => {
       </div>
     );
   }
-
-  // Preview dinâmico da imagem
 
   return (
     <div className="space-y-6">
@@ -145,105 +135,96 @@ export const AdminCategories: React.FC = () => {
         </button>
       </div>
 
-      <div className="modern-container">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Categorias</h1>
-          <button
-            onClick={() => {
-              setShowModal(true);
-              setEditingCategory(null);
-              setFormData({ name: '', description: '', image_url: '' });
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="inline-block mr-2" /> Nova Categoria
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {categories.map(category => (
-            <div key={category.id} className="modern-card p-4 flex flex-col items-center">
-              {category.image_url && (
-                <img src={category.image_url} alt={category.name} className="w-24 h-24 rounded-full object-cover mb-2" />
-              )}
-              <span className="text-lg font-semibold mb-1">{category.name}</span>
-              <div className="mb-2 text-gray-600 text-sm">{category.description}</div>
-              <div className="flex gap-2 mt-2">
+      {/* Categories Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {categories.map((category) => (
+          <div key={category.id} className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
+              <div className="flex space-x-2">
                 <button
                   onClick={() => handleEdit(category)}
-                  className="p-2 bg-yellow-100 text-yellow-700 rounded-full hover:bg-yellow-200"
+                  className="text-blue-600 hover:text-blue-800"
                 >
-                  <Edit size={18} />
+                  <Edit className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => handleDelete(category.id)}
-                  className="p-2 bg-red-100 text-red-700 rounded-full hover:bg-red-200"
+                  className="text-red-600 hover:text-red-800"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 className="h-4 w-4" />
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="modern-card p-8 w-full max-w-md">
-              <h2 className="text-xl font-bold mb-4">{editingCategory ? 'Editar Categoria' : 'Nova Categoria'}</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4 flex flex-col items-center">
-                  {formData.image_url && (
-                    <img src={formData.image_url} alt="Preview" className="w-24 h-24 rounded-full object-cover mx-auto mb-2" />
-                  )}
-                  <label className="block text-gray-700 font-semibold mb-2">URL da Imagem</label>
-                  <input
-                    type="text"
-                    className="input"
-                    value={formData.image_url}
-                    onChange={e => setFormData({ ...formData, image_url: e.target.value })}
-                    placeholder="Cole a URL da imagem da categoria"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">Nome</label>
-                  <input
-                    type="text"
-                    className="input"
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">Descrição</label>
-                  <textarea
-                    className="input"
-                    value={formData.description}
-                    onChange={e => setFormData({ ...formData, description: e.target.value })}
-                  />
-                </div>
-                <div className="flex justify-end gap-2 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                      setEditingCategory(null);
-                      setFormData({ name: '', description: '', image_url: '' });
-                    }}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    {editingCategory ? 'Atualizar' : 'Adicionar'}
-                  </button>
-                </div>
-              </form>
+            
+            {category.description && (
+              <p className="text-gray-600 text-sm mb-4">{category.description}</p>
+            )}
+            
+            <div className="text-xs text-gray-500">
+              Criado em: {new Date(category.created_at).toLocaleDateString('pt-BR')}
             </div>
           </div>
-        )}
+        ))}
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {editingCategory ? 'Editar Categoria' : 'Adicionar Categoria'}
+            </h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nome
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descrição (Opcional)
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    setEditingCategory(null);
+                    setFormData({ name: '', description: '' });
+                  }}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  {editingCategory ? 'Atualizar' : 'Adicionar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

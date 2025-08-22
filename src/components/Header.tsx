@@ -29,13 +29,12 @@ export const Header: React.FC = () => {
             <Link to="/" className="logo-container">
               {settings?.logo_url ? (
                 <img
-                  src={settings.logo_url}
+                  src={settings.logo_url} 
                   alt={settings.store_name}
                   className="logo-image"
-                  style={{ maxHeight: '60px', maxWidth: '150px' }}
                 />
               ) : (
-                <Store className="h-10 w-10 text-blue-600" />
+                <Store className="h-8 w-8 text-blue-600" />
               )}
               <span className="logo-text hidden sm:block">
                 {settings?.store_name}
@@ -54,6 +53,11 @@ export const Header: React.FC = () => {
 
             {/* Ações */}
             <div className="flex items-center gap-4">
+              {/* Busca Mobile */}
+              <button className="md:hidden cart-button">
+                <Search className="h-5 w-5" />
+              </button>
+              
               {/* Carrinho */}
               <Link to="/cart" className="cart-button">
                 <ShoppingCart className="h-5 w-5" />

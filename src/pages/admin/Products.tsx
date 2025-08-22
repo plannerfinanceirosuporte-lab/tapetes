@@ -10,14 +10,12 @@ export const AdminProducts: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
-  name: '',
-  description: '',
-  price: '',
-  stock_quantity: '',
-  category_id: '',
-  image_url: '',
-  image_secondary_1: '',
-  image_secondary_2: '',
+    name: '',
+    description: '',
+    price: '',
+    stock_quantity: '',
+    category_id: '',
+    image_url: '',
   });
 
   useEffect(() => {
@@ -46,11 +44,7 @@ export const AdminProducts: React.FC = () => {
       setProducts(data || []);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
-      if (error instanceof Error) {
-        alert(`Erro ao buscar produtos: ${error.message}`);
-      } else {
-        alert('Erro ao buscar produtos: Verifique sua conexão com o Supabase.');
-      }
+      alert(`Erro ao buscar produtos: ${error.message || 'Verifique sua conexão com o Supabase.'}`);
     } finally {
       setLoading(false);
     }
@@ -91,8 +85,6 @@ export const AdminProducts: React.FC = () => {
         stock_quantity: parseInt(formData.stock_quantity),
         category_id: formData.category_id,
         image_url: formData.image_url,
-        image_secondary_1: formData.image_secondary_1,
-        image_secondary_2: formData.image_secondary_2,
       };
 
       if (editingProduct) {
@@ -116,37 +108,29 @@ export const AdminProducts: React.FC = () => {
       setShowModal(false);
       setEditingProduct(null);
       setFormData({
-  name: '',
-  description: '',
-  price: '',
-  stock_quantity: '',
-  category_id: '',
-  image_url: '',
-  image_secondary_1: '',
-  image_secondary_2: '',
+        name: '',
+        description: '',
+        price: '',
+        stock_quantity: '',
+        category_id: '',
+        image_url: '',
       });
       fetchProducts();
     } catch (error) {
       console.error('Erro ao salvar produto:', error);
-      if (error instanceof Error) {
-        alert(`Erro ao salvar produto: ${error.message}`);
-      } else {
-        alert('Erro ao salvar produto: Tente novamente.');
-      }
+      alert(`Erro ao salvar produto: ${error.message || 'Tente novamente.'}`);
     }
   };
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
     setFormData({
-    name: product.name,
-    description: product.description,
-    price: product.price.toString(),
-    stock_quantity: product.stock_quantity.toString(),
-    category_id: product.category_id,
-    image_url: product.image_url,
-    image_secondary_1: product.image_secondary_1 || '',
-    image_secondary_2: product.image_secondary_2 || '',
+      name: product.name,
+      description: product.description,
+      price: product.price.toString(),
+      stock_quantity: product.stock_quantity.toString(),
+      category_id: product.category_id,
+      image_url: product.image_url,
     });
     setShowModal(true);
   };
@@ -171,11 +155,7 @@ export const AdminProducts: React.FC = () => {
         alert('Produto excluído com sucesso!');
       } catch (error) {
         console.error('Erro ao excluir produto:', error);
-        if (error instanceof Error) {
-          alert(`Erro ao excluir produto: ${error.message}`);
-        } else {
-          alert('Erro ao excluir produto: Tente novamente.');
-        }
+        alert(`Erro ao excluir produto: ${error.message || 'Tente novamente.'}`);
       }
     }
   };
@@ -392,7 +372,9 @@ export const AdminProducts: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Imagem Principal</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  URL da Imagem
+                </label>
                 <input
                   type="url"
                   value={formData.image_url}
@@ -405,49 +387,7 @@ export const AdminProducts: React.FC = () => {
                   <div className="mt-2">
                     <img
                       src={formData.image_url}
-                      alt="Preview principal"
-                      className="w-32 h-32 object-cover rounded-lg border"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-
-                <label className="block text-sm font-medium text-gray-700 mb-2 mt-4">Imagem Secundária 1</label>
-                <input
-                  type="url"
-                  value={formData.image_secondary_1 || ''}
-                  onChange={(e) => setFormData({ ...formData, image_secondary_1: e.target.value })}
-                  placeholder="https://exemplo.com/imagem2.jpg"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                {formData.image_secondary_1 && (
-                  <div className="mt-2">
-                    <img
-                      src={formData.image_secondary_1}
-                      alt="Preview secundária 1"
-                      className="w-32 h-32 object-cover rounded-lg border"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-
-                <label className="block text-sm font-medium text-gray-700 mb-2 mt-4">Imagem Secundária 2</label>
-                <input
-                  type="url"
-                  value={formData.image_secondary_2 || ''}
-                  onChange={(e) => setFormData({ ...formData, image_secondary_2: e.target.value })}
-                  placeholder="https://exemplo.com/imagem3.jpg"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                {formData.image_secondary_2 && (
-                  <div className="mt-2">
-                    <img
-                      src={formData.image_secondary_2}
-                      alt="Preview secundária 2"
+                      alt="Preview"
                       className="w-32 h-32 object-cover rounded-lg border"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
@@ -470,8 +410,6 @@ export const AdminProducts: React.FC = () => {
                       stock_quantity: '',
                       category_id: '',
                       image_url: '',
-                      image_secondary_1: '',
-                      image_secondary_2: '',
                     });
                   }}
                   className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"

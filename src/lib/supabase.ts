@@ -48,7 +48,6 @@ export interface Category {
   id: string;
   name: string;
   description?: string;
-  image_url?: string;
   created_at: string;
 }
 
@@ -60,8 +59,6 @@ export interface Product {
   stock_quantity: number;
   category_id: string;
   image_url: string;
-    image_secondary_1?: string;
-    image_secondary_2?: string;
   created_at: string;
   category?: Category;
 }
