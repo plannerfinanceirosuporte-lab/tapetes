@@ -120,12 +120,12 @@ export const ProductPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+  <div className="min-h-screen bg-gray-50 pt-2 pb-4">
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
             {/* Galeria de Imagens */}
-            <div className="relative mx-auto my-8 w-full flex justify-center items-center" style={{ maxWidth: 400, height: 400 }}>
+            <div className="relative mx-auto my-2 w-full flex justify-center items-center" style={{ maxWidth: 400, height: 400 }}>
               {/* Seta esquerda: só aparece se não for a primeira imagem */}
               {selectedImage > 0 && (
                 <button
