@@ -128,9 +128,6 @@ export const AdminCategories: React.FC = () => {
   }
 
   // Preview dinâmico da imagem
-  const imagePreview = formData.image_url ? (
-    <img src={formData.image_url} alt="Preview" className="w-24 h-24 rounded-full object-cover mx-auto mb-2" />
-  ) : null;
 
   return (
     <div className="space-y-6">
@@ -247,11 +244,6 @@ export const AdminCategories: React.FC = () => {
           </div>
         )}
       </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, StoreSettings, isSupabaseConfigured } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 interface StoreSettings {
   contact_email: string;
@@ -151,7 +151,6 @@ interface StoreSettings {
   
   // SEO
   // meta_title, meta_description, meta_keywords removidos (duplicidade)
-  google_analytics_id: string;
   contact_whatsapp: string;
   contact_address: string;
   
@@ -248,6 +247,57 @@ export const useStore = () => {
 
 // Configurações padrão para quando Supabase não estiver configurado
 const defaultSettings: StoreSettings = {
+  meta_author: '',
+  meta_robots: '',
+  canonical_url: '',
+  og_title: '',
+  contact_address: '',
+  facebook_url: '',
+  instagram_url: '',
+  twitter_url: '',
+  youtube_url: '',
+  linkedin_url: '',
+  tiktok_url: '',
+  min_order_value: 0,
+  free_shipping_threshold: 0,
+  tax_rate: 0,
+  enable_credit_card: true,
+  enable_debit_card: true,
+  enable_pix: true,
+  enable_boleto: false,
+  enable_paypal: false,
+  default_shipping_cost: 0,
+  estimated_delivery_days: 7,
+  welcome_message: '',
+  footer_text: '',
+  contact_email: '',
+  contact_phone: '',
+  button_primary_text_color: '#fff',
+  button_primary_hover_bg_color: '#2563eb',
+  button_primary_hover_text_color: '#fff',
+  button_secondary_bg_color: '#f3f4f6',
+  button_secondary_text_color: '#111827',
+  logo_url: '',
+  favicon_url: '',
+  banner_url: '',
+  header_banner_url: '',
+  about_image_url: '',
+  primary_color: '#3b82f6',
+  accent_color: '#f59e0b',
+  background_color: '#fff',
+  text_color: '#111827',
+  button_primary_bg_color: '#3b82f6',
+  button_secondary_hover_bg_color: '#e5e7eb',
+  button_secondary_hover_text_color: '#111827',
+  button_success_bg_color: '#10b981',
+  button_success_text_color: '#fff',
+  button_success_hover_bg_color: '#059669',
+  button_success_hover_text_color: '#fff',
+  button_danger_bg_color: '#ef4444',
+  button_danger_text_color: '#fff',
+  button_danger_hover_bg_color: '#b91c1c',
+  product_title_color: '#111827',
+  // ...adicionar todas as propriedades obrigatórias do tipo StoreSettings...
   id: 'default',
   store_name: 'TechStore',
   store_description: 'Os melhores produtos com qualidade garantida',

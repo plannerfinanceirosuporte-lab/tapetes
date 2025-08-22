@@ -70,7 +70,7 @@ export const ProductPage: React.FC = () => {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('products')
         .select(`
           *,
@@ -97,7 +97,7 @@ export const ProductPage: React.FC = () => {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('reviews')
         .select('*')
         .eq('product_id', id)
