@@ -40,58 +40,45 @@ export const Home: React.FC = () => {
         .select(`
           *,
           category:categories(*)
-        `)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setProducts(data || []);
-    } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProducts(mockProducts);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    if (!isSupabaseConfigured()) {
-      console.warn('Supabase not configured. Using mock category data.');
-      setCategories(mockCategories);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .order('name');
-
-      if (error) throw error;
-      setCategories(data || []);
-    } catch (error) {
-      console.error('Erro ao buscar categorias:', error);
-      setCategories(mockCategories);
-    }
-  };
-
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
-    : products.filter(product => product.category_id === selectedCategory);
-
-  const scrollContainer = (containerId: string, direction: 'left' | 'right') => {
-    const container = document.getElementById(containerId);
-    if (container) {
-      const scrollAmount = 320;
-      container.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen">
+          {/* Hero Section Moderno */}
+          <section 
+            className="relative text-white py-20 md:py-32 overflow-hidden"
+            style={{
+              background: settings?.banner_url 
+                ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
+                : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
+            <div className="modern-container relative z-10">
+              <div className="max-w-4xl mx-auto text-center">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                  {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
+                </h1>
+                <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
+                  {settings?.store_description}
+                </p>
+                {settings?.store_slogan && (
+                  <p className="text-base md:text-lg mb-10 opacity-80 italic max-w-xl mx-auto">
+                    "{settings.store_slogan}"
+                  </p>
+                )}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/products" className="btn-primary px-8 py-4 text-lg">
+                    Explorar Produtos
+                    <ArrowRight className="h-5 w-5" />
+                  </Link>
+                  <Link to="/products" className="btn-outline px-8 py-4 text-lg">
+                    Ver Ofertas
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
         <div className="loading-skeleton w-32 h-32 rounded-full"></div>
       </div>
     );
@@ -101,19 +88,21 @@ export const Home: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero Section Moderno */}
       <section 
-        className="relative text-white py-20 md:py-32 overflow-hidden"
-        style={{
-          background: settings?.banner_url 
-            ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
-            : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
-          backgroundPosition: 'center center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
-        <div className="modern-container relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+              const backgroundStyle = {
+                background: settings?.banner_url
+                  ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
+                  : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
+                backgroundPosition: 'center center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat'
+              };
+              return (
+                <div className="min-h-screen">
+                  {/* Hero Section Moderno */}
+                  <section
+                    className="relative text-white py-20 md:py-32 overflow-hidden"
+                    style={backgroundStyle}
+                  >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
             </h1>
@@ -315,45 +304,45 @@ export const Home: React.FC = () => {
             {(settings?.facebook_url || settings?.instagram_url || settings?.twitter_url) && (
               <div>
                 <h3 className="text-xl font-semibold mb-6">Siga-nos</h3>
-                <div className="flex space-x-4">
-                  {settings?.facebook_url && (
-                    <a 
-                      href={settings.facebook_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                      </svg>
-                    </a>
-                  )}
-                  {settings?.instagram_url && (
-                    <a 
-                      href={settings.instagram_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-all"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.611-3.197-1.559-.748-.948-1.197-2.25-1.197-3.654 0-1.404.449-2.706 1.197-3.654.749-.948 1.9-1.559 3.197-1.559s2.448.611 3.197 1.559c.748.948 1.197 2.25 1.197 3.654 0 1.404-.449 2.706-1.197 3.654-.749.948-1.9 1.559-3.197 1.559zm7.138 0c-1.297 0-2.448-.611-3.197-1.559-.748-.948-1.197-2.25-1.197-3.654 0-1.404.449-2.706 1.197-3.654.749-.948 1.9-1.559 3.197-1.559s2.448.611 3.197 1.559c.748.948 1.197 2.25 1.197 3.654 0 1.404-.449 2.706-1.197 3.654-.749.948-1.9 1.559-3.197 1.559z"/>
-                      </svg>
-                    </a>
-                  )}
-                  {settings?.twitter_url && (
-                    <a 
-                      href={settings.twitter_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              </div>
+                <div className="min-h-screen">
+                  {/* Hero Section Moderno */}
+                  <section
+                    className="relative text-white py-20 md:py-32 overflow-hidden"
+                    style={{
+                      background: settings?.banner_url
+                        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
+                        : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
+                      backgroundPosition: 'center center',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
+                    <div className="modern-container relative z-10">
+                      <div className="max-w-4xl mx-auto text-center">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                          {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
+                        </h1>
+                        <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
+                          {settings?.store_description}
+                        </p>
+                        {settings?.store_slogan && (
+                          <p className="text-base md:text-lg mb-10 opacity-80 italic max-w-xl mx-auto">
+                            "{settings.store_slogan}"
+                          </p>
+                        )}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                          <Link to="/products" className="btn-primary px-8 py-4 text-lg">
+                            Explorar Produtos
+                            <ArrowRight className="h-5 w-5" />
+                          </Link>
+                          <Link to="/products" className="btn-outline px-8 py-4 text-lg">
+                            Ver Ofertas
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
             )}
           </div>
 
