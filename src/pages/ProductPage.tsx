@@ -198,8 +198,8 @@ export const ProductPage: React.FC = () => {
               {/* Cabeçalho */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="badge-new">Novo</span>
-                  <span className="badge-stock">Em Estoque</span>
+                  <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-green-100 text-green-700 border border-green-200">Novo</span>
+                  <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">Em Estoque</span>
                 </div>
                 
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
