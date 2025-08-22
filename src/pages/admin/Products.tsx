@@ -91,6 +91,8 @@ export const AdminProducts: React.FC = () => {
         stock_quantity: parseInt(formData.stock_quantity),
         category_id: formData.category_id,
         image_url: formData.image_url,
+        image_secondary_1: formData.image_secondary_1,
+        image_secondary_2: formData.image_secondary_2,
       };
 
       if (editingProduct) {
