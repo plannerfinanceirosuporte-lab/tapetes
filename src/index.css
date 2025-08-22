@@ -1,5 +1,5 @@
 .category-pill:first-child {
-  margin-left: 8px;
+  margin-left: 16px;
 }
 /* Esconde a barra de rolagem horizontal */
 .no-scrollbar {
@@ -895,7 +895,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 16px 0 16px 32px;
+  padding: 16px 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -916,6 +916,10 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+}
+
+.category-pill:first-child {
+  margin-left: 16px;
 }
 
 .category-pill:hover {
