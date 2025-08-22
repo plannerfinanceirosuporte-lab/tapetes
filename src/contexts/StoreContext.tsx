@@ -2,6 +2,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase, StoreSettings, isSupabaseConfigured } from '../lib/supabase';
 
 interface StoreSettings {
+  contact_email: string;
+  contact_phone: string;
+  button_primary_text_color: string;
+  button_primary_hover_bg_color: string;
+  button_primary_hover_text_color: string;
+  button_secondary_bg_color: string;
+  button_secondary_text_color: string;
   id: string;
   // Informações básicas
   store_name: string;
@@ -24,11 +31,6 @@ interface StoreSettings {
   
   // Cores de botões
   button_primary_bg_color: string;
-  button_primary_text_color: string;
-  button_primary_hover_bg_color: string;
-  button_primary_hover_text_color: string;
-  button_secondary_bg_color: string;
-  button_secondary_text_color: string;
   button_secondary_hover_bg_color: string;
   button_secondary_hover_text_color: string;
   button_success_bg_color: string;
@@ -148,15 +150,8 @@ interface StoreSettings {
   maintenance_mode: boolean;
   
   // SEO
-  meta_title: string;
-  meta_description: string;
-  meta_keywords: string;
+  // meta_title, meta_description, meta_keywords removidos (duplicidade)
   google_analytics_id: string;
-  facebook_pixel_id: string;
-  
-  // Contato
-  contact_email: string;
-  contact_phone: string;
   contact_whatsapp: string;
   contact_address: string;
   
@@ -257,37 +252,8 @@ const defaultSettings: StoreSettings = {
   store_name: 'TechStore',
   store_description: 'Os melhores produtos com qualidade garantida',
   store_slogan: 'Tecnologia que transforma sua vida',
-  logo_url: '',
-  favicon_url: '',
-  banner_url: '',
-  header_banner_url: '',
-  about_image_url: '',
-  primary_color: '#3b82f6',
   secondary_color: '#10b981',
-  accent_color: '#f59e0b',
-  background_color: '#f9fafb',
-  text_color: '#111827',
-  
-  // Cores de botões
-  button_primary_bg_color: '#3b82f6',
-  button_primary_text_color: '#ffffff',
-  button_primary_hover_bg_color: '#2563eb',
-  button_primary_hover_text_color: '#ffffff',
-  button_secondary_bg_color: '#6b7280',
-  button_secondary_text_color: '#ffffff',
-  button_secondary_hover_bg_color: '#4b5563',
-  button_secondary_hover_text_color: '#ffffff',
-  button_success_bg_color: '#10b981',
-  button_success_text_color: '#ffffff',
-  button_success_hover_bg_color: '#059669',
-  button_success_hover_text_color: '#ffffff',
-  button_danger_bg_color: '#ef4444',
-  button_danger_text_color: '#ffffff',
-  button_danger_hover_bg_color: '#dc2626',
   button_danger_hover_text_color: '#ffffff',
-
-  // Cores de textos específicos
-  product_title_color: '#111827',
   product_description_color: '#6b7280',
   product_price_color: '#3b82f6',
   header_text_color: '#111827',
@@ -377,7 +343,6 @@ const defaultSettings: StoreSettings = {
 
   font_family: 'Roboto',
   heading_font: 'Montserrat',
-  heading_font: 'Montserrat',
   currency: 'BRL',
   currency_symbol: 'R$',
   language: 'pt-BR',
@@ -390,41 +355,9 @@ const defaultSettings: StoreSettings = {
   maintenance_mode: false,
   meta_title: '',
   meta_description: '',
-  meta_keywords: '',
-  google_analytics_id: '',
-  facebook_pixel_id: '',
-  contact_email: '',
-  contact_phone: '',
   contact_whatsapp: '',
-  contact_address: '',
-  facebook_url: '',
-  instagram_url: '',
-  twitter_url: '',
-  youtube_url: '',
-  linkedin_url: '',
-  tiktok_url: '',
-  min_order_value: 0,
-  free_shipping_threshold: 100,
-  tax_rate: 0,
-  enable_credit_card: true,
-  enable_debit_card: true,
-  enable_pix: true,
-  enable_boleto: true,
-  enable_paypal: false,
-  default_shipping_cost: 10,
-  estimated_delivery_days: 7,
   enable_local_pickup: false,
-  welcome_message: 'Descubra produtos incríveis com a melhor qualidade do mercado!',
-  footer_text: '© 2024 TechStore. Todos os direitos reservados.',
-  
-  // SEO
-  meta_title: '',
-  meta_description: '',
   meta_keywords: '',
-  meta_author: '',
-  meta_robots: 'index,follow',
-  canonical_url: '',
-  og_title: '',
   og_description: '',
   og_image: '',
   og_type: 'website',
