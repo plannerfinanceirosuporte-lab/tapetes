@@ -299,15 +299,15 @@ export const Products: React.FC = () => {
                 </button>
               </div>
             ) : (
-              {/* Destaques em 2 linhas com scroll horizontal invisível */}
+              {/* Destaques em 2 linhas, sem scroll */}
               {viewMode === 'grid' ? (
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+                  <div className="grid grid-cols-2 gap-4 pb-2">
                     {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
                       <ProductCard key={product.id} product={product} />
                     ))}
                   </div>
-                  <div className="flex gap-4 overflow-x-auto no-scrollbar pt-2">
+                  <div className="grid grid-cols-2 gap-4 pt-2">
                     {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
                       <ProductCard key={product.id} product={product} />
                     ))}
