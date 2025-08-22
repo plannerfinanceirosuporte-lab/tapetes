@@ -144,7 +144,7 @@ export const Home: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Explore nossas categorias
           </h2>
-          <div className="category-pills justify-center overflow-x-auto pb-4 px-2 md:px-0 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="category-pills justify-center overflow-x-auto pb-4 pl-6 pr-2 md:px-0 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
