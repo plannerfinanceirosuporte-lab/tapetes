@@ -16,7 +16,6 @@ export const Home: React.FC = () => {
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat'
     };
-    // ...existing code...
     return (
       <div className="min-h-screen">
         {/* Hero Section Moderno */}
@@ -52,8 +51,6 @@ export const Home: React.FC = () => {
         </section>
       </div>
     );
-                </>
-            <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
             >
