@@ -185,10 +185,21 @@ export const Home: React.FC = () => {
               <p className="text-gray-500 text-lg">Nenhum produto em destaque.</p>
             </div>
           ) : (
-            <div className="products-grid">
-              {filteredProducts.slice(0, 8).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            <div className="flex flex-col gap-8">
+              <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
+                  <div style={{ minWidth: 240, maxWidth: 320 }}>
+                    <ProductCard key={product.id} product={product} />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-6 overflow-x-auto no-scrollbar pt-2">
+                {filteredProducts.slice(Math.ceil(filteredProducts.length / 2), 8).map((product) => (
+                  <div style={{ minWidth: 240, maxWidth: 320 }}>
+                    <ProductCard key={product.id} product={product} />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           
