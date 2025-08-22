@@ -191,16 +191,16 @@ export const Home: React.FC = () => {
               const secondRow = destaque.slice(half);
               return (
                 <>
-                  <div className="flex gap-6 overflow-x-auto pb-4 pl-12 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', minWidth: '100%' }}>
+                  <div className="flex gap-4 overflow-x-auto pb-4 px-4 justify-center scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
                     {firstRow.map((product) => (
-                      <div key={product.id} className="min-w-[220px]">
+                      <div key={product.id} className="min-w-[180px] flex-shrink-0">
                         <ProductCard product={product} />
                       </div>
                     ))}
                   </div>
-                  <div className="flex gap-6 overflow-x-auto pb-4 pl-12 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', minWidth: '100%' }}>
+                  <div className="flex gap-4 overflow-x-auto pb-4 px-4 justify-center scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
                     {secondRow.map((product) => (
-                      <div key={product.id} className="min-w-[220px]">
+                      <div key={product.id} className="min-w-[180px] flex-shrink-0">
                         <ProductCard product={product} />
                       </div>
                     ))}
