@@ -54,9 +54,7 @@ export const Header: React.FC = () => {
             {/* Ações */}
             <div className="flex items-center gap-4">
               {/* Busca Mobile */}
-              <button className="md:hidden cart-button">
-                <Search className="h-5 w-5" />
-              </button>
+              {/* Ícone de busca removido no mobile */}
               
               {/* Carrinho */}
               <Link to="/cart" className="cart-button">

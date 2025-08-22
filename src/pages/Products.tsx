@@ -299,11 +299,27 @@ export const Products: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className={viewMode === 'grid' ? 'products-grid' : 'space-y-4'}>
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              {/* Destaques em 2 linhas com scroll horizontal invisível */}
+              {viewMode === 'grid' ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+                    {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                  <div className="flex gap-4 overflow-x-auto no-scrollbar pt-2">
+                    {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              )}
             )}
           </div>
         </div>

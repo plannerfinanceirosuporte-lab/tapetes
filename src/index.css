@@ -1,3 +1,11 @@
+/* Esconde a barra de rolagem horizontal */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
@@ -770,9 +778,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-image {
-  height: 40px;
+  height: 32px;
   width: auto;
-  max-width: 200px;
+  max-width: 140px;
   object-fit: contain;
 }
 
