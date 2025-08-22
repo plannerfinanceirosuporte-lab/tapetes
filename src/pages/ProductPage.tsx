@@ -151,9 +151,9 @@ export const ProductPage: React.FC = () => {
   // Simular múltiplas imagens para demonstração
   const productImages = [
     product.image_url,
-    product.image_url,
-    product.image_url
-  ];
+    product.image_secondary_1,
+    product.image_secondary_2
+  ].filter(Boolean);
 
   return (
   <div className="min-h-screen bg-gray-50 pt-2 pb-4">
