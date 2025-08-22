@@ -58,7 +58,7 @@ export const Home: React.FC = () => {
             </div>
           </div>
         </section>
-        {/* Seção de produtos em destaque, benefícios, footer - mantenha apenas um bloco de retorno, todas tags fechadas corretamente */}
+        {/* ...restante do conteúdo da Home (categorias, produtos em destaque, benefícios, footer) ... */}
       </div>
     );
       <section 
