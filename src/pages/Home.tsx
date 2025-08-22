@@ -188,14 +188,14 @@ export const Home: React.FC = () => {
             <div className="flex flex-col gap-8">
               <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
                 {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
-                  <div style={{ minWidth: 240, maxWidth: 320 }}>
+                  <div style={{ minWidth: 270, maxWidth: 350 }}>
                     <ProductCard key={product.id} product={product} />
                   </div>
                 ))}
               </div>
               <div className="flex gap-6 overflow-x-auto no-scrollbar pt-2">
                 {filteredProducts.slice(Math.ceil(filteredProducts.length / 2), 8).map((product) => (
-                  <div style={{ minWidth: 240, maxWidth: 320 }}>
+                  <div style={{ minWidth: 270, maxWidth: 350 }}>
                     <ProductCard key={product.id} product={product} />
                   </div>
                 ))}
