@@ -6,6 +6,42 @@ import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
 
 export const ProductPage: React.FC = () => {
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+      setIsFavorited(favorites.includes(product.id));
+    }
+  }, [product]);
+
+  const handleFavorite = () => {
+    if (!product) return;
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let updated;
+    if (favorites.includes(product.id)) {
+      updated = favorites.filter((id: string) => id !== product.id);
+      setIsFavorited(false);
+    } else {
+      updated = [...favorites, product.id];
+      setIsFavorited(true);
+    }
+    localStorage.setItem('favorites', JSON.stringify(updated));
+  };
+
+  const handleShare = () => {
+    if (!product) return;
+    const shareData = {
+      title: product.name,
+      text: product.description,
+      url: window.location.href
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {});
+    } else {
+      window.prompt('Copie o link do produto:', window.location.href);
+    }
+  };
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -241,15 +277,15 @@ export const ProductPage: React.FC = () => {
                     Adicionar ao Carrinho
                   </button>
                   
-                  <button className="btn-secondary py-3">
-                    <Heart className="h-5 w-5" />
-                    Favoritar
+                  <button className={`btn-secondary py-3 flex items-center gap-2 ${isFavorited ? 'text-red-500' : ''}`} onClick={handleFavorite}>
+                    <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500' : ''}`} />
+                    {isFavorited ? 'Favoritado' : 'Favoritar'}
                   </button>
                 </div>
                 
                 <button className="btn-outline w-full py-3">
                   <Share2 className="h-5 w-5" />
-                  Compartilhar Produto
+                  <span onClick={handleShare}>Compartilhar Produto</span>
                 </button>
               </div>
 
