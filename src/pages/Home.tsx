@@ -129,22 +129,22 @@ export const Home: React.FC = () => {
               <Link to="/products" className="btn-primary px-8 py-4 text-lg">
                 Explorar Produtos
                 <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link to="/products" className="btn-outline px-8 py-4 text-lg">
-                Ver Ofertas
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Categorias Modernas */}
-      <section className="py-16 bg-white">
-        <div className="modern-container">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Explore nossas categorias
-          </h2>
-          <div className="category-pills justify-start overflow-x-auto pb-4 pl-12 pr-4 md:px-0 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', minWidth: '100%' }}>
+                <>
+                  <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide hide-scroll" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    {firstRow.map((product) => (
+                      <div key={product.id} className="min-w-[260px]">
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide hide-scroll mt-8" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    {secondRow.map((product) => (
+                      <div key={product.id} className="min-w-[260px]">
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                </>
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
