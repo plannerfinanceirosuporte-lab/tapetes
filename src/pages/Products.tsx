@@ -298,28 +298,25 @@ export const Products: React.FC = () => {
                   Limpar Filtros
                 </button>
               </div>
-            ) : (
-              {/* Destaques em 2 linhas, sem scroll */}
-              {viewMode === 'grid' ? (
-                <div className="flex flex-col gap-4">
-                  <div className="grid grid-cols-2 gap-4 pb-2">
-                    {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 pt-2">
-                    {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredProducts.map((product) => (
+            ) : viewMode === 'grid' ? (
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4 pb-2">
+                  {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
                 </div>
-              )}
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
             )}
           </div>
         </div>
