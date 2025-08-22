@@ -4,8 +4,7 @@ import { ArrowRight, Truck, Shield, RotateCcw, Star, Heart, Share2 } from 'lucid
 import { useStore } from '../contexts/StoreContext';
 import { supabase, isSupabaseConfigured, Product, Category } from '../lib/supabase';
 import { ProductCard } from '../components/ProductCard';
-import { mockReviews } from '../lib/mockData';
-
+export const Home: React.FC = () => {
   const { settings } = useStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -226,4 +225,4 @@ import { mockReviews } from '../lib/mockData';
       </footer>
     </div>
   );
-};
+}
