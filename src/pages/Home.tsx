@@ -193,15 +193,15 @@ export const Home: React.FC = () => {
                 <>
                   <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
                     {firstRow.map((product) => (
-                      <div key={product.id} className="min-w-[240px]">
-                        <ProductCard product={product} />
+                      <div key={product.id} className="min-w-[260px]">
+                        <ProductCard product={{ ...product, badgeStyle: 'minimal' }} />
                       </div>
                     ))}
                   </div>
                   <div className="flex gap-8 overflow-x-auto pb-4 px-6 justify-start scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
                     {secondRow.map((product) => (
-                      <div key={product.id} className="min-w-[240px]">
-                        <ProductCard product={product} />
+                      <div key={product.id} className="min-w-[260px]">
+                        <ProductCard product={{ ...product, badgeStyle: 'minimal' }} />
                       </div>
                     ))}
                   </div>
