@@ -142,24 +142,23 @@ export const Home: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="modern-container">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Explore por Categoria
+            Explore nossas categorias
           </h2>
-          
-          <div className="category-pills justify-center">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
-            >
-              Todos os Produtos
-            </button>
+          <div className="flex gap-8 overflow-x-auto pb-4 px-2 md:px-0 justify-center">
             {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`category-pill ${selectedCategory === category.id ? 'active' : ''}`}
-              >
-                {category.name}
-              </button>
+              <div key={category.id} className="flex flex-col items-center min-w-[110px]">
+                <button
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`w-24 h-24 rounded-full bg-white shadow-md flex items-center justify-center mb-2 border-2 transition-all duration-200 ${selectedCategory === category.id ? 'border-blue-500 scale-105' : 'border-transparent'}`}
+                >
+                  {category.image_url ? (
+                    <img src={category.image_url} alt={category.name} className="w-20 h-20 rounded-full object-cover" />
+                  ) : (
+                    <span className="text-gray-400 text-3xl"><Store /></span>
+                  )}
+                </button>
+                <span className="text-sm font-medium text-gray-700 text-center truncate w-24">{category.name}</span>
+              </div>
             ))}
           </div>
         </div>
