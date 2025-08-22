@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
 import { supabase, Product, Review, isSupabaseConfigured } from '../lib/supabase';
 import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
@@ -14,6 +14,42 @@ export const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+      setIsFavorited(favorites.includes(product.id));
+    }
+  }, [product]);
+
+  const handleFavorite = () => {
+    if (!product) return;
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let updated;
+    if (favorites.includes(product.id)) {
+      updated = favorites.filter((id: string) => id !== product.id);
+      setIsFavorited(false);
+    } else {
+      updated = [...favorites, product.id];
+      setIsFavorited(true);
+    }
+    localStorage.setItem('favorites', JSON.stringify(updated));
+  };
+
+  const handleShare = () => {
+    if (!product) return;
+    const shareData = {
+      title: product.name,
+      text: product.description,
+      url: window.location.href
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {});
+    } else {
+      window.prompt('Copie o link do produto:', window.location.href);
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -34,7 +70,7 @@ export const ProductPage: React.FC = () => {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('products')
         .select(`
           *,
@@ -61,7 +97,7 @@ export const ProductPage: React.FC = () => {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('reviews')
         .select('*')
         .eq('product_id', id)
@@ -115,41 +151,46 @@ export const ProductPage: React.FC = () => {
   // Simular múltiplas imagens para demonstração
   const productImages = [
     product.image_url,
-    product.image_url,
-    product.image_url
-  ];
+    product.image_secondary_1,
+    product.image_secondary_2
+  ].filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+  <div className="min-h-screen bg-gray-50 pt-2 pb-4">
       <div className="modern-container">
         <div className="modern-card overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
             {/* Galeria de Imagens */}
-            <div className="product-images-layout">
-              {/* Imagem Principal */}
-              <div className="main-image-container">
-                <img
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="main-image"
-                />
-              </div>
-              
-              {/* Imagens Secundárias */}
-              <div className="secondary-images-container">
-                <img
-                  src={productImages[1]}
-                  alt={`${product.name} - Vista 2`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(1)}
-                />
-                <img
-                  src={productImages[2]}
-                  alt={`${product.name} - Vista 3`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(2)}
-                />
-              </div>
+            <div className="relative mx-auto my-2 w-full flex justify-center items-center" style={{ maxWidth: 400, height: 400 }}>
+              {/* Seta esquerda: só aparece se não for a primeira imagem */}
+              {selectedImage > 0 && (
+                <button
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow"
+                  onClick={() => setSelectedImage(selectedImage - 1)}
+                  aria-label="Imagem anterior"
+                  style={{ zIndex: 2 }}
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                </button>
+              )}
+              {/* Imagem principal centralizada, com border radius na imagem */}
+              <img
+                key={selectedImage}
+                src={productImages[selectedImage]}
+                alt={product.name}
+                className="mx-auto rounded-2xl bg-white shadow transition-all duration-500 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-72 sm:h-80 md:h-96 object-contain"
+              />
+              {/* Seta direita: só aparece se não for a última imagem */}
+              {selectedImage < productImages.length - 1 && (
+                <button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow"
+                  onClick={() => setSelectedImage(selectedImage + 1)}
+                  aria-label="Próxima imagem"
+                  style={{ zIndex: 2 }}
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                </button>
+              )}
             </div>
 
             {/* Detalhes do Produto */}
@@ -157,8 +198,8 @@ export const ProductPage: React.FC = () => {
               {/* Cabeçalho */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="badge-new">Novo</span>
-                  <span className="badge-stock">Em Estoque</span>
+                  <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-green-100 text-green-700 border border-green-200">Novo</span>
+                  <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">Em Estoque</span>
                 </div>
                 
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
@@ -186,12 +227,7 @@ export const ProductPage: React.FC = () => {
               </div>
 
               {/* Descrição */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
+              {/* Descrição movida para abaixo dos botões */}
 
               {/* Controle de Quantidade */}
               <div className="flex items-center gap-6">
@@ -241,16 +277,24 @@ export const ProductPage: React.FC = () => {
                     Adicionar ao Carrinho
                   </button>
                   
-                  <button className="btn-secondary py-3">
-                    <Heart className="h-5 w-5" />
-                    Favoritar
+                  <button className={`btn-secondary py-3 flex items-center gap-2 ${isFavorited ? 'text-red-500' : ''}`} onClick={handleFavorite}>
+                    <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500' : ''}`} />
+                    {isFavorited ? 'Favoritado' : 'Favoritar'}
                   </button>
                 </div>
                 
                 <button className="btn-outline w-full py-3">
                   <Share2 className="h-5 w-5" />
-                  Compartilhar Produto
+                  <span onClick={handleShare}>Compartilhar Produto</span>
                 </button>
+              </div>
+
+              {/* Descrição abaixo dos botões */}
+              <div className="bg-gray-50 rounded-lg p-6 mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Benefícios */}

@@ -1,12 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, RotateCcw, Star } from 'lucide-react';
 import { useStore } from '../contexts/StoreContext';
-import { mockCategories, mockProducts, mockReviews } from '../lib/mockData';
+import { supabase, isSupabaseConfigured, Product, Category } from '../lib/supabase';
 import { ProductCard } from '../components/ProductCard';
 
 export const Home: React.FC = () => {
   const { settings } = useStore();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts();
+  }, []);
+
+  const fetchCategories = async () => {
+    if (!isSupabaseConfigured()) {
+      setCategories([]);
+      return;
+    }
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name');
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      setCategories([]);
+    }
+  };
+
+  const fetchProducts = async () => {
+    if (!isSupabaseConfigured()) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const backgroundStyle = {
     background: settings?.banner_url
       ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
@@ -50,76 +96,36 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Categorias */}
+      {/* Categorias - horizontal, sem imagem */}
       <section className="modern-container py-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Categorias</h2>
         <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
-          {mockCategories.map((cat) => (
-            <div key={cat.id} className="flex flex-col items-center min-w-[120px]">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-3 overflow-hidden">
-                <img src={cat.image_url || 'https://placehold.co/80x80'} alt={cat.name} className="w-full h-full object-cover rounded-full" />
-              </div>
-              <span className="text-sm font-semibold text-gray-700 text-center">{cat.name}</span>
+          {categories.map((cat) => (
+            <div key={cat.id} className="flex flex-col items-center min-w-[120px] justify-center">
+              <span className="text-base font-semibold text-gray-700 text-center px-4 py-2 rounded-full bg-gray-100">{cat.name}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Produtos em destaque */}
+      {/* Produtos em destaque - grid minimalista */}
       <section className="modern-container py-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Produtos em Destaque</h2>
-        <div className="products-grid">
-          {mockProducts.slice(0, 6).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-12 text-gray-500">Carregando produtos...</div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">Nenhum produto encontrado.</div>
+        ) : (
+          <div className="products-grid">
+            {products.slice(0, 6).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
         <div className="text-center mt-8">
           <Link to="/products" className="btn-primary px-8 py-4 text-lg inline-flex items-center gap-2">
             Ver todos os produtos <ArrowRight className="h-5 w-5" />
           </Link>
-        </div>
-      </section>
-
-      {/* Benefícios */}
-      <section className="modern-container py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Vantagens da Loja</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex items-center gap-3 p-6 bg-green-50 rounded-lg border border-green-200">
-            <Truck className="h-8 w-8 text-green-600" />
-            <div>
-              <p className="font-semibold text-green-800 text-base">Frete Grátis</p>
-              <p className="text-xs text-green-600">Para todo Brasil</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-6 bg-blue-50 rounded-lg border border-blue-200">
-            <Shield className="h-8 w-8 text-blue-600" />
-            <div>
-              <p className="font-semibold text-blue-800 text-base">Compra Segura</p>
-              <p className="text-xs text-blue-600">100% Protegida</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-6 bg-purple-50 rounded-lg border border-purple-200">
-            <RotateCcw className="h-8 w-8 text-purple-600" />
-            <div>
-              <p className="font-semibold text-purple-800 text-base">Troca Fácil</p>
-              <p className="text-xs text-purple-600">30 dias</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Depoimentos/Reviews */}
-      <section className="modern-container py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Depoimentos de Clientes</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {mockReviews.slice(0, 3).map((review) => (
-            <div key={review.id} className="p-6 bg-white rounded-lg shadow flex flex-col items-center">
-              <Star className="h-6 w-6 text-yellow-400 mb-2" />
-              <p className="text-gray-700 text-center mb-2">{review.comment}</p>
-              <span className="text-sm font-semibold text-gray-900">{review.customer_name}</span>
-              <span className="text-xs text-gray-500 mt-1">{new Date(review.created_at).toLocaleDateString()}</span>
-            </div>
-          ))}
         </div>
       </section>
 
