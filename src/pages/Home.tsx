@@ -7,86 +7,60 @@ import { ProductCard } from '../components/ProductCard';
 import { useStore } from '../contexts/StoreContext';
 
 export const Home: React.FC = () => {
-  const { settings } = useStore();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-    
-    if (import.meta.env.DEV) {
-      console.log('🔧 Supabase Status:', getSupabaseStatus());
-      if (!isSupabaseConfigured()) {
-        console.warn('⚠️ Supabase não configurado. Usando dados de demonstração.');
-        console.info('📖 Veja SUPABASE_INTEGRATION.md para instruções de configuração.');
-      }
-    }
-  }, []);
-
-  const fetchProducts = async () => {
-    if (!isSupabaseConfigured()) {
-      console.warn('Supabase not configured. Using mock product data.');
-      setProducts(mockProducts);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          category:categories(*)
-        <div className="min-h-screen">
-          {/* Hero Section Moderno */}
-          <section 
-            className="relative text-white py-20 md:py-32 overflow-hidden"
-            style={{
-              background: settings?.banner_url 
-                ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
-                : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
-              backgroundPosition: 'center center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
-            <div className="modern-container relative z-10">
-              <div className="max-w-4xl mx-auto text-center">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                  {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
-                </h1>
-                <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
-                  {settings?.store_description}
+    const { settings } = useStore();
+    const backgroundStyle = {
+      background: settings?.banner_url
+        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
+        : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat'
+    };
+    const { settings } = useStore();
+    const backgroundStyle = {
+      background: settings?.banner_url
+        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${settings.banner_url})`
+        : `linear-gradient(135deg, ${settings?.primary_color || '#4f46e5'} 0%, ${settings?.secondary_color || '#06b6d4'} 100%)`,
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat'
+    };
+    return (
+      <div className="min-h-screen">
+        {/* Hero Section Moderno */}
+        <section
+          className="relative text-white py-20 md:py-32 overflow-hidden"
+          style={backgroundStyle}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
+          <div className="modern-container relative z-10">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
+              </h1>
+              <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
+                {settings?.store_description}
+              </p>
+              {settings?.store_slogan && (
+                <p className="text-base md:text-lg mb-10 opacity-80 italic max-w-xl mx-auto">
+                  {`"${settings.store_slogan}"`}
                 </p>
-                {settings?.store_slogan && (
-                  <p className="text-base md:text-lg mb-10 opacity-80 italic max-w-xl mx-auto">
-                    "{settings.store_slogan}"
-                  </p>
-                )}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/products" className="btn-primary px-8 py-4 text-lg">
-                    Explorar Produtos
-                    <ArrowRight className="h-5 w-5" />
-                  </Link>
-                  <Link to="/products" className="btn-outline px-8 py-4 text-lg">
-                    Ver Ofertas
-                  </Link>
-                </div>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/products" className="btn-primary px-8 py-4 text-lg">
+                  Explorar Produtos
+                  <ArrowRight className="h-5 w-5" />
+                </Link>
+                <Link to="/products" className="btn-outline px-8 py-4 text-lg">
+                  Ver Ofertas
+                </Link>
               </div>
             </div>
-          </section>
-        <div className="loading-skeleton w-32 h-32 rounded-full"></div>
+          </div>
+        </section>
+        {/* Seção de produtos em destaque, benefícios, footer - mantenha apenas um bloco de retorno, todas tags fechadas corretamente */}
       </div>
     );
-  }
-
-  return (
-    <div className="min-h-screen">
-      {/* Hero Section Moderno */}
       <section 
               const backgroundStyle = {
                 background: settings?.banner_url
