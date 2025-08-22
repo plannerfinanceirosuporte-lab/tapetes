@@ -81,7 +81,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.stock_quantity > 50 && (
-              <span className="badge-new">Novo</span>
+              <span className="modern-badge badge-new" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+                Novo
+              </span>
             )}
             {product.stock_quantity < 10 && product.stock_quantity > 0 && (
               <span className="badge-low-stock">Últimas unidades</span>
@@ -120,7 +122,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               R$ {product.price.toFixed(2).replace('.', ',')}
             </span>
             
-            <span className="badge-stock">
+            <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
               Em estoque
             </span>
           </div>
