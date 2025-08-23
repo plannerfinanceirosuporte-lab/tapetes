@@ -1,3 +1,6 @@
+body, #root, *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
 .product-card, .product-card * {
   font-family: var(--font-family) !important;
 }
