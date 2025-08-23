@@ -1,3 +1,6 @@
+.product-card, .product-card * {
+  font-family: var(--font-family) !important;
+}
 html, body {
   font-family: var(--font-family) !important;
 }
