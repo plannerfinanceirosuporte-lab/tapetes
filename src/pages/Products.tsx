@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, SlidersHorizontal, Grid, List } from 'lucide-react';
 import { supabase, Product, Category, isSupabaseConfigured } from '../lib/supabase';
 import { mockProducts, mockCategories } from '../lib/mockData';
-import { ProductCard } from '../components/ProductCard';
+import { ProductCardFull } from '../components/ProductCardFull';
 import { useStore } from '../contexts/StoreContext';
 
 export const Products: React.FC = () => {
@@ -302,19 +302,19 @@ export const Products: React.FC = () => {
               <div className="flex flex-col gap-4">
                 <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
                   {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCardFull key={product.id} product={product} />
                   ))}
                 </div>
                 <div className="flex gap-4 overflow-x-auto no-scrollbar pt-2">
                   {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCardFull key={product.id} product={product} />
                   ))}
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCardFull key={product.id} product={product} />
                 ))}
               </div>
             )}
