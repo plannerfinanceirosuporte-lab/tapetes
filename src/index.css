@@ -895,6 +895,8 @@ h1, h2, h3, h4, h5, h6 {
   padding: 16px 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  width: 100%;
+  min-width: 0;
 }
 
 .category-pills::-webkit-scrollbar {
@@ -903,6 +905,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .category-pill {
   flex-shrink: 0;
+  min-width: 120px;
   padding: 12px 24px;
   border-radius: 24px;
   border: 2px solid var(--gray-200);
