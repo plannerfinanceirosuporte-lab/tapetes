@@ -11,7 +11,7 @@ export const AdminSettings: React.FC = () => {
   const [formData, setFormData] = useState<Partial<StoreSettings>>({});
 
   useEffect(() => {
-    if (settings) {
+    if (settings && Object.keys(formData).length === 0) {
       setFormData(settings);
     }
   }, [settings]);
