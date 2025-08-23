@@ -1,3 +1,6 @@
+html, body {
+  font-family: var(--font-family) !important;
+}
 /* Esconde a barra de rolagem horizontal */
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */
