@@ -13,11 +13,11 @@ export const Header: React.FC = () => {
     <>
       {/* Banner acima do header */}
       {settings?.header_banner_url && (
-        <div style={{position: 'relative', zIndex: 50}}>
+        <div className="responsive-banner" style={{position: 'relative', zIndex: 50}}>
           <img
             src={settings.header_banner_url}
             alt="Banner"
-            className="responsive-banner"
+            style={{width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover'}}
           />
         </div>
       )}
