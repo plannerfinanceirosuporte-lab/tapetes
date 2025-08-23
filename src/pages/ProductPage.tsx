@@ -157,14 +157,18 @@ export const ProductPage: React.FC = () => {
               {/* Cabeçalho */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="badge-new">Novo</span>
-                  <span className="badge-stock">Em Estoque</span>
+                  {product.stock_quantity > 50 && (
+                    <span className="modern-badge badge-new" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+                      Novo
+                    </span>
+                  )}
+                  <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+                    Em Estoque
+                  </span>
                 </div>
-                
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
                   {product.name}
                 </h1>
-                
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="rating-stars">
@@ -179,19 +183,12 @@ export const ProductPage: React.FC = () => {
                     {averageRating.toFixed(1)} ({reviews.length} avaliações)
                   </span>
                 </div>
-
                 <p className="modern-price-large mb-6">
                   R$ {product.price.toFixed(2).replace('.', ',')}
                 </p>
               </div>
 
               {/* Descrição */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
 
               {/* Controle de Quantidade */}
               <div className="flex items-center gap-6">
@@ -240,17 +237,23 @@ export const ProductPage: React.FC = () => {
                     <ShoppingCart className="h-5 w-5" />
                     Adicionar ao Carrinho
                   </button>
-                  
                   <button className="btn-secondary py-3">
                     <Heart className="h-5 w-5" />
                     Favoritar
                   </button>
                 </div>
-                
                 <button className="btn-outline w-full py-3">
                   <Share2 className="h-5 w-5" />
                   Compartilhar Produto
                 </button>
+              </div>
+
+              {/* Descrição abaixo dos botões */}
+              <div className="bg-gray-50 rounded-lg p-6 mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Benefícios */}
