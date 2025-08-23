@@ -258,10 +258,6 @@ export const ProductPage: React.FC = () => {
                     {isFavorited ? 'Favoritado' : 'Favoritar'}
                   </button>
                 </div>
-                <button className="btn-outline w-full py-3">
-                  <Share2 className="h-5 w-5" />
-                  Compartilhar Produto
-                </button>
                 <button
                   className="btn-outline w-full py-3 mt-2"
                   onClick={handleShare}
