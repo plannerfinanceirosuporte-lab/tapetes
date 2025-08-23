@@ -15,6 +15,40 @@ export const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsFavorited(wishlist.includes(product.id));
+    }
+  }, [product]);
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product?.name,
+        text: product?.description,
+        url: window.location.href,
+      });
+    } else {
+      window.prompt('Copie o link do produto:', window.location.href);
+    }
+  };
+
+  const handleFavorite = () => {
+    if (!product) return;
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    let updated;
+    if (wishlist.includes(product.id)) {
+      updated = wishlist.filter((id: string) => id !== product.id);
+      setIsFavorited(false);
+    } else {
+      updated = [...wishlist, product.id];
+      setIsFavorited(true);
+    }
+    localStorage.setItem('wishlist', JSON.stringify(updated));
+  };
 
   useEffect(() => {
     if (id) {
@@ -216,12 +250,22 @@ export const ProductPage: React.FC = () => {
                     <ShoppingCart className="h-5 w-5" />
                     Adicionar ao Carrinho
                   </button>
-                  <button className="btn-secondary py-3">
+                  <button
+                    className={`btn-secondary py-3 ${isFavorited ? 'bg-pink-100 text-pink-600' : ''}`}
+                    onClick={handleFavorite}
+                  >
                     <Heart className="h-5 w-5" />
-                    Favoritar
+                    {isFavorited ? 'Favoritado' : 'Favoritar'}
                   </button>
                 </div>
                 <button className="btn-outline w-full py-3">
+                  <Share2 className="h-5 w-5" />
+                  Compartilhar Produto
+                </button>
+                <button
+                  className="btn-outline w-full py-3 mt-2"
+                  onClick={handleShare}
+                >
                   <Share2 className="h-5 w-5" />
                   Compartilhar Produto
                 </button>
@@ -281,7 +325,7 @@ export const ProductPage: React.FC = () => {
                   <div key={review.id} className="modern-card-minimal p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-gray-900 text-lg">
-                        {review.customer_name}
+                        {review.customer_name && review.customer_name.trim() ? review.customer_name : 'Cliente'}
                       </h4>
                       <div className="rating-stars">
                         {[1, 2, 3, 4, 5].map((star) => (
