@@ -145,11 +145,11 @@ export const Home: React.FC = () => {
             Explore por Categoria
           </h2>
           
-          <div className="category-pills justify-center">
+          <div className="category-pills-scroll" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '16px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', width: '100%' }}>
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
-              style={{ display: 'inline-flex' }}
+              style={{ minWidth: 140, flexShrink: 0, whiteSpace: 'nowrap' }}
             >
               Todos os Produtos
             </button>
@@ -158,11 +158,12 @@ export const Home: React.FC = () => {
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`category-pill ${selectedCategory === category.id ? 'active' : ''}`}
-                style={{ display: 'inline-flex' }}
+                style={{ minWidth: 140, flexShrink: 0, whiteSpace: 'nowrap' }}
               >
                 {category.name}
               </button>
             ))}
+          </div>
           </div>
         </div>
       </section>
