@@ -434,6 +434,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Banner Responsivo */
 .responsive-banner {
+}
+.responsive-banner img {
+  width: 100%;
+  min-width: 100%;
+  display: block;
+  object-fit: cover;
+}
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
