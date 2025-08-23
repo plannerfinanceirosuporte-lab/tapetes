@@ -149,14 +149,16 @@ export const Home: React.FC = () => {
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
+              style={{ display: 'inline-flex' }}
             >
               Todos os Produtos
             </button>
-            {categories.map((category) => (
+            {Array.isArray(categories) && categories.length > 0 && categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`category-pill ${selectedCategory === category.id ? 'active' : ''}`}
+                style={{ display: 'inline-flex' }}
               >
                 {category.name}
               </button>
