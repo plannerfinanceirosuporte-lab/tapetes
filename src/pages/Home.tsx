@@ -134,9 +134,9 @@ export const Home: React.FC = () => {
                 Ver Ofertas
               </Link>
             </div>
-          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Categorias Modernas */}
       <section className="py-16 bg-white">
@@ -163,7 +163,6 @@ export const Home: React.FC = () => {
                 {category.name}
               </button>
             ))}
-          </div>
           </div>
         </div>
       </section>
