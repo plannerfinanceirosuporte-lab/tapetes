@@ -1,6 +1,3 @@
-.category-pill:first-child {
-  margin-left: 16px;
-}
 /* Esconde a barra de rolagem horizontal */
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */

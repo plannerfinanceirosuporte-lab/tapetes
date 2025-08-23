@@ -149,7 +149,6 @@ export const Home: React.FC = () => {
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
-              style={{ marginLeft: 16 }}
             >
               Todos os Produtos
             </button>
