@@ -1,7 +1,7 @@
 .product-card, .product-card * {
   font-family: var(--font-family) !important;
 }
-html, body {
+html, body, #root, .min-h-screen, .modern-container, .modern-card, .product-card, .product-card *, .btn-primary, .btn-secondary, .btn-success, .btn-outline, .category-pill, .category-pills-scroll, .filter-sidebar, .form-input, .form-select, .product-content, .product-title, .product-description, .product-price, .badge-new, .badge-stock, .badge-low-stock, .badge-sale, .cart-badge {
   font-family: var(--font-family) !important;
 }
 /* Esconde a barra de rolagem horizontal */
