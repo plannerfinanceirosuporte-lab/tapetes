@@ -115,6 +115,8 @@ export interface StoreSettings {
   store_name: string;
   store_description: string;
   store_slogan: string;
+  // Cor do título principal da homepage
+  home_title_color?: string;
   
   // URLs de mídia
   logo_url: string;

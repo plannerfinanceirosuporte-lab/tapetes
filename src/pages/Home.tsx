@@ -114,7 +114,10 @@ export const Home: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40"></div>
         <div className="modern-container relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <h1
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+              style={{ color: settings?.home_title_color || '#fff' }}
+            >
               {settings?.welcome_message || `Bem-vindo à ${settings?.store_name}`}
             </h1>
             <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">

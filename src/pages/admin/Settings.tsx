@@ -144,6 +144,28 @@ export const AdminSettings: React.FC = () => {
 
   const renderDesignTab = () => (
     <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-gray-900">Cor do Título Principal da Home</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Cor do Título Principal</label>
+          <div className="flex space-x-2">
+            <input
+              type="color"
+              name="home_title_color"
+              value={formData.home_title_color || '#ffffff'}
+              onChange={handleInputChange}
+              className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+            />
+            <input
+              type="text"
+              name="home_title_color"
+              value={formData.home_title_color || '#ffffff'}
+              onChange={handleInputChange}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
       <h3 className="text-lg font-semibold text-gray-900">Cores Principais</h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div>

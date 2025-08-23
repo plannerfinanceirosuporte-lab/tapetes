@@ -257,6 +257,7 @@ const defaultSettings: StoreSettings = {
   store_name: 'TechStore',
   store_description: 'Os melhores produtos com qualidade garantida',
   store_slogan: 'Tecnologia que transforma sua vida',
+  home_title_color: '#ffffff',
   logo_url: '',
   favicon_url: '',
   banner_url: '',
