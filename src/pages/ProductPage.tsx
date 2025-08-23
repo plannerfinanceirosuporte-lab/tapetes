@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
 import { supabase, Product, Review, isSupabaseConfigured } from '../lib/supabase';
+import ImageGallery from '../components/ImageGallery';
 import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
 
@@ -113,11 +114,12 @@ export const ProductPage: React.FC = () => {
   }
 
   // Simular múltiplas imagens para demonstração
-  const productImages = [
-    product.image_url,
-    product.image_url,
-    product.image_url
-  ];
+  // Usar imagens do produto (image_urls: string[]), fallback para image_url
+  const productImages = Array.isArray((product as any).image_urls) && (product as any).image_urls.length > 0
+    ? (product as any).image_urls
+    : product.image_url
+    ? [product.image_url]
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -126,30 +128,7 @@ export const ProductPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
             <div className="product-images-layout">
-              {/* Imagem Principal */}
-              <div className="main-image-container">
-                <img
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="main-image"
-                />
-              </div>
-              
-              {/* Imagens Secundárias */}
-              <div className="secondary-images-container">
-                <img
-                  src={productImages[1]}
-                  alt={`${product.name} - Vista 2`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(1)}
-                />
-                <img
-                  src={productImages[2]}
-                  alt={`${product.name} - Vista 3`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(2)}
-                />
-              </div>
+              <ImageGallery images={productImages} />
             </div>
 
             {/* Detalhes do Produto */}
