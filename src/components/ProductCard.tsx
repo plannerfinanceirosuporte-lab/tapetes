@@ -130,9 +130,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               Adicionar
             </button>
           </div>
-          <p className="product-description line-clamp-2 mt-2">
-            {product.description}
-          </p>
         </div>
       </Link>
     </div>
