@@ -22,50 +22,51 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-  <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 flex items-center sticky top-0 z-40">
-        <div className="modern-container">
-  <div className="flex flex-row items-center justify-between w-full">
-            {/* Logo */}
-            <Link to="/" className="logo-container flex items-center justify-center">
-              {settings?.logo_url ? (
-                <img
-                  src={settings.logo_url}
-                  alt={settings.store_name}
-                  className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
-                />
-              ) : (
-                <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
-              )}
-              <span className="logo-text hidden sm:block ml-2">
-                {settings?.store_name}
-              </span>
-            </Link>
-
-            {/* Busca */}
-            <div className="search-container hidden md:flex flex-1 items-center justify-center">
-              <Search className="search-icon" />
-              <input
-                type="text"
-                placeholder="Buscar produtos..."
-                className="search-input"
+  <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky top-0 z-40">
+    <div className="modern-container">
+      <div className="flex flex-row items-center justify-between w-full">
+        {/* Esquerda: Logo */}
+        <div className="flex items-center">
+          <Link to="/" className="logo-container flex items-center">
+            {settings?.logo_url ? (
+              <img
+                src={settings.logo_url}
+                alt={settings.store_name}
+                className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
               />
-            </div>
-
-            {/* Ações */}
-            <div className="flex items-center gap-4 justify-center">
-              {/* Carrinho */}
-              <Link to="/cart" className="cart-button">
-                <ShoppingCart className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="cart-badge">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
-            </div>
-          </div>
+            ) : (
+              <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
+            )}
+            <span className="logo-text hidden sm:block ml-2">
+              {settings?.store_name}
+            </span>
+          </Link>
         </div>
-      </header>
+
+        {/* Centro: Busca */}
+        <div className="search-container hidden md:flex flex-1 items-center justify-center">
+          <Search className="search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar produtos..."
+            className="search-input"
+          />
+        </div>
+
+        {/* Direita: Carrinho */}
+        <div className="flex items-center justify-end">
+          <Link to="/cart" className="cart-button ml-6">
+            <ShoppingCart className="h-5 w-5" />
+            {itemCount > 0 && (
+              <span className="cart-badge">
+                {itemCount}
+              </span>
+            )}
+          </Link>
+        </div>
+      </div>
+    </div>
+  </header>
     </>
   );
 }
