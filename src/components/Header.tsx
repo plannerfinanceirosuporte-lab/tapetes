@@ -22,19 +22,19 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-  <header className="w-full bg-white shadow-sm flex items-center justify-between px-4 py-2 sticky top-0 z-40" style={{ marginTop: '64px' }}>
+      <header className="w-full bg-white shadow-sm flex items-center justify-between px-4 pt-3 pb-2 sticky top-0 z-40">
         <div className="modern-container">
           <div className="header-content">
             {/* Logo */}
             <Link to="/" className="logo-container">
               {settings?.logo_url ? (
                 <img
-                  src={settings.logo_url} 
+                  src={settings.logo_url}
                   alt={settings.store_name}
-                  className="logo-image"
+                  className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
                 />
               ) : (
-                <Store className="h-8 w-8 text-blue-600" />
+                <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
               )}
               <span className="logo-text hidden sm:block">
                 {settings?.store_name}
