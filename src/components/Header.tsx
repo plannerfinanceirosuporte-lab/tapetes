@@ -27,37 +27,50 @@ export const Header: React.FC = () => {
       <div className="flex flex-row items-center justify-between w-full">
         {/* Desktop layout: logo left, search center, cart right */}
         <div className="w-full flex items-center justify-between">
-          {/* Logo - left on desktop */}
-          <div className="flex items-center flex-shrink-0">
-            <Link to="/" className="logo-container flex items-center">
+          {/* Desktop: Centralize logo and cart, increase logo size, remove search */}
+          <div className="hidden md:flex w-full items-center justify-center gap-16">
+            <Link to="/" className="logo-container flex items-center justify-center">
               {settings?.logo_url ? (
                 <img
                   src={settings.logo_url}
                   alt={settings.store_name}
-                  className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
+                  className="logo-image h-16 lg:h-20 xl:h-24"
                 />
               ) : (
-                <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
+                <Store className="h-16 lg:h-20 xl:h-24 w-auto text-blue-600" />
+              )}
+              <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
+                {settings?.store_name}
+              </span>
+            </Link>
+            <Link to="/cart" className="cart-button flex items-center justify-center">
+              <ShoppingCart className="h-8 w-8" />
+              {itemCount > 0 && (
+                <span className="cart-badge text-lg">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+          </div>
+          {/* Mobile: keep previous layout */}
+          <div className="flex md:hidden flex-row items-center justify-between w-full">
+            {/* Logo */}
+            <Link to="/" className="logo-container flex items-center justify-center">
+              {settings?.logo_url ? (
+                <img
+                  src={settings.logo_url}
+                  alt={settings.store_name}
+                  className="logo-image h-8 sm:h-10"
+                />
+              ) : (
+                <Store className="h-8 sm:h-10 w-auto text-blue-600" />
               )}
               <span className="logo-text hidden sm:block ml-2">
                 {settings?.store_name}
               </span>
             </Link>
-          </div>
-
-          {/* Search - center on desktop, hidden on mobile */}
-          <div className="hidden md:flex flex-1 items-center justify-center mx-8">
-            <Search className="search-icon" />
-            <input
-              type="text"
-              placeholder="Buscar produtos..."
-              className="search-input"
-            />
-          </div>
-
-          {/* Cart - right on desktop */}
-          <div className="flex items-center justify-end flex-shrink-0">
-            <Link to="/cart" className="cart-button ml-6">
+            {/* Cart */}
+            <Link to="/cart" className="cart-button ml-4">
               <ShoppingCart className="h-5 w-5" />
               {itemCount > 0 && (
                 <span className="cart-badge">
