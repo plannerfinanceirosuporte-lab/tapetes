@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
 
   <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 flex items-center sticky top-0 z-40">
         <div className="modern-container">
-      <div className="flex flex-row items-center justify-between w-full">
+  <div className="flex flex-row items-center justify-between w-full">
             {/* Logo */}
             <Link to="/" className="logo-container flex items-center justify-center">
               {settings?.logo_url ? (
