@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-  <header className="w-full bg-white shadow-sm px-4 py-4 pt-8 sticky top-0 z-40">
+  <header className="w-full bg-white shadow-sm px-4 py-4 pt-2 sticky top-0 z-40">
         <div className="modern-container">
           <div className="flex flex-row items-center justify-between w-full">
             {/* Logo */}

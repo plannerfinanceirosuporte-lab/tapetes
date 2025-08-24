@@ -107,11 +107,11 @@ export const ProductCardFull: React.FC<ProductCardFullProps> = ({ product }) => 
             </span>
           </div>
         )}
-        <div className="flex items-center justify-between mt-auto mb-2">
-          <span className="product-price">
+        <div className="flex flex-wrap items-center justify-between mt-auto mb-2" style={{minWidth: 0}}>
+          <span className="product-price" style={{maxWidth: '60%', overflowWrap: 'break-word', wordBreak: 'break-all'}}>
             R$ {product.price.toFixed(2).replace('.', ',')}
           </span>
-          <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+          <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px', maxWidth: '38%', textAlign: 'right', whiteSpace: 'nowrap'}}>
             Em estoque
           </span>
         </div>
