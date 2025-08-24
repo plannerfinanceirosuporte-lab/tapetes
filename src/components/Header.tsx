@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-      <header className="modern-header">
+  <header className="w-full bg-white shadow-sm flex items-center justify-between px-4 py-2 sticky top-0 z-40" style={{ marginTop: '64px' }}>
         <div className="modern-container">
           <div className="header-content">
             {/* Logo */}
