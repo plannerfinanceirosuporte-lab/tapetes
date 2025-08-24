@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, SlidersHorizontal, Grid, List } from 'lucide-react';
 import { supabase, Product, Category, isSupabaseConfigured } from '../lib/supabase';
 import { mockProducts, mockCategories } from '../lib/mockData';
-import { ProductCardFull } from '../components/ProductCardFull';
+import { ProductCard } from '../components/ProductCard';
 import { useStore } from '../contexts/StoreContext';
 
 export const Products: React.FC = () => {
@@ -306,21 +306,21 @@ export const Products: React.FC = () => {
                 <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
                   {filteredProducts.filter((_, i) => i % 3 === 0).map((product) => (
                     <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
-                      <ProductCardFull key={product.id} product={product} />
+                      <ProductCard key={product.id} product={product} />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
                   {filteredProducts.filter((_, i) => i % 3 === 1).map((product) => (
                     <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
-                      <ProductCardFull key={product.id} product={product} />
+                      <ProductCard key={product.id} product={product} />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
                   {filteredProducts.filter((_, i) => i % 3 === 2).map((product) => (
                     <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
-                      <ProductCardFull key={product.id} product={product} />
+                      <ProductCard key={product.id} product={product} />
                     </div>
                   ))}
                 </div>
