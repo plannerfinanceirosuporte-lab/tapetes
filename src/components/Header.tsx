@@ -25,44 +25,47 @@ export const Header: React.FC = () => {
   <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky top-0 z-40">
     <div className="modern-container">
       <div className="flex flex-row items-center justify-between w-full">
-        {/* Esquerda: Logo */}
-        <div className="flex items-center">
-          <Link to="/" className="logo-container flex items-center">
-            {settings?.logo_url ? (
-              <img
-                src={settings.logo_url}
-                alt={settings.store_name}
-                className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
-              />
-            ) : (
-              <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
-            )}
-            <span className="logo-text hidden sm:block ml-2">
-              {settings?.store_name}
-            </span>
-          </Link>
-        </div>
-
-        {/* Centro: Busca */}
-        <div className="search-container hidden md:flex flex-1 items-center justify-center">
-          <Search className="search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar produtos..."
-            className="search-input"
-          />
-        </div>
-
-        {/* Direita: Carrinho */}
-        <div className="flex items-center justify-end">
-          <Link to="/cart" className="cart-button ml-6">
-            <ShoppingCart className="h-5 w-5" />
-            {itemCount > 0 && (
-              <span className="cart-badge">
-                {itemCount}
+        {/* Desktop layout: logo left, search center, cart right */}
+        <div className="w-full flex items-center justify-between">
+          {/* Logo - left on desktop */}
+          <div className="flex items-center flex-shrink-0">
+            <Link to="/" className="logo-container flex items-center">
+              {settings?.logo_url ? (
+                <img
+                  src={settings.logo_url}
+                  alt={settings.store_name}
+                  className="logo-image h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
+                />
+              ) : (
+                <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
+              )}
+              <span className="logo-text hidden sm:block ml-2">
+                {settings?.store_name}
               </span>
-            )}
-          </Link>
+            </Link>
+          </div>
+
+          {/* Search - center on desktop, hidden on mobile */}
+          <div className="hidden md:flex flex-1 items-center justify-center mx-8">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar produtos..."
+              className="search-input"
+            />
+          </div>
+
+          {/* Cart - right on desktop */}
+          <div className="flex items-center justify-end flex-shrink-0">
+            <Link to="/cart" className="cart-button ml-6">
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="cart-badge">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
       </div>
     </div>
