@@ -86,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               </span>
             )}
             {product.stock_quantity < 10 && product.stock_quantity > 0 && (
-              <span className="badge-low-stock">Últimas unidades</span>
+              <span className="modern-badge badge-low-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>Últimas unidades</span>
             )}
           </div>
         </div>
