@@ -153,11 +153,12 @@ export const Products: React.FC = () => {
           {/* Sidebar com Filtros */}
           <div className="lg:w-80 flex-shrink-0">
             <div className="filter-sidebar">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="filter-title">🔍 Filtros</h3>
+              <div className="flex items-center justify-center gap-4 mb-6 h-16">
+                <h3 className="filter-title flex items-center">🔍 Filtros</h3>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="lg:hidden btn-secondary p-2"
+                  className="lg:hidden btn-secondary p-2 flex items-center justify-center"
+                  style={{height: '40px'}}
                 >
                   <SlidersHorizontal className="h-5 w-5" />
                 </button>
