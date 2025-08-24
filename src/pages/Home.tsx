@@ -148,7 +148,7 @@ export const Home: React.FC = () => {
             Explore por Categoria
           </h2>
           
-          <div className="category-pills-scroll" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '16px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', width: '100%' }}>
+            <div className="category-pills-scroll" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', padding: '16px 0', width: '100%' }}>
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}
