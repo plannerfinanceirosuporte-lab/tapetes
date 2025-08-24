@@ -301,10 +301,29 @@ export const Products: React.FC = () => {
                 </button>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCardFull key={product.id} product={product} />
-                ))}
+              <div className="flex flex-col gap-6">
+                {/* Divide os produtos em 3 linhas horizontais com scroll invisível */}
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 0).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCardFull key={product.id} product={product} />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 1).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCardFull key={product.id} product={product} />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 2).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCardFull key={product.id} product={product} />
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
