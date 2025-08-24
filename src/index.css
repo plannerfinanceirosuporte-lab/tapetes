@@ -1,3 +1,32 @@
+@media (hover: none) and (pointer: coarse) {
+  .modern-card:hover,
+  .modern-card-minimal:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-success:hover,
+  .btn-outline:hover,
+  .product-card:hover,
+  .product-card:hover .product-image,
+  .secondary-image:hover,
+  .payment-method:hover,
+  .cart-item:hover,
+  .quantity-btn:hover,
+  .cart-button:hover,
+  .category-pill:hover,
+  .hover-lift:hover,
+  .hover-scale:hover {
+    filter: none !important;
+    box-shadow: none !important;
+    background: inherit !important;
+    color: inherit !important;
+    transform: none !important;
+    opacity: 1 !important;
+    border: inherit !important;
+    outline: inherit !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+  }
+}
 body, #root {
   width: 100vw;
   min-width: 100vw;
