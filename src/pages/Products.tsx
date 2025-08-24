@@ -181,19 +181,21 @@ export const Products: React.FC = () => {
 
                 {/* Categoria */}
                 <div className="filter-group">
-                  <label className="filter-label">Categoria</label>
-                  <select
-                    value={filters.category}
-                    onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                    className="form-select"
-                  >
-                    <option value="all">Todas as categorias</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="filter-label text-center w-full block">Categoria</label>
+                  <div className="w-full flex justify-center">
+                    <select
+                      value={filters.category}
+                      onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                      className="form-select w-60 text-center"
+                    >
+                      <option value="all">Todas as categorias</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 {/* Faixa de Preço */}
