@@ -140,8 +140,8 @@ export const Products: React.FC = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="modern-container py-12">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">🛍️ Todos os Produtos</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h1 className="font-bold text-gray-900 mb-2 text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl leading-tight">🛍️ Todos os Produtos</h1>
+            <p className="text-gray-600 max-w-xl mx-auto text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl leading-normal">
               Encontre exatamente o que você está procurando em nossa coleção completa
             </p>
           </div>
@@ -149,7 +149,7 @@ export const Products: React.FC = () => {
       </div>
 
       <div className="modern-container py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+  <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar com Filtros */}
           <div className="lg:w-80 flex-shrink-0">
             <div className="filter-sidebar">
@@ -250,10 +250,10 @@ export const Products: React.FC = () => {
             {/* Header da Lista */}
             <div className="flex justify-between items-center mb-8">
               <div>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
                   {filteredProducts.length} produto{filteredProducts.length !== 1 ? 's' : ''} encontrado{filteredProducts.length !== 1 ? 's' : ''}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600">
                   {filters.category !== 'all' && categories.find(c => c.id === filters.category)?.name}
                 </p>
               </div>
@@ -301,17 +301,10 @@ export const Products: React.FC = () => {
                 </button>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-                  {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCardFull key={product.id} product={product} />
-                  ))}
-                </div>
-                <div className="flex gap-4 overflow-x-auto no-scrollbar pt-2">
-                  {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCardFull key={product.id} product={product} />
-                  ))}
-                </div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCardFull key={product.id} product={product} />
+                ))}
               </div>
             ) : (
               <div className="space-y-4">

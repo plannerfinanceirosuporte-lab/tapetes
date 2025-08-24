@@ -69,7 +69,7 @@ export const ProductCardFull: React.FC<ProductCardFullProps> = ({ product }) => 
 
   return (
     <div className="product-card fade-in">
-      <div className="relative overflow-hidden">
+  <div className="relative overflow-hidden rounded-xl shadow-md border border-gray-200 bg-white p-3 flex flex-col h-full">
         <img
           src={product.image_url}
           alt={product.name}
