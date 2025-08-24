@@ -139,9 +139,9 @@ export const Products: React.FC = () => {
       {/* Header da Página */}
       <div className="bg-white border-b border-gray-200">
         <div className="modern-container py-12">
-          <div className="text-center">
-            <h1 className="font-bold text-gray-900 mb-2 text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl leading-tight">🛍️ Todos os Produtos</h1>
-            <p className="text-gray-600 max-w-xl mx-auto text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl leading-normal">
+          <div className="text-center pt-6 pb-6">
+            <h1 className="font-bold text-gray-900 mb-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl leading-tight">🛍️ Todos os Produtos</h1>
+            <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl leading-normal">
               Encontre exatamente o que você está procurando em nossa coleção completa
             </p>
           </div>
