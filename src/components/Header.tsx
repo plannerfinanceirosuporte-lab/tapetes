@@ -22,11 +22,11 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-      <header className="w-full bg-white shadow-sm flex items-center justify-between px-4 pt-3 pb-2 sticky top-0 z-40">
+      <header className="w-full bg-white shadow-sm px-4 py-4 sticky top-0 z-40">
         <div className="modern-container">
-          <div className="header-content">
+          <div className="flex flex-row items-center justify-center gap-8 w-full">
             {/* Logo */}
-            <Link to="/" className="logo-container">
+            <Link to="/" className="logo-container flex items-center justify-center">
               {settings?.logo_url ? (
                 <img
                   src={settings.logo_url}
@@ -36,13 +36,13 @@ export const Header: React.FC = () => {
               ) : (
                 <Store className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 w-auto text-blue-600" />
               )}
-              <span className="logo-text hidden sm:block">
+              <span className="logo-text hidden sm:block ml-2">
                 {settings?.store_name}
               </span>
             </Link>
 
             {/* Busca */}
-            <div className="search-container hidden md:block">
+            <div className="search-container hidden md:flex flex-1 items-center justify-center">
               <Search className="search-icon" />
               <input
                 type="text"
@@ -52,10 +52,7 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Ações */}
-            <div className="flex items-center gap-4">
-              {/* Busca Mobile */}
-              {/* Ícone de busca removido no mobile */}
-              
+            <div className="flex items-center gap-4 justify-center">
               {/* Carrinho */}
               <Link to="/cart" className="cart-button">
                 <ShoppingCart className="h-5 w-5" />
@@ -69,6 +66,4 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </header>
-    </>
-  );
-};
+  </>
