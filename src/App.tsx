@@ -33,35 +33,32 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Router>
-            <Header />
-            <div className="min-h-screen bg-gray-50">
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                <Route path="/payment-callback" element={<PaymentCallback />} />
-                <Route path="/thank-you" element={<ThankYou />} />
-                {/* Admin Routes */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin/*" element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="products" element={<AdminProducts />} />
-                  <Route path="categories" element={<AdminCategories />} />
-                  <Route path="orders" element={<AdminOrders />} />
-                  <Route path="reviews" element={<AdminReviews />} />
-                  <Route path="users" element={<AdminUsers />} />
-                  <Route path="settings" element={<AdminSettings />} />
-                </Route>
-              </Routes>
-            </div>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<><Header /><Home /></>} />
+              <Route path="/products" element={<><Header /><Products /></>} />
+              <Route path="/product/:id" element={<><Header /><ProductPage /></>} />
+              <Route path="/cart" element={<><Header /><Cart /></>} />
+              <Route path="/checkout" element={<><Header /><Checkout /></>} />
+              <Route path="/order-confirmation" element={<><Header /><OrderConfirmation /></>} />
+              <Route path="/payment-callback" element={<><Header /><PaymentCallback /></>} />
+              <Route path="/thank-you" element={<><Header /><ThankYou /></>} />
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/*" element={
+                <ProtectedRoute requireAdmin>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }>
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="reviews" element={<AdminReviews />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
+            </Routes>
           </Router>
         </CartProvider>
       </AuthProvider>
