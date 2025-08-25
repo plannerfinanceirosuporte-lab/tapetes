@@ -29,31 +29,29 @@ export const Header: React.FC = () => {
         <div className="w-full flex items-center justify-between">
           {/* Desktop: Centralize logo and cart, increase logo size, remove search */}
           <div className="hidden md:flex w-full items-center justify-center gap-16">
-            <div className="flex w-full items-center justify-center">
-              <div className="flex items-center justify-center gap-32 w-full">
-                <Link to="/" className="logo-container flex items-center justify-center">
-                  {settings?.logo_url ? (
-                    <img
-                      src={settings.logo_url}
-                      alt={settings.store_name}
-                      className="logo-image h-16 lg:h-20 xl:h-24"
-                    />
-                  ) : (
-                    <Store className="h-16 lg:h-20 xl:h-24 w-auto text-blue-600" />
-                  )}
-                  <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
-                    {settings?.store_name}
+            <div className="flex w-full items-center justify-between px-8" style={{gap: '0'}}>
+              <Link to="/" className="logo-container flex items-center">
+                {settings?.logo_url ? (
+                  <img
+                    src={settings.logo_url}
+                    alt={settings.store_name}
+                    className="logo-image h-16 lg:h-20 xl:h-24"
+                  />
+                ) : (
+                  <Store className="h-16 lg:h-20 xl:h-24 w-auto text-blue-600" />
+                )}
+                <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
+                  {settings?.store_name}
+                </span>
+              </Link>
+              <Link to="/cart" className="cart-button flex items-center">
+                <ShoppingCart className="h-8 w-8" />
+                {itemCount > 0 && (
+                  <span className="cart-badge text-lg">
+                    {itemCount}
                   </span>
-                </Link>
-                <Link to="/cart" className="cart-button flex items-center justify-center">
-                  <ShoppingCart className="h-8 w-8" />
-                  {itemCount > 0 && (
-                    <span className="cart-badge text-lg">
-                      {itemCount}
-                    </span>
-                  )}
-                </Link>
-              </div>
+                )}
+              </Link>
             </div>
           </div>
           {/* Mobile: keep previous layout */}
