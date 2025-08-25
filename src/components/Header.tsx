@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
 
   <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky top-0 z-40">
     <div className="modern-container">
-      <div className="flex flex-row items-center justify-between w-full" style={{minHeight: '72px'}}>
+      <div className="flex flex-row items-center justify-between w-full" style={{minHeight: '56px', paddingTop: '8px', paddingBottom: '8px'}}>
         {/* Desktop layout: logo left, search center, cart right */}
         <div className="w-full flex items-center justify-between">
           {/* Desktop: Centralize logo and cart, increase logo size, remove search */}
@@ -35,10 +35,10 @@ export const Header: React.FC = () => {
                   <img
                     src={settings.logo_url}
                     alt={settings.store_name}
-                    className="logo-image h-24 lg:h-28 xl:h-32"
+                    className="logo-image h-32 lg:h-36 xl:h-40"
                   />
                 ) : (
-                  <Store className="h-24 lg:h-28 xl:h-32 w-auto text-blue-600" />
+                  <Store className="h-32 lg:h-36 xl:h-40 w-auto text-blue-600" />
                 )}
                 <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
                   {settings?.store_name}
