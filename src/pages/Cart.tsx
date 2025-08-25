@@ -59,9 +59,6 @@ export const Cart: React.FC = () => {
                     
                     <div className="cart-item-content">
                       <h3 className="cart-item-title line-clamp-2">{item.name}</h3>
-                      <p className="cart-item-price">
-                        R$ {item.price.toFixed(2).replace('.', ',')} por unidade
-                      </p>
                     </div>
                     
                     <div className="flex items-center gap-4">
@@ -81,18 +78,15 @@ export const Cart: React.FC = () => {
                         </button>
                       </div>
                       
-                      <div className="text-right">
-                        <p className="modern-price text-lg">
-                          R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
-                        </p>
-                        <button
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-red-500 hover:text-red-600 transition-colors mt-1"
-                          title="Remover item"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
+                        <div className="text-right">
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="text-red-500 hover:text-red-600 transition-colors mt-1"
+                            title="Remover item"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                     </div>
                   </div>
                 ))}

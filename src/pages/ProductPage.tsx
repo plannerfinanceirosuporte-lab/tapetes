@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
 import { supabase, Product, Review, isSupabaseConfigured } from '../lib/supabase';
+import ImageGallery from '../components/ImageGallery';
 import { mockProducts, mockReviews } from '../lib/mockData';
 import { useCart } from '../contexts/CartContext';
 
@@ -14,6 +15,40 @@ export const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsFavorited(wishlist.includes(product.id));
+    }
+  }, [product]);
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product?.name,
+        text: product?.description,
+        url: window.location.href,
+      });
+    } else {
+      window.prompt('Copie o link do produto:', window.location.href);
+    }
+  };
+
+  const handleFavorite = () => {
+    if (!product) return;
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    let updated;
+    if (wishlist.includes(product.id)) {
+      updated = wishlist.filter((id: string) => id !== product.id);
+      setIsFavorited(false);
+    } else {
+      updated = [...wishlist, product.id];
+      setIsFavorited(true);
+    }
+    localStorage.setItem('wishlist', JSON.stringify(updated));
+  };
 
   useEffect(() => {
     if (id) {
@@ -113,11 +148,12 @@ export const ProductPage: React.FC = () => {
   }
 
   // Simular múltiplas imagens para demonstração
-  const productImages = [
-    product.image_url,
-    product.image_url,
-    product.image_url
-  ];
+  // Usar imagens do produto (image_urls: string[]), fallback para image_url
+  const productImages = Array.isArray((product as any).image_urls) && (product as any).image_urls.length > 0
+    ? (product as any).image_urls
+    : product.image_url
+    ? [product.image_url]
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -126,30 +162,7 @@ export const ProductPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Galeria de Imagens */}
             <div className="product-images-layout">
-              {/* Imagem Principal */}
-              <div className="main-image-container">
-                <img
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="main-image"
-                />
-              </div>
-              
-              {/* Imagens Secundárias */}
-              <div className="secondary-images-container">
-                <img
-                  src={productImages[1]}
-                  alt={`${product.name} - Vista 2`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(1)}
-                />
-                <img
-                  src={productImages[2]}
-                  alt={`${product.name} - Vista 3`}
-                  className="secondary-image"
-                  onClick={() => setSelectedImage(2)}
-                />
-              </div>
+              <ImageGallery images={productImages} />
             </div>
 
             {/* Detalhes do Produto */}
@@ -157,14 +170,18 @@ export const ProductPage: React.FC = () => {
               {/* Cabeçalho */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="badge-new">Novo</span>
-                  <span className="badge-stock">Em Estoque</span>
+                  {product.stock_quantity > 50 && (
+                    <span className="modern-badge badge-new" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+                      Novo
+                    </span>
+                  )}
+                  <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+                    Em Estoque
+                  </span>
                 </div>
-                
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
                   {product.name}
                 </h1>
-                
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="rating-stars">
@@ -179,19 +196,12 @@ export const ProductPage: React.FC = () => {
                     {averageRating.toFixed(1)} ({reviews.length} avaliações)
                   </span>
                 </div>
-
                 <p className="modern-price-large mb-6">
                   R$ {product.price.toFixed(2).replace('.', ',')}
                 </p>
               </div>
 
               {/* Descrição */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
 
               {/* Controle de Quantidade */}
               <div className="flex items-center gap-6">
@@ -240,17 +250,29 @@ export const ProductPage: React.FC = () => {
                     <ShoppingCart className="h-5 w-5" />
                     Adicionar ao Carrinho
                   </button>
-                  
-                  <button className="btn-secondary py-3">
+                  <button
+                    className={`btn-secondary py-3 ${isFavorited ? 'bg-pink-100 text-pink-600' : ''}`}
+                    onClick={handleFavorite}
+                  >
                     <Heart className="h-5 w-5" />
-                    Favoritar
+                    {isFavorited ? 'Favoritado' : 'Favoritar'}
                   </button>
                 </div>
-                
-                <button className="btn-outline w-full py-3">
+                <button
+                  className="btn-outline w-full py-3 mt-2"
+                  onClick={handleShare}
+                >
                   <Share2 className="h-5 w-5" />
                   Compartilhar Produto
                 </button>
+              </div>
+
+              {/* Descrição abaixo dos botões */}
+              <div className="bg-gray-50 rounded-lg p-6 mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">📋 Descrição do Produto</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Benefícios */}
@@ -299,7 +321,7 @@ export const ProductPage: React.FC = () => {
                   <div key={review.id} className="modern-card-minimal p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-gray-900 text-lg">
-                        {review.customer_name}
+                        {review.customer_name && review.customer_name.trim() ? review.customer_name : 'Cliente'}
                       </h4>
                       <div className="rating-stars">
                         {[1, 2, 3, 4, 5].map((star) => (

@@ -13,62 +13,80 @@ export const Header: React.FC = () => {
     <>
       {/* Banner acima do header */}
       {settings?.header_banner_url && (
-        <div className="w-full sticky top-0 z-50">
+        <div className="responsive-banner" style={{position: 'relative', zIndex: 50}}>
           <img
             src={settings.header_banner_url}
             alt="Banner"
-            className="responsive-banner"
+            style={{width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover'}}
           />
         </div>
       )}
 
-      <header className="modern-header">
-        <div className="modern-container">
-          <div className="header-content">
+  <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky top-0 z-40">
+    <div className="modern-container">
+      <div className="flex flex-row items-center justify-between w-full">
+        {/* Desktop layout: logo left, search center, cart right */}
+        <div className="w-full flex items-center justify-between">
+          {/* Desktop: Centralize logo and cart, increase logo size, remove search */}
+          <div className="hidden md:flex w-full items-center justify-center gap-16">
+            <div className="flex w-full items-center justify-center">
+              <div className="flex items-center justify-center gap-32 w-full">
+                <Link to="/" className="logo-container flex items-center justify-center">
+                  {settings?.logo_url ? (
+                    <img
+                      src={settings.logo_url}
+                      alt={settings.store_name}
+                      className="logo-image h-16 lg:h-20 xl:h-24"
+                    />
+                  ) : (
+                    <Store className="h-16 lg:h-20 xl:h-24 w-auto text-blue-600" />
+                  )}
+                  <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
+                    {settings?.store_name}
+                  </span>
+                </Link>
+                <Link to="/cart" className="cart-button flex items-center justify-center">
+                  <ShoppingCart className="h-8 w-8" />
+                  {itemCount > 0 && (
+                    <span className="cart-badge text-lg">
+                      {itemCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/* Mobile: keep previous layout */}
+          <div className="flex md:hidden flex-row items-center justify-between w-full">
             {/* Logo */}
-            <Link to="/" className="logo-container">
+            <Link to="/" className="logo-container flex items-center justify-center">
               {settings?.logo_url ? (
                 <img
-                  src={settings.logo_url} 
+                  src={settings.logo_url}
                   alt={settings.store_name}
-                  className="logo-image"
+                  className="logo-image h-8 sm:h-10"
                 />
               ) : (
-                <Store className="h-8 w-8 text-blue-600" />
+                <Store className="h-8 sm:h-10 w-auto text-blue-600" />
               )}
-              <span className="logo-text hidden sm:block">
+              <span className="logo-text hidden sm:block ml-2">
                 {settings?.store_name}
               </span>
             </Link>
-
-            {/* Busca */}
-            <div className="search-container hidden md:block">
-              <Search className="search-icon" />
-              <input
-                type="text"
-                placeholder="Buscar produtos..."
-                className="search-input"
-              />
-            </div>
-
-            {/* Ações */}
-            <div className="flex items-center gap-4">
-              {/* Busca Mobile */}
-              {/* Ícone de busca removido no mobile */}
-              
-              {/* Carrinho */}
-              <Link to="/cart" className="cart-button">
-                <ShoppingCart className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="cart-badge">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
-            </div>
+            {/* Cart */}
+            <Link to="/cart" className="cart-button ml-4">
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="cart-badge">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
     </>
   );
-};
+}

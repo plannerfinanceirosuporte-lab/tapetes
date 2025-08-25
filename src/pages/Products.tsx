@@ -139,9 +139,9 @@ export const Products: React.FC = () => {
       {/* Header da Página */}
       <div className="bg-white border-b border-gray-200">
         <div className="modern-container py-12">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">🛍️ Todos os Produtos</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <div className="text-center pt-6 pb-6">
+            <h1 className="font-bold text-gray-900 mb-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl leading-tight">🛍️ Todos os Produtos</h1>
+            <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl leading-normal">
               Encontre exatamente o que você está procurando em nossa coleção completa
             </p>
           </div>
@@ -149,19 +149,21 @@ export const Products: React.FC = () => {
       </div>
 
       <div className="modern-container py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+  <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar com Filtros */}
           <div className="lg:w-80 flex-shrink-0">
             <div className="filter-sidebar">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="filter-title">🔍 Filtros</h3>
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="lg:hidden btn-secondary p-2"
-                  style={{marginLeft: '32px', alignItems: 'center', display: 'flex'}}
-                >
-                  <SlidersHorizontal className="h-5 w-5" />
-                </button>
+              <div className="flex items-center justify-center mb-6 h-16">
+                <div className="flex items-center justify-center w-full max-w-xs mx-auto gap-8">
+                  <h3 className="filter-title flex items-center">🔍 Filtros</h3>
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="lg:hidden btn-secondary p-2 flex items-center justify-center"
+                    style={{height: '40px'}}
+                  >
+                    <SlidersHorizontal className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
 
               <div className={`space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
@@ -182,19 +184,21 @@ export const Products: React.FC = () => {
 
                 {/* Categoria */}
                 <div className="filter-group">
-                  <label className="filter-label">Categoria</label>
-                  <select
-                    value={filters.category}
-                    onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                    className="form-select"
-                  >
-                    <option value="all">Todas as categorias</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="filter-label text-center w-full block">Categoria</label>
+                  <div className="w-full flex justify-center">
+                    <select
+                      value={filters.category}
+                      onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                      className="form-select w-60 text-center"
+                    >
+                      <option value="all">Todas as categorias</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 {/* Faixa de Preço */}
@@ -249,10 +253,10 @@ export const Products: React.FC = () => {
             {/* Header da Lista */}
             <div className="flex justify-between items-center mb-8">
               <div>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
                   {filteredProducts.length} produto{filteredProducts.length !== 1 ? 's' : ''} encontrado{filteredProducts.length !== 1 ? 's' : ''}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600">
                   {filters.category !== 'all' && categories.find(c => c.id === filters.category)?.name}
                 </p>
               </div>
@@ -300,22 +304,34 @@ export const Products: React.FC = () => {
                 </button>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-                  {filteredProducts.slice(0, Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCard key={product.id} product={product} />
+              <div className="flex flex-col gap-6">
+                {/* Divide os produtos em 3 linhas horizontais com scroll invisível */}
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 0).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCard key={product.id} product={product} />
+                    </div>
                   ))}
                 </div>
-                <div className="flex gap-4 overflow-x-auto no-scrollbar pt-2">
-                  {filteredProducts.slice(Math.ceil(filteredProducts.length / 2)).map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 1).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCard key={product.id} product={product} />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+                  {filteredProducts.filter((_, i) => i % 3 === 2).map((product) => (
+                    <div className="w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[340px] flex-shrink-0">
+                      <ProductCard key={product.id} product={product} />
+                    </div>
                   ))}
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCardFull key={product.id} product={product} />
                 ))}
               </div>
             )}

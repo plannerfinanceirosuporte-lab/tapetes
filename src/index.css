@@ -1,3 +1,39 @@
+@media (hover: none) and (pointer: coarse) {
+  .modern-card:hover,
+  .modern-card-minimal:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-success:hover,
+  .btn-outline:hover,
+  .product-card:hover,
+  .product-card:hover .product-image,
+  .secondary-image:hover,
+  .payment-method:hover,
+  .cart-item:hover,
+  .quantity-btn:hover,
+  .cart-button:hover,
+  .category-pill:hover,
+  .hover-lift:hover,
+  .hover-scale:hover {
+    filter: none !important;
+    box-shadow: none !important;
+    background: inherit !important;
+    color: inherit !important;
+    transform: none !important;
+    opacity: 1 !important;
+    border: inherit !important;
+    outline: inherit !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+  }
+}
+body, #root {
+  width: 100vw;
+  min-width: 100vw;
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+}
 html, body, #root, *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
@@ -427,7 +463,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Banner Responsivo */
 .responsive-banner {
+}
+.responsive-banner img {
   width: 100%;
+  min-width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.responsive-banner {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   height: auto;
   object-fit: contain;
   object-position: center;
