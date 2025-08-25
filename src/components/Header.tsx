@@ -36,10 +36,12 @@ export const Header: React.FC = () => {
                     src={settings.logo_url}
                     alt={settings.store_name}
                     className="logo-image"
-                    style={{width: '220px', maxHeight: '56px', objectFit: 'contain'}}
+                    style={{width: '120px', maxHeight: '40px', objectFit: 'contain'}}
+                    srcSet={`${settings.logo_url} 1x, ${settings.logo_url} 2x`}
+                    sizes="(max-width: 768px) 120px, 220px"
                   />
                 ) : (
-                  <Store style={{width: '220px', maxHeight: '56px'}} className="w-auto text-blue-600" />
+                  <Store style={{width: '120px', maxHeight: '40px'}} className="w-auto text-blue-600 md:!w-[220px] md:!max-h-[56px]" />
                 )}
                 <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
                   {settings?.store_name}
