@@ -154,7 +154,7 @@ export const Products: React.FC = () => {
           <div className="lg:w-80 flex-shrink-0">
             <div className="filter-sidebar">
               <div className="flex items-center justify-center mb-6 h-16">
-                <div className="flex items-center justify-center w-full max-w-xs mx-auto gap-8">
+                <div className="flex items-center justify-between w-full max-w-xs mx-auto px-4 h-12">
                   <h3 className="filter-title flex items-center">🔍 Filtros</h3>
                   <button
                     onClick={() => setShowFilters(!showFilters)}
