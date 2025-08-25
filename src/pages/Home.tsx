@@ -144,46 +144,11 @@ export const Home: React.FC = () => {
       {/* Categorias Modernas */}
       <section className="py-16 bg-white">
         <div className="modern-container">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Explore por Categoria
           </h2>
           
-            <div className="category-pills-scroll" style={{ display: 'flex', gap: 12, padding: '16px 0', width: '100%', overflowX: 'auto', overflowY: 'hidden', whiteSpace: 'nowrap', justifyContent: 'flex-start', flexWrap: 'nowrap' }}>
-              <style>{`
-                @media (max-width: 767px) {
-                  .category-pills-scroll {
-                    justify-content: flex-start !important;
-                    flex-wrap: nowrap !important;
-                    overflow-x: auto !important;
-                    white-space: nowrap !important;
-                  }
-                  .category-pills-scroll::-webkit-scrollbar { display: none; }
-                  .category-pills-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-                }
-                @media (min-width: 768px) {
-                  .category-pills-scroll {
-                    justify-content: center !important;
-                    flex-wrap: wrap !important;
-                    overflow-x: visible !important;
-                    white-space: normal !important;
-                  }
-                }
-              `}</style>
-              {/* Mobile: scroll horizontal, Desktop: centralizado */}
-              <style>{`
-                @media (min-width: 768px) {
-                  .category-pills-scroll {
-                    justify-content: center !important;
-                    flex-wrap: wrap !important;
-                    overflow-x: visible !important;
-                    white-space: normal !important;
-                  }
-                }
-                @media (max-width: 767px) {
-                  .category-pills-scroll::-webkit-scrollbar { display: none; }
-                  .category-pills-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-                }
-              `}</style>
+          <div className="category-pills-scroll" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '16px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', width: '100%' }}>
             <button
               onClick={() => setSelectedCategory('all')}
               className={`category-pill ${selectedCategory === 'all' ? 'active' : ''}`}

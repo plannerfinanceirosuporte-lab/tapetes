@@ -86,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               </span>
             )}
             {product.stock_quantity < 10 && product.stock_quantity > 0 && (
-              <span className="modern-badge badge-low-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>Últimas unidades</span>
+              <span className="badge-low-stock">Últimas unidades</span>
             )}
           </div>
         </div>
@@ -113,15 +113,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           )}
           
-          <div className="flex items-center justify-between mt-auto mb-2">
+          <p className="product-description line-clamp-2">
+            {product.description}
+          </p>
+          
+          <div className="flex items-center justify-between mt-auto">
             <span className="product-price">
               R$ {product.price.toFixed(2).replace('.', ',')}
             </span>
+            
             <span className="modern-badge badge-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
               Em estoque
             </span>
           </div>
-          <div className="product-actions mb-2">
+          
+          <div className="product-actions">
             <button
               onClick={handleAddToCart}
               className="btn-primary flex-1"

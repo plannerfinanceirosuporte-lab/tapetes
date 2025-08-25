@@ -33,18 +33,25 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Router>
-            <Header />
             <div className="min-h-screen bg-gray-50">
               <Routes>
                 {/* Public Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                <Route path="/payment-callback" element={<PaymentCallback />} />
-                <Route path="/thank-you" element={<ThankYou />} />
+                <Route path="/*" element={
+                  <>
+                    <Header />
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/product/:id" element={<ProductPage />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                      <Route path="/payment-callback" element={<PaymentCallback />} />
+                      <Route path="/thank-you" element={<ThankYou />} />
+                    </Routes>
+                  </>
+                } />
+
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin/*" element={

@@ -10,12 +10,12 @@ export const AdminProducts: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
-  name: '',
-  description: '',
-  price: '',
-  stock_quantity: '',
-  category_id: '',
-  image_urls: '', // string separada por vírgula
+    name: '',
+    description: '',
+    price: '',
+    stock_quantity: '',
+    category_id: '',
+    image_url: '',
   });
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export const AdminProducts: React.FC = () => {
       if (error) throw error;
       setProducts(data || []);
     } catch (error) {
-  console.error('Erro ao buscar produtos:', error);
-  alert(`Erro ao buscar produtos: ${(error as any).message || 'Verifique sua conexão com o Supabase.'}`);
+      console.error('Erro ao buscar produtos:', error);
+      alert(`Erro ao buscar produtos: ${error.message || 'Verifique sua conexão com o Supabase.'}`);
     } finally {
       setLoading(false);
     }
@@ -84,12 +84,7 @@ export const AdminProducts: React.FC = () => {
         price: parseFloat(formData.price),
         stock_quantity: parseInt(formData.stock_quantity),
         category_id: formData.category_id,
-        image_urls: formData.image_urls
-          .split(',')
-          .map((url) => url.trim())
-          .filter((url) => url.length > 0),
-        // Para compatibilidade, salva image_url como a primeira imagem
-        image_url: formData.image_urls.split(',')[0]?.trim() || '',
+        image_url: formData.image_url,
       };
 
       if (editingProduct) {
@@ -113,17 +108,17 @@ export const AdminProducts: React.FC = () => {
       setShowModal(false);
       setEditingProduct(null);
       setFormData({
-  name: '',
-  description: '',
-  price: '',
-  stock_quantity: '',
-  category_id: '',
-  image_urls: '',
+        name: '',
+        description: '',
+        price: '',
+        stock_quantity: '',
+        category_id: '',
+        image_url: '',
       });
       fetchProducts();
     } catch (error) {
-  console.error('Erro ao salvar produto:', error);
-  alert(`Erro ao salvar produto: ${(error as any).message || 'Tente novamente.'}`);
+      console.error('Erro ao salvar produto:', error);
+      alert(`Erro ao salvar produto: ${error.message || 'Tente novamente.'}`);
     }
   };
 
@@ -135,9 +130,7 @@ export const AdminProducts: React.FC = () => {
       price: product.price.toString(),
       stock_quantity: product.stock_quantity.toString(),
       category_id: product.category_id,
-      image_urls: Array.isArray((product as any).image_urls)
-        ? (product as any).image_urls.join(', ')
-        : (product.image_url ? product.image_url : ''),
+      image_url: product.image_url,
     });
     setShowModal(true);
   };
@@ -161,8 +154,8 @@ export const AdminProducts: React.FC = () => {
         fetchProducts();
         alert('Produto excluído com sucesso!');
       } catch (error) {
-    console.error('Erro ao excluir produto:', error);
-    alert(`Erro ao excluir produto: ${(error as any).message || 'Tente novamente.'}`);
+        console.error('Erro ao excluir produto:', error);
+        alert(`Erro ao excluir produto: ${error.message || 'Tente novamente.'}`);
       }
     }
   };
@@ -380,34 +373,28 @@ export const AdminProducts: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  URLs das Imagens (separe por vírgula)
+                  URL da Imagem
                 </label>
-                <textarea
-                  value={formData.image_urls}
-                  onChange={(e) => setFormData({ ...formData, image_urls: e.target.value })}
+                <input
+                  type="url"
+                  value={formData.image_url}
+                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                   required
-                  placeholder="https://exemplo.com/img1.jpg, https://exemplo.com/img2.jpg, ..."
-                  rows={2}
+                  placeholder="https://exemplo.com/imagem.jpg"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                {/* Preview das imagens */}
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {formData.image_urls
-                    .split(',')
-                    .map((url) => url.trim())
-                    .filter((url) => url.length > 0)
-                    .map((url, idx) => (
-                      <img
-                        key={url + idx}
-                        src={url}
-                        alt={`Preview ${idx + 1}`}
-                        className="w-20 h-20 object-cover rounded-lg border"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    ))}
-                </div>
+                {formData.image_url && (
+                  <div className="mt-2">
+                    <img
+                      src={formData.image_url}
+                      alt="Preview"
+                      className="w-32 h-32 object-cover rounded-lg border"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end space-x-3 pt-4">
@@ -422,7 +409,7 @@ export const AdminProducts: React.FC = () => {
                       price: '',
                       stock_quantity: '',
                       category_id: '',
-                      image_urls: '',
+                      image_url: '',
                     });
                   }}
                   className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"

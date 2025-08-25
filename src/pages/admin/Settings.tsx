@@ -347,23 +347,13 @@ export const AdminSettings: React.FC = () => {
             value={formData.font_family || 'Roboto'}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            style={{ fontFamily: formData.font_family || 'Roboto' }}
           >
-            <option value="Roboto" style={{ fontFamily: 'Roboto, sans-serif' }}>Roboto</option>
-            <option value="Inter" style={{ fontFamily: 'Inter, sans-serif' }}>Inter</option>
-            <option value="Poppins" style={{ fontFamily: 'Poppins, sans-serif' }}>Poppins</option>
-            <option value="Open Sans" style={{ fontFamily: 'Open Sans, sans-serif' }}>Open Sans</option>
-            <option value="Lato" style={{ fontFamily: 'Lato, sans-serif' }}>Lato</option>
-            <option value="Montserrat" style={{ fontFamily: 'Montserrat, sans-serif' }}>Montserrat</option>
-            <option value="Oswald" style={{ fontFamily: 'Oswald, sans-serif' }}>Oswald</option>
-            <option value="Nunito" style={{ fontFamily: 'Nunito, sans-serif' }}>Nunito</option>
-            <option value="Merriweather" style={{ fontFamily: 'Merriweather, serif' }}>Merriweather</option>
-            <option value="Raleway" style={{ fontFamily: 'Raleway, sans-serif' }}>Raleway</option>
-            <option value="Quicksand" style={{ fontFamily: 'Quicksand, sans-serif' }}>Quicksand</option>
-            <option value="Ubuntu" style={{ fontFamily: 'Ubuntu, sans-serif' }}>Ubuntu</option>
-            <option value="Playfair Display" style={{ fontFamily: 'Playfair Display, serif' }}>Playfair Display</option>
-            <option value="Rubik" style={{ fontFamily: 'Rubik, sans-serif' }}>Rubik</option>
-            <option value="Source Sans Pro" style={{ fontFamily: 'Source Sans Pro, sans-serif' }}>Source Sans Pro</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Inter">Inter</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Lato">Lato</option>
+            <option value="Montserrat">Montserrat</option>
           </select>
         </div>
 
@@ -374,23 +364,13 @@ export const AdminSettings: React.FC = () => {
             value={formData.heading_font || 'Montserrat'}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            style={{ fontFamily: formData.heading_font || 'Montserrat' }}
           >
-            <option value="Montserrat" style={{ fontFamily: 'Montserrat, sans-serif' }}>Montserrat</option>
-            <option value="Roboto" style={{ fontFamily: 'Roboto, sans-serif' }}>Roboto</option>
-            <option value="Inter" style={{ fontFamily: 'Inter, sans-serif' }}>Inter</option>
-            <option value="Poppins" style={{ fontFamily: 'Poppins, sans-serif' }}>Poppins</option>
-            <option value="Open Sans" style={{ fontFamily: 'Open Sans, sans-serif' }}>Open Sans</option>
-            <option value="Lato" style={{ fontFamily: 'Lato, sans-serif' }}>Lato</option>
-            <option value="Oswald" style={{ fontFamily: 'Oswald, sans-serif' }}>Oswald</option>
-            <option value="Nunito" style={{ fontFamily: 'Nunito, sans-serif' }}>Nunito</option>
-            <option value="Merriweather" style={{ fontFamily: 'Merriweather, serif' }}>Merriweather</option>
-            <option value="Raleway" style={{ fontFamily: 'Raleway, sans-serif' }}>Raleway</option>
-            <option value="Quicksand" style={{ fontFamily: 'Quicksand, sans-serif' }}>Quicksand</option>
-            <option value="Ubuntu" style={{ fontFamily: 'Ubuntu, sans-serif' }}>Ubuntu</option>
-            <option value="Playfair Display" style={{ fontFamily: 'Playfair Display, serif' }}>Playfair Display</option>
-            <option value="Rubik" style={{ fontFamily: 'Rubik, sans-serif' }}>Rubik</option>
-            <option value="Source Sans Pro" style={{ fontFamily: 'Source Sans Pro, sans-serif' }}>Source Sans Pro</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Inter">Inter</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Lato">Lato</option>
           </select>
         </div>
       </div>
