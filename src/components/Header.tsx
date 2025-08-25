@@ -35,10 +35,11 @@ export const Header: React.FC = () => {
                   <img
                     src={settings.logo_url}
                     alt={settings.store_name}
-                    className="logo-image h-32 lg:h-36 xl:h-40"
+                    className="logo-image"
+                    style={{width: '180px', maxHeight: '56px', objectFit: 'contain'}}
                   />
                 ) : (
-                  <Store className="h-32 lg:h-36 xl:h-40 w-auto text-blue-600" />
+                  <Store style={{width: '180px', maxHeight: '56px'}} className="w-auto text-blue-600" />
                 )}
                 <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
                   {settings?.store_name}
