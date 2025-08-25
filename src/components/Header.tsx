@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
     <>
       {/* Banner acima do header */}
       {settings?.header_banner_url && (
-        <div className="responsive-banner" style={{position: 'relative', zIndex: 50}}>
+        <div className="responsive-banner" style={{position: 'relative', zIndex: 50, marginBottom: '18px'}}>
           <img
             src={settings.header_banner_url}
             alt="Banner"
@@ -35,10 +35,10 @@ export const Header: React.FC = () => {
                   <img
                     src={settings.logo_url}
                     alt={settings.store_name}
-                    className="logo-image h-16 lg:h-20 xl:h-24"
+                    className="logo-image h-20 lg:h-24 xl:h-28"
                   />
                 ) : (
-                  <Store className="h-16 lg:h-20 xl:h-24 w-auto text-blue-600" />
+                  <Store className="h-20 lg:h-24 xl:h-28 w-auto text-blue-600" />
                 )}
                 <span className="logo-text hidden sm:block ml-4 text-2xl lg:text-3xl">
                   {settings?.store_name}
