@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
           {/* Desktop: Centralize logo and cart, increase logo size, remove search */}
           <div className="hidden md:flex w-full items-center justify-center gap-16">
             <div className="flex w-full items-center justify-between px-8" style={{gap: '0'}}>
-              <Link to="/" className="logo-container flex items-center">
+              <Link to="/" className="logo-container flex items-center" style={{alignItems: 'center'}}>
                 {settings?.logo_url ? (
                   <img
                     src={settings.logo_url}
@@ -48,9 +48,9 @@ export const Header: React.FC = () => {
                 </span>
               </Link>
               <Link to="/cart" className="cart-button flex items-center">
-                <ShoppingCart className="h-8 w-8" />
+                <ShoppingCart className="h-8 w-8" style={{verticalAlign: 'middle'}} />
                 {itemCount > 0 && (
-                  <span className="cart-badge text-lg">
+                  <span className="cart-badge text-lg" style={{verticalAlign: 'middle'}}>
                     {itemCount}
                   </span>
                 )}
