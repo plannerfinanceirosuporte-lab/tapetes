@@ -167,13 +167,13 @@ export const Products: React.FC = () => {
                 <div className="filter-group">
                   <label className="filter-label">Buscar Produtos</label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 lg:h-5 lg:w-5" />
                     <input
                       type="text"
                       value={filters.search}
                       onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                       placeholder="Digite o nome do produto..."
-                      className="form-input pl-10"
+                      className="form-input pl-8 lg:pl-12"
                     />
                   </div>
                 </div>
