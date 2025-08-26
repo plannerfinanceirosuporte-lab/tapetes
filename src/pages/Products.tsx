@@ -138,12 +138,10 @@ export const Products: React.FC = () => {
     <div className="min-h-screen bg-gray-50" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
       {/* Header da Página */}
       <div className="bg-white border-b border-gray-200">
-        <div className="modern-container py-12">
-          <div className="text-center pt-6 pb-6">
-            <h1 className="font-bold text-gray-900 mb-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl leading-tight">🛍️ Todos os Produtos</h1>
-            <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl leading-normal">
-              Encontre exatamente o que você está procurando em nossa coleção completa
-            </p>
+        <div className="modern-container py-8 lg:py-6">
+          <div className="text-center pt-4 pb-4 lg:pt-8 lg:pb-8">
+            <h1 className="font-bold text-gray-900 mb-2 text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl leading-tight lg:pb-2 lg:pt-2">🛍️ Todos os Produtos</h1>
+            <p className="text-gray-600 max-w-xl mx-auto text-xs sm:text-sm md:text-base lg:text-base xl:text-lg leading-normal lg:pb-2">Encontre exatamente o que você está procurando em nossa coleção completa</p>
           </div>
         </div>
       </div>
@@ -152,7 +150,7 @@ export const Products: React.FC = () => {
   <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar com Filtros */}
           <div className="lg:w-80 flex-shrink-0">
-            <div className="filter-sidebar">
+            <div className="filter-sidebar lg:pb-8">
               <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} className="mb-6 h-16 w-full px-4">
                 <h3 className="filter-title flex items-center">🔍 Filtros</h3>
                 <button
@@ -251,7 +249,7 @@ export const Products: React.FC = () => {
             {/* Header da Lista */}
             <div className="flex justify-between items-center mb-8">
               <div>
-                <p className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
+                <p className="text-base sm:text-lg font-semibold text-gray-900 mb-1 lg:mt-2 lg:mb-2 lg:pt-2">
                   {filteredProducts.length} produto{filteredProducts.length !== 1 ? 's' : ''} encontrado{filteredProducts.length !== 1 ? 's' : ''}
                 </p>
                 <p className="text-xs sm:text-sm text-gray-600">
