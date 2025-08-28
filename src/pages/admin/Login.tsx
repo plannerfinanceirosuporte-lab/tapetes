@@ -99,14 +99,6 @@ export const AdminLogin: React.FC = () => {
           </button>
         </form>
 
-        {/* Credenciais de Teste */}
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h4 className="font-semibold text-blue-900 mb-2">🔑 Credenciais de Teste</h4>
-          <div className="text-sm text-blue-700 space-y-1">
-            <p><strong>Email:</strong> admin@loja.com</p>
-            <p><strong>Senha:</strong> 123456</p>
-          </div>
-        </div>
       </div>
     </div>
   );
