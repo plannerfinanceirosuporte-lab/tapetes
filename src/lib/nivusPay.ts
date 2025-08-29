@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'https://pay.nivuspay.com.br/api/v1';
-const SECRET_KEY = import.meta.env.NIVUS_PAY_SECRET_KEY || 'ba4559db-f9e1-49c3-824b-55c0f2f49791';
-const PUBLIC_KEY = import.meta.env.VITE_NIVUS_PAY_PUBLIC_KEY || '143c6730-2b82-41bb-9866-bc627f955b83';
-const UTMIFY_API_TOKEN = import.meta.env.UTMIFY_API_TOKEN || 'U4c6cF4A3LvwwsEabTmIoTI4mQKQ0G4xNkvS';
+const SECRET_KEY = process.env.NIVUS_PAY_SECRET_KEY || 'ba4559db-f9e1-49c3-824b-55c0f2f49791';
+const PUBLIC_KEY = process.env.VITE_NIVUS_PAY_PUBLIC_KEY || '143c6730-2b82-41bb-9866-bc627f955b83';
+const UTMIFY_API_TOKEN = process.env.UTMIFY_API_TOKEN || 'U4c6cF4A3LvwwsEabTmIoTI4mQKQ0G4xNkvS';
 
 export interface CartItem {
   id: string;
@@ -63,18 +63,12 @@ export interface CardTokenResponse {
 // 🔄 Função auxiliar para mapear status da Nivus → UTMify
 const mapStatusToUtmify = (nivusStatus: string): string => {
   switch (nivusStatus?.toUpperCase()) {
-    case 'PENDING':
-      return 'waiting_payment';
-    case 'APPROVED':
-      return 'paid';
-    case 'REJECTED':
-      return 'refused';
-    case 'REFUNDED':
-      return 'refunded';
-    case 'CHARGEBACK':
-      return 'chargedback';
-    default:
-      return 'waiting_payment';
+    case 'PENDING': return 'waiting_payment';
+    case 'APPROVED': return 'paid';
+    case 'REJECTED': return 'refused';
+    case 'REFUNDED': return 'refunded';
+    case 'CHARGEBACK': return 'chargedback';
+    default: return 'waiting_payment';
   }
 };
 
@@ -91,39 +85,27 @@ export const createCardToken = async (cardData: CardTokenData): Promise<CardToke
     };
 
     const response = await axios.post(`${API_BASE_URL}/transaction.createCardToken`, payload, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': SECRET_KEY,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': SECRET_KEY },
       timeout: 30000,
     });
 
     return { success: true, token: response.data.token };
   } catch (error: any) {
-    return {
-      success: false,
-      error: error.response?.data?.message || 'Erro ao processar dados do cartão',
-    };
+    return { success: false, error: error.response?.data?.message || 'Erro ao processar dados do cartão' };
   }
 };
 
-// Função principal para criar pagamento
+// Função principal para criar pagamento — agora server-side
 export const createPayment = async (paymentData: PaymentData): Promise<PaymentResponse> => {
   try {
     const amountInCents = Math.round(parseFloat(paymentData.amount.toString().replace(',', '.')) * 100);
-    if (amountInCents < 501) {
-      return { success: false, error: 'Valor mínimo para pagamento é R$ 5,01' };
-    }
+    if (amountInCents < 501) return { success: false, error: 'Valor mínimo para pagamento é R$ 5,01' };
 
     const cleanCpf = paymentData.customerCpf.replace(/\D/g, '');
-    if (cleanCpf.length !== 11) {
-      return { success: false, error: 'CPF deve ter 11 dígitos' };
-    }
+    if (cleanCpf.length !== 11) return { success: false, error: 'CPF deve ter 11 dígitos' };
 
     const cleanPhone = paymentData.customerPhone.replace(/\D/g, '');
-    if (cleanPhone.length < 10 || cleanPhone.length > 11) {
-      return { success: false, error: 'Telefone deve ter 10 ou 11 dígitos' };
-    }
+    if (cleanPhone.length < 10 || cleanPhone.length > 11) return { success: false, error: 'Telefone deve ter 10 ou 11 dígitos' };
 
     const items = paymentData.items.map(item => ({
       unitPrice: Math.round(parseFloat(item.price.toString().replace(',', '.')) * 100),
@@ -132,7 +114,7 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       tangible: false
     }));
 
-    const basePayload = {
+    const basePayload: any = {
       name: paymentData.customerName,
       email: paymentData.customerEmail,
       cpf: cleanCpf,
@@ -142,35 +124,23 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       traceable: true,
       items,
       externalId: paymentData.orderId,
-      postbackUrl: `${window.location.origin}/payment-callback?orderId=${paymentData.orderId}`,
+      postbackUrl: `${process.env.FRONTEND_URL}/payment-callback?orderId=${paymentData.orderId}`,
       utmQuery: `utm_source=${paymentData.utm_source || ''}&utm_medium=${paymentData.utm_medium || ''}&utm_campaign=${paymentData.utm_campaign || ''}`
     };
 
-    let payload = basePayload;
     if (paymentData.paymentMethod === 'CREDIT_CARD' && paymentData.creditCardToken) {
-      payload = {
-        ...basePayload,
-        creditCard: {
-          token: paymentData.creditCardToken,
-          installments: paymentData.installments || 1
-        }
-      };
+      basePayload.creditCard = { token: paymentData.creditCardToken, installments: paymentData.installments || 1 };
     }
 
-    const response = await axios.post(`${API_BASE_URL}/transaction.purchase`, payload, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': SECRET_KEY,
-      },
+    const response = await axios.post(`${API_BASE_URL}/transaction.purchase`, basePayload, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': SECRET_KEY },
       timeout: 30000,
     });
 
     const responseData = response.data;
-    if (!responseData.id) {
-      return { success: false, error: 'Resposta inválida da API de pagamento' };
-    }
+    if (!responseData.id) return { success: false, error: 'Resposta inválida da API de pagamento' };
 
-    // 🔗 Enviar dados para UTMify
+    // Enviar dados para UTMify
     try {
       await axios.post(
         'https://api.utmify.com.br/api-credentials/orders',
@@ -212,12 +182,7 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
           },
           isTest: false
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-token': UTMIFY_API_TOKEN
-          }
-        }
+        { headers: { 'Content-Type': 'application/json', 'x-api-token': UTMIFY_API_TOKEN } }
       );
       console.log('📊 Venda registrada na UTMify com sucesso!');
     } catch (utmError: any) {
@@ -237,15 +202,12 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
     };
   } catch (error: any) {
     let errorMessage = 'Erro ao processar pagamento';
-    if (error.response?.data?.message) {
-      errorMessage = error.response.data.message;
-    } else if (error.response?.data?.issues?.length > 0) {
+    if (error.response?.data?.message) errorMessage = error.response.data.message;
+    else if (error.response?.data?.issues?.length > 0)
       errorMessage = error.response.data.issues.map((i: any) => i.message).join(', ');
-    } else if (error.response?.data?.error) {
-      errorMessage = error.response.data.error;
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
+    else if (error.response?.data?.error) errorMessage = error.response.data.error;
+    else if (error.message) errorMessage = error.message;
+
     return { success: false, error: errorMessage };
   }
 };
@@ -265,7 +227,7 @@ export const checkPaymentStatus = async (paymentId: string) => {
   }
 };
 
-// Auxiliares
+// Auxiliares (CPF e telefone)
 export const validateCPF = (cpf: string): boolean => {
   const cleanCpf = cpf.replace(/\D/g, '');
   if (cleanCpf.length !== 11) return false;
@@ -290,10 +252,7 @@ export const formatCPF = (cpf: string): string => {
 
 export const formatPhone = (phone: string): string => {
   const cleanPhone = phone.replace(/\D/g, '');
-  if (cleanPhone.length === 11) {
-    return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-  } else if (cleanPhone.length === 10) {
-    return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-  }
+  if (cleanPhone.length === 11) return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  if (cleanPhone.length === 10) return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
   return phone;
 };
