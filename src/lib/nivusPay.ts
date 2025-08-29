@@ -60,21 +60,35 @@ export interface CardTokenResponse {
   error?: string;
 }
 
+// 🔄 Função auxiliar para mapear status da Nivus → UTMify
+const mapStatusToUtmify = (nivusStatus: string): string => {
+  switch (nivusStatus?.toUpperCase()) {
+    case 'PENDING':
+      return 'waiting_payment';
+    case 'APPROVED':
+      return 'paid';
+    case 'REJECTED':
+      return 'refused';
+    case 'REFUNDED':
+      return 'refunded';
+    case 'CHARGEBACK':
+      return 'chargedback';
+    default:
+      return 'waiting_payment';
+  }
+};
+
 // Função para criar token do cartão
 export const createCardToken = async (cardData: CardTokenData): Promise<CardTokenResponse> => {
   try {
-    console.log('🔄 Criando token do cartão...');
-    
     const payload = {
-      cardNumber: cardData.cardNumber.replace(/\s/g, ''), 
+      cardNumber: cardData.cardNumber.replace(/\s/g, ''),
       cardCvv: cardData.cardCvv,
       cardExpirationMonth: cardData.cardExpirationMonth.padStart(2, '0'),
       cardExpirationYear: cardData.cardExpirationYear.slice(-2),
       holderName: cardData.holderName,
       holderDocument: cardData.holderDocument.replace(/\D/g, '')
     };
-
-    console.log('📤 Payload para token:', { ...payload, cardNumber: '****', cardCvv: '***' });
 
     const response = await axios.post(`${API_BASE_URL}/transaction.createCardToken`, payload, {
       headers: {
@@ -84,15 +98,8 @@ export const createCardToken = async (cardData: CardTokenData): Promise<CardToke
       timeout: 30000,
     });
 
-    console.log('✅ Token criado com sucesso');
-    
-    return {
-      success: true,
-      token: response.data.token,
-    };
+    return { success: true, token: response.data.token };
   } catch (error: any) {
-    console.error('❌ Erro ao criar token do cartão:', error.response?.data || error.message);
-    
     return {
       success: false,
       error: error.response?.data?.message || 'Erro ao processar dados do cartão',
@@ -103,8 +110,6 @@ export const createCardToken = async (cardData: CardTokenData): Promise<CardToke
 // Função principal para criar pagamento
 export const createPayment = async (paymentData: PaymentData): Promise<PaymentResponse> => {
   try {
-    console.log('🔄 Iniciando pagamento com Nivus Pay');
-    
     const amountInCents = Math.round(parseFloat(paymentData.amount.toString().replace(',', '.')) * 100);
     if (amountInCents < 501) {
       return { success: false, error: 'Valor mínimo para pagamento é R$ 5,01' };
@@ -135,7 +140,7 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       paymentMethod: paymentData.paymentMethod || 'PIX',
       amount: amountInCents,
       traceable: true,
-      items: items,
+      items,
       externalId: paymentData.orderId,
       postbackUrl: `${window.location.origin}/payment-callback?orderId=${paymentData.orderId}`,
       utmQuery: `utm_source=${paymentData.utm_source || ''}&utm_medium=${paymentData.utm_medium || ''}&utm_campaign=${paymentData.utm_campaign || ''}`
@@ -161,12 +166,9 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
     });
 
     const responseData = response.data;
-
     if (!responseData.id) {
       return { success: false, error: 'Resposta inválida da API de pagamento' };
     }
-
-    console.log('✅ Pagamento criado com sucesso!');
 
     // 🔗 Enviar dados para UTMify
     try {
@@ -176,9 +178,9 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
           orderId: paymentData.orderId,
           platform: 'MinhaLojaCustomReact',
           paymentMethod: (paymentData.paymentMethod || 'PIX').toLowerCase(),
-          status: responseData.status?.toLowerCase() || 'waiting_payment',
+          status: mapStatusToUtmify(responseData.status),
           createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
-          approvedDate: responseData.status === 'PAID'
+          approvedDate: responseData.status?.toUpperCase() === 'APPROVED'
             ? new Date().toISOString().slice(0, 19).replace('T', ' ')
             : null,
           refundedAt: null,
@@ -234,25 +236,16 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       billetCode: responseData.billetCode,
     };
   } catch (error: any) {
-    console.error('❌ Erro detalhado ao criar pagamento Nivus Pay:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-    });
-    
     let errorMessage = 'Erro ao processar pagamento';
-    
     if (error.response?.data?.message) {
       errorMessage = error.response.data.message;
-    } else if (error.response?.data?.issues && error.response.data.issues.length > 0) {
-      errorMessage = error.response.data.issues.map((issue: any) => issue.message).join(', ');
+    } else if (error.response?.data?.issues?.length > 0) {
+      errorMessage = error.response.data.issues.map((i: any) => i.message).join(', ');
     } else if (error.response?.data?.error) {
       errorMessage = error.response.data.error;
     } else if (error.message) {
       errorMessage = error.message;
     }
-    
     return { success: false, error: errorMessage };
   }
 };
@@ -265,7 +258,6 @@ export const checkPaymentStatus = async (paymentId: string) => {
       headers: { 'Authorization': SECRET_KEY },
       timeout: 30000,
     });
-
     return response.data;
   } catch (error: any) {
     console.error('❌ Erro ao verificar status do pagamento:', error.response?.data || error.message);
@@ -273,34 +265,29 @@ export const checkPaymentStatus = async (paymentId: string) => {
   }
 };
 
-// Função auxiliar para validar CPF
+// Auxiliares
 export const validateCPF = (cpf: string): boolean => {
   const cleanCpf = cpf.replace(/\D/g, '');
   if (cleanCpf.length !== 11) return false;
   if (/^(\d)\1{10}$/.test(cleanCpf)) return false;
-  
   let sum = 0;
   for (let i = 0; i < 9; i++) sum += parseInt(cleanCpf.charAt(i)) * (10 - i);
   let remainder = (sum * 10) % 11;
-  if (remainder === 10 || remainder === 11) remainder = 0;
+  if (remainder >= 10) remainder = 0;
   if (remainder !== parseInt(cleanCpf.charAt(9))) return false;
-  
   sum = 0;
   for (let i = 0; i < 10; i++) sum += parseInt(cleanCpf.charAt(i)) * (11 - i);
   remainder = (sum * 10) % 11;
-  if (remainder === 10 || remainder === 11) remainder = 0;
+  if (remainder >= 10) remainder = 0;
   if (remainder !== parseInt(cleanCpf.charAt(10))) return false;
-  
   return true;
 };
 
-// Função auxiliar para formatar CPF
 export const formatCPF = (cpf: string): string => {
   const cleanCpf = cpf.replace(/\D/g, '');
   return cleanCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
 };
 
-// Função auxiliar para formatar telefone
 export const formatPhone = (phone: string): string => {
   const cleanPhone = phone.replace(/\D/g, '');
   if (cleanPhone.length === 11) {
