@@ -12,12 +12,16 @@ export const Header: React.FC = () => {
   return (
     <>
       {/* Banner acima do header */}
+
       {settings?.header_banner_url && (
-  <div className="responsive-banner" style={{position: 'relative', zIndex: 50}}>
+        <div
+          className="responsive-banner"
+          style={{ position: 'relative', zIndex: 50, marginBottom: '0.5rem' }} // Adiciona espaçamento abaixo do banner
+        >
           <img
             src={settings.header_banner_url}
             alt="Banner"
-            style={{width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover'}}
+            style={{ width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover' }}
           />
         </div>
       )}
