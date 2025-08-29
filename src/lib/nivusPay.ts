@@ -3,6 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = 'https://pay.nivuspay.com.br/api/v1';
 const SECRET_KEY = import.meta.env.NIVUS_PAY_SECRET_KEY || 'ba4559db-f9e1-49c3-824b-55c0f2f49791';
 const PUBLIC_KEY = import.meta.env.VITE_NIVUS_PAY_PUBLIC_KEY || '143c6730-2b82-41bb-9866-bc627f955b83';
+const UTMIFY_API_TOKEN = import.meta.env.UTMIFY_API_TOKEN || 'U4c6cF4A3LvwwsEabTmIoTI4mQKQ0G4xNkvS';
 
 export interface CartItem {
   id: string;
@@ -22,6 +23,11 @@ export interface PaymentData {
   paymentMethod?: 'PIX' | 'CREDIT_CARD' | 'BILLET';
   creditCardToken?: string;
   installments?: number;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
 }
 
 export interface PaymentResponse {
@@ -60,12 +66,12 @@ export const createCardToken = async (cardData: CardTokenData): Promise<CardToke
     console.log('🔄 Criando token do cartão...');
     
     const payload = {
-      cardNumber: cardData.cardNumber.replace(/\s/g, ''), // Remove espaços
+      cardNumber: cardData.cardNumber.replace(/\s/g, ''), 
       cardCvv: cardData.cardCvv,
-      cardExpirationMonth: cardData.cardExpirationMonth.padStart(2, '0'), // Garante 2 dígitos
-      cardExpirationYear: cardData.cardExpirationYear.slice(-2), // Últimos 2 dígitos
+      cardExpirationMonth: cardData.cardExpirationMonth.padStart(2, '0'),
+      cardExpirationYear: cardData.cardExpirationYear.slice(-2),
       holderName: cardData.holderName,
-      holderDocument: cardData.holderDocument.replace(/\D/g, '') // Remove formatação
+      holderDocument: cardData.holderDocument.replace(/\D/g, '')
     };
 
     console.log('📤 Payload para token:', { ...payload, cardNumber: '****', cardCvv: '***' });
@@ -98,74 +104,43 @@ export const createCardToken = async (cardData: CardTokenData): Promise<CardToke
 export const createPayment = async (paymentData: PaymentData): Promise<PaymentResponse> => {
   try {
     console.log('🔄 Iniciando pagamento com Nivus Pay');
-    console.log('📊 Dados recebidos:', {
-      amount: paymentData.amount,
-      customerName: paymentData.customerName,
-      customerEmail: paymentData.customerEmail,
-      paymentMethod: paymentData.paymentMethod || 'PIX',
-      itemsCount: paymentData.items.length
-    });
     
-    // Converter valor para centavos
     const amountInCents = Math.round(parseFloat(paymentData.amount.toString().replace(',', '.')) * 100);
-    console.log('💰 Valor em centavos:', amountInCents);
-    
-    // Validar valor mínimo (R$ 5,01 = 501 centavos)
     if (amountInCents < 501) {
-      console.error('❌ Valor muito baixo:', amountInCents);
-      return {
-        success: false,
-        error: 'Valor mínimo para pagamento é R$ 5,01',
-      };
+      return { success: false, error: 'Valor mínimo para pagamento é R$ 5,01' };
     }
 
-    // Limpar e validar CPF (deve ter exatamente 11 dígitos)
     const cleanCpf = paymentData.customerCpf.replace(/\D/g, '');
-    console.log('📄 CPF limpo:', cleanCpf);
     if (cleanCpf.length !== 11) {
-      console.error('❌ CPF inválido:', cleanCpf);
-      return {
-        success: false,
-        error: 'CPF deve ter 11 dígitos',
-      };
+      return { success: false, error: 'CPF deve ter 11 dígitos' };
     }
 
-    // Limpar e formatar telefone (deve ter entre 10 e 11 dígitos)
     const cleanPhone = paymentData.customerPhone.replace(/\D/g, '');
-    console.log('📱 Telefone limpo:', cleanPhone);
     if (cleanPhone.length < 10 || cleanPhone.length > 11) {
-      console.error('❌ Telefone inválido:', cleanPhone);
-      return {
-        success: false,
-        error: 'Telefone deve ter 10 ou 11 dígitos',
-      };
+      return { success: false, error: 'Telefone deve ter 10 ou 11 dígitos' };
     }
 
-    // Preparar itens conforme a documentação da API
     const items = paymentData.items.map(item => ({
-      unitPrice: Math.round(parseFloat(item.price.toString().replace(',', '.')) * 100), // Preço unitário em centavos
+      unitPrice: Math.round(parseFloat(item.price.toString().replace(',', '.')) * 100),
       title: item.name,
       quantity: item.quantity,
-      tangible: false // Assumindo produtos digitais/não físicos
+      tangible: false
     }));
 
-    console.log('📦 Itens processados:', items);
-
-    // Payload base conforme a documentação oficial
     const basePayload = {
       name: paymentData.customerName,
       email: paymentData.customerEmail,
-      cpf: cleanCpf, // CPF limpo com 11 dígitos
-      phone: cleanPhone, // Telefone limpo (10-11 dígitos)
+      cpf: cleanCpf,
+      phone: cleanPhone,
       paymentMethod: paymentData.paymentMethod || 'PIX',
       amount: amountInCents,
       traceable: true,
       items: items,
       externalId: paymentData.orderId,
       postbackUrl: `${window.location.origin}/payment-callback?orderId=${paymentData.orderId}`,
+      utmQuery: `utm_source=${paymentData.utm_source || ''}&utm_medium=${paymentData.utm_medium || ''}&utm_campaign=${paymentData.utm_campaign || ''}`
     };
 
-    // Adicionar dados específicos do cartão se necessário
     let payload = basePayload;
     if (paymentData.paymentMethod === 'CREDIT_CARD' && paymentData.creditCardToken) {
       payload = {
@@ -177,8 +152,6 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       };
     }
 
-    console.log('📤 Payload enviado para Nivus Pay:', JSON.stringify(payload, null, 2));
-
     const response = await axios.post(`${API_BASE_URL}/transaction.purchase`, payload, {
       headers: {
         'Content-Type': 'application/json',
@@ -187,24 +160,67 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       timeout: 30000,
     });
 
-    console.log('📥 Resposta da API Nivus Pay:', JSON.stringify(response.data, null, 2));
-
     const responseData = response.data;
 
-    // Verificar se a resposta contém os dados necessários
     if (!responseData.id) {
-      console.error('❌ Resposta da API não contém ID do pagamento');
-      return {
-        success: false,
-        error: 'Resposta inválida da API de pagamento',
-      };
+      return { success: false, error: 'Resposta inválida da API de pagamento' };
     }
 
     console.log('✅ Pagamento criado com sucesso!');
-    console.log('🆔 Payment ID:', responseData.id);
-    console.log('📱 PIX Code:', responseData.pixCode ? 'Presente' : 'Ausente');
-    console.log('🔲 PIX QR Code:', responseData.pixQrCode ? 'Presente' : 'Ausente');
-    console.log('📄 Boleto URL:', responseData.billetUrl ? 'Presente' : 'Ausente');
+
+    // 🔗 Enviar dados para UTMify
+    try {
+      await axios.post(
+        'https://api.utmify.com.br/api-credentials/orders',
+        {
+          orderId: paymentData.orderId,
+          platform: 'MinhaLojaCustomReact',
+          paymentMethod: (paymentData.paymentMethod || 'PIX').toLowerCase(),
+          status: responseData.status?.toLowerCase() || 'waiting_payment',
+          createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          approvedDate: responseData.status === 'PAID'
+            ? new Date().toISOString().slice(0, 19).replace('T', ' ')
+            : null,
+          refundedAt: null,
+          customer: {
+            name: paymentData.customerName,
+            email: paymentData.customerEmail,
+            phone: cleanPhone,
+            document: cleanCpf
+          },
+          products: paymentData.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            planId: null,
+            planName: null,
+            quantity: item.quantity,
+            priceInCents: Math.round(item.price * 100)
+          })),
+          trackingParameters: {
+            utm_source: paymentData.utm_source || null,
+            utm_medium: paymentData.utm_medium || null,
+            utm_campaign: paymentData.utm_campaign || null,
+            utm_content: paymentData.utm_content || null,
+            utm_term: paymentData.utm_term || null
+          },
+          commission: {
+            totalPriceInCents: amountInCents,
+            gatewayFeeInCents: 0,
+            userCommissionInCents: amountInCents
+          },
+          isTest: false
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-token': UTMIFY_API_TOKEN
+          }
+        }
+      );
+      console.log('📊 Venda registrada na UTMify com sucesso!');
+    } catch (utmError: any) {
+      console.error('❌ Erro ao enviar venda para UTMify:', utmError.response?.data || utmError.message);
+    }
 
     return {
       success: true,
@@ -212,7 +228,6 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       transactionId: responseData.customId,
       status: responseData.status,
       expiresAt: responseData.expiresAt,
-      // Dados específicos por método de pagamento
       pixCode: responseData.pixCode,
       pixQrCode: responseData.pixQrCode,
       billetUrl: responseData.billetUrl,
@@ -238,29 +253,19 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       errorMessage = error.message;
     }
     
-    return {
-      success: false,
-      error: errorMessage,
-    };
+    return { success: false, error: errorMessage };
   }
 };
 
 // Função para verificar status do pagamento
 export const checkPaymentStatus = async (paymentId: string) => {
   try {
-    console.log('🔄 Verificando status do pagamento:', paymentId);
-    
     const response = await axios.get(`${API_BASE_URL}/transaction.getPayment`, {
-      params: {
-        id: paymentId
-      },
-      headers: {
-        'Authorization': SECRET_KEY,
-      },
+      params: { id: paymentId },
+      headers: { 'Authorization': SECRET_KEY },
       timeout: 30000,
     });
 
-    console.log('📥 Status do pagamento:', response.data);
     return response.data;
   } catch (error: any) {
     console.error('❌ Erro ao verificar status do pagamento:', error.response?.data || error.message);
@@ -271,23 +276,17 @@ export const checkPaymentStatus = async (paymentId: string) => {
 // Função auxiliar para validar CPF
 export const validateCPF = (cpf: string): boolean => {
   const cleanCpf = cpf.replace(/\D/g, '');
-  
   if (cleanCpf.length !== 11) return false;
-  if (/^(\d)\1{10}$/.test(cleanCpf)) return false; // CPFs com todos os dígitos iguais
+  if (/^(\d)\1{10}$/.test(cleanCpf)) return false;
   
-  // Validação dos dígitos verificadores
   let sum = 0;
-  for (let i = 0; i < 9; i++) {
-    sum += parseInt(cleanCpf.charAt(i)) * (10 - i);
-  }
+  for (let i = 0; i < 9; i++) sum += parseInt(cleanCpf.charAt(i)) * (10 - i);
   let remainder = (sum * 10) % 11;
   if (remainder === 10 || remainder === 11) remainder = 0;
   if (remainder !== parseInt(cleanCpf.charAt(9))) return false;
   
   sum = 0;
-  for (let i = 0; i < 10; i++) {
-    sum += parseInt(cleanCpf.charAt(i)) * (11 - i);
-  }
+  for (let i = 0; i < 10; i++) sum += parseInt(cleanCpf.charAt(i)) * (11 - i);
   remainder = (sum * 10) % 11;
   if (remainder === 10 || remainder === 11) remainder = 0;
   if (remainder !== parseInt(cleanCpf.charAt(10))) return false;
