@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, Package, Calendar, Trash2 } from 'lucide-react';
 import { supabase, Order, OrderItem } from '../../lib/supabase';
+import { updateUtmifyOrderStatus } from '../../lib/utmify';
 
 export const AdminOrders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -8,6 +9,29 @@ export const AdminOrders: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  // Função para atualizar status do pedido
+  const handleStatusChange = async (newStatus: string) => {
+    if (!selectedOrder) return;
+    setStatusLoading(true);
+    try {
+      // Atualiza no banco
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', selectedOrder.id);
+      if (error) throw error;
+      // Atualiza na UTMify
+      await updateUtmifyOrderStatus(selectedOrder.id, newStatus);
+      // Atualiza localmente
+      setSelectedOrder({ ...selectedOrder, status: newStatus });
+      setOrders(orders => orders.map(o => o.id === selectedOrder.id ? { ...o, status: newStatus } : o));
+    } catch (err) {
+      alert('Erro ao atualizar status do pedido');
+    } finally {
+      setStatusLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -226,7 +250,7 @@ export const AdminOrders: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-              {/* Customer Info */}
+              {/* Customer Info + Status Editável */}
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Informações do Cliente</h4>
                 <div className="bg-gray-50 rounded-lg p-4 space-y-2">
@@ -234,6 +258,20 @@ export const AdminOrders: React.FC = () => {
                   <p><span className="font-medium">Email:</span> {selectedOrder.customer_email}</p>
                   <p><span className="font-medium">Endereço:</span> {selectedOrder.customer_address}</p>
                   <p><span className="font-medium">Data do Pedido:</span> {new Date(selectedOrder.created_at).toLocaleString('pt-BR')}</p>
+                  <div className="mt-4">
+                    <label className="font-medium mr-2">Status:</label>
+                    <select
+                      className="border rounded px-2 py-1"
+                      value={selectedOrder.status}
+                      onChange={e => handleStatusChange(e.target.value)}
+                      disabled={statusLoading}
+                    >
+                      <option value="pending">Pendente</option>
+                      <option value="confirmed">Aprovado</option>
+                      <option value="cancelled">Cancelado</option>
+                    </select>
+                    {statusLoading && <span className="ml-2 text-xs text-blue-600">Atualizando...</span>}
+                  </div>
                 </div>
               </div>
 
