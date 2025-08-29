@@ -10,6 +10,7 @@ export const AdminOrders: React.FC = () => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
+
   // Função para atualizar status do pedido
   const handleStatusChange = async (newStatus: string) => {
     if (!selectedOrder) return;
@@ -21,13 +22,38 @@ export const AdminOrders: React.FC = () => {
         .update({ status: newStatus })
         .eq('id', selectedOrder.id);
       if (error) throw error;
+
       // Atualiza na UTMify
-      await updateUtmifyOrderStatus(selectedOrder.id, newStatus);
+      await updateUtmifyOrderStatus({
+        orderId: selectedOrder.id,
+        status: newStatus,
+        customer: {
+          name: selectedOrder.customer_name,
+          email: selectedOrder.customer_email,
+          phone: selectedOrder.customer_phone,
+          document: selectedOrder.customer_cpf
+        },
+        products: orderItems.map(item => ({
+          id: item.product?.id || item.id,
+          name: item.product?.name || item.name,
+          quantity: item.quantity,
+          priceInCents: Math.round(item.price * 100)
+        })),
+        trackingParameters: {
+          utm_source: selectedOrder.utm_source,
+          utm_medium: selectedOrder.utm_medium,
+          utm_campaign: selectedOrder.utm_campaign,
+          utm_content: selectedOrder.utm_content,
+          utm_term: selectedOrder.utm_term
+        }
+      });
+
       // Atualiza localmente
       setSelectedOrder({ ...selectedOrder, status: newStatus });
       setOrders(orders => orders.map(o => o.id === selectedOrder.id ? { ...o, status: newStatus } : o));
     } catch (err) {
       alert('Erro ao atualizar status do pedido');
+      console.error(err);
     } finally {
       setStatusLoading(false);
     }
@@ -43,7 +69,6 @@ export const AdminOrders: React.FC = () => {
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
-
       if (error) throw error;
       setOrders(data || []);
     } catch (error) {
@@ -62,7 +87,6 @@ export const AdminOrders: React.FC = () => {
           product:products(*)
         `)
         .eq('order_id', orderId);
-
       if (error) throw error;
       setOrderItems(data || []);
     } catch (error) {
@@ -83,9 +107,7 @@ export const AdminOrders: React.FC = () => {
           .from('orders')
           .delete()
           .eq('id', orderId);
-
         if (error) throw error;
-        
         fetchOrders();
         alert('Pedido excluído com sucesso!');
       } catch (error) {
@@ -94,6 +116,7 @@ export const AdminOrders: React.FC = () => {
       }
     }
   };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -149,42 +172,24 @@ export const AdminOrders: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Pedido
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Cliente
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Data
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedido</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      #{order.id.slice(-8)}
-                    </div>
+                    <div className="text-sm font-medium text-gray-900">#{order.id.slice(-8)}</div>
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {order.customer_name}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {order.customer_email}
-                      </div>
+                      <div className="text-sm font-medium text-gray-900">{order.customer_name}</div>
+                      <div className="text-sm text-gray-500">{order.customer_email}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -203,19 +208,11 @@ export const AdminOrders: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleViewOrder(order)}
-                        className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
-                      >
-                        <Eye className="h-4 w-4" />
-                        <span>Ver</span>
+                      <button onClick={() => handleViewOrder(order)} className="text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+                        <Eye className="h-4 w-4" /><span>Ver</span>
                       </button>
-                      <button
-                        onClick={() => handleDeleteOrder(order.id)}
-                        className="text-red-600 hover:text-red-800 flex items-center space-x-1"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span>Excluir</span>
+                      <button onClick={() => handleDeleteOrder(order.id)} className="text-red-600 hover:text-red-800 flex items-center space-x-1">
+                        <Trash2 className="h-4 w-4" /><span>Excluir</span>
                       </button>
                     </div>
                   </td>
@@ -224,7 +221,7 @@ export const AdminOrders: React.FC = () => {
             </tbody>
           </table>
         </div>
-        
+
         {orders.length === 0 && (
           <div className="text-center py-12">
             <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -238,15 +235,8 @@ export const AdminOrders: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Detalhes do Pedido #{selectedOrder.id.slice(-8)}
-              </h3>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                ✕
-              </button>
+              <h3 className="text-lg font-semibold text-gray-900">Detalhes do Pedido #{selectedOrder.id.slice(-8)}</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700">✕</button>
             </div>
 
             <div className="space-y-6">
@@ -281,11 +271,7 @@ export const AdminOrders: React.FC = () => {
                 <div className="space-y-3">
                   {orderItems.map((item) => (
                     <div key={item.id} className="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
-                      <img
-                        src={item.product?.image_url}
-                        alt={item.product?.name}
-                        className="h-16 w-16 rounded-lg object-cover"
-                      />
+                      <img src={item.product?.image_url} alt={item.product?.name} className="h-16 w-16 rounded-lg object-cover" />
                       <div className="flex-1">
                         <h5 className="font-medium text-gray-900">{item.product?.name}</h5>
                         <p className="text-sm text-gray-600">
