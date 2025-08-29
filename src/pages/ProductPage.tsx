@@ -17,6 +17,11 @@ export const ProductPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
 
+  // Scroll para o topo ao abrir a página do produto
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [id]);
+
   useEffect(() => {
     if (product) {
       const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
