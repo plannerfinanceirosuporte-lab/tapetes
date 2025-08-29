@@ -12,11 +12,14 @@ interface ProductCardProps {
   product: Product;
 }
 
+import { useNavigate } from 'react-router-dom';
+
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProductRating();
@@ -71,26 +74,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="product-card fade-in">
+    <div
+      className="product-card fade-in cursor-pointer"
+      onClick={() => navigate(`/product/${product.id}`)}
+      tabIndex={0}
+      role="button"
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate(`/product/${product.id}`); }}
+    >
       <div className="relative overflow-hidden">
-        <Link to={`/product/${product.id}`} className="block">
-          <img
-            src={product.image_url}
-            alt={product.name}
-            className="product-image"
-          />
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-            {product.stock_quantity > 50 && (
-              <span className="modern-badge badge-new" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
-                Novo
-              </span>
-            )}
-            {product.stock_quantity < 10 && product.stock_quantity > 0 && (
-              <span className="modern-badge badge-low-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>Últimas unidades</span>
-            )}
-          </div>
-        </Link>
+        <img
+          src={product.image_url}
+          alt={product.name}
+          className="product-image"
+        />
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+          {product.stock_quantity > 50 && (
+            <span className="modern-badge badge-new" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>
+              Novo
+            </span>
+          )}
+          {product.stock_quantity < 10 && product.stock_quantity > 0 && (
+            <span className="modern-badge badge-low-stock" style={{padding: '2px 10px', fontSize: '11px', borderRadius: '12px'}}>Últimas unidades</span>
+          )}
+        </div>
         {/* Botão de Favorito */}
         <button
           className="absolute top-3 right-3 z-20 bg-white/80 rounded-full p-2 shadow hover:bg-white"
@@ -135,7 +142,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
         <div className="product-actions mb-2 flex">
           <button
-            onClick={handleAddToCart}
+            onClick={e => { e.stopPropagation(); handleAddToCart(e); }}
             className="btn-primary flex-1"
           >
             <ShoppingCart className="h-4 w-4" />
