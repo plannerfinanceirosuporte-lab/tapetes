@@ -15,8 +15,8 @@ export const Header: React.FC = () => {
 
       {settings?.header_banner_url && (
         <div
-          className="responsive-banner"
-          style={{ position: 'relative', zIndex: 50, marginBottom: '0.5rem' }} // Adiciona espaçamento abaixo do banner
+          className="responsive-banner mb-0 md:mb-4"
+          style={{ position: 'relative', zIndex: 50 }}
         >
           <img
             src={settings.header_banner_url}
