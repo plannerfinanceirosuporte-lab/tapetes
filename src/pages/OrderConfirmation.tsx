@@ -22,9 +22,36 @@ export const OrderConfirmation: React.FC = () => {
 
   // Busca dados do pedido se não vieram no state
   useEffect(() => {
-    if ((!pixCode && !pixQrCode && !billetUrl && !paymentId) && orderId && supabase) {
-      supabase.from('orders').select('*').eq('id', orderId).single().then(({ data }) => {
-        if (data) setOrderData(data);
+    // Busca dados do pedido se não vieram no state
+    if ((!pixCode && !pixQrCode && !billetUrl) && orderId && supabase) {
+      supabase.from('orders').select('*').eq('id', orderId).single().then(async ({ data }) => {
+        if (data) {
+          // Se tem paymentId mas não tem pixCode/billet, tenta buscar do NivusPay
+          if (data.payment_id && (!data.pix_code && !data.pix_qr_code && !data.billet_url)) {
+            try {
+              const payment = await import('../lib/nivusPay').then(m => m.checkPaymentStatus(data.payment_id));
+              // Atualiza pedido no Supabase se encontrar dados
+              if ((payment.pixCode || payment.pixQrCode || payment.billetUrl) && supabase) {
+                await supabase.from('orders').update({
+                  pix_code: payment.pixCode,
+                  pix_qr_code: payment.pixQrCode,
+                  billet_url: payment.billetUrl,
+                  billet_code: payment.billetCode,
+                  expires_at: payment.expiresAt
+                }).eq('id', orderId);
+                setOrderData({ ...data, ...{
+                  pix_code: payment.pixCode,
+                  pix_qr_code: payment.pixQrCode,
+                  billet_url: payment.billetUrl,
+                  billet_code: payment.billetCode,
+                  expires_at: payment.expiresAt
+                }});
+                return;
+              }
+            } catch (e) { /* ignora erro */ }
+          }
+          setOrderData(data);
+        }
       });
     }
   }, [orderId]);
