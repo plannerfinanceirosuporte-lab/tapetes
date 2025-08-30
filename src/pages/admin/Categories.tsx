@@ -11,6 +11,7 @@ export const AdminCategories: React.FC = () => {
     name: '',
     description: '',
   });
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -138,29 +139,31 @@ export const AdminCategories: React.FC = () => {
       {/* Categories Grid */}
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
         {categories.map((category) => (
-          <div key={category.id} className="bg-white rounded-lg shadow-md p-6">
+          <div
+            key={category.id}
+            className={`bg-white rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2 ${selectedCategoryId === category.id ? 'border-blue-600 bg-blue-50' : 'border-transparent hover:border-blue-300'}`}
+            onClick={() => setSelectedCategoryId(category.id)}
+          >
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
+              <h3 className={`text-lg font-semibold ${selectedCategoryId === category.id ? 'text-blue-700' : 'text-gray-900'}`}>{category.name}</h3>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => handleEdit(category)}
+                  onClick={e => { e.stopPropagation(); handleEdit(category); }}
                   className="text-blue-600 hover:text-blue-800"
                 >
                   <Edit className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => handleDelete(category.id)}
+                  onClick={e => { e.stopPropagation(); handleDelete(category.id); }}
                   className="text-red-600 hover:text-red-800"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
             </div>
-            
             {category.description && (
               <p className="text-gray-600 text-sm mb-4">{category.description}</p>
             )}
-            
             <div className="text-xs text-gray-500">
               Criado em: {new Date(category.created_at).toLocaleDateString('pt-BR')}
             </div>
