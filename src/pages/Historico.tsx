@@ -107,6 +107,7 @@ const Historico: React.FC = () => {
                           .single();
                         const data = response?.data;
                         if (data && data.payment_id) {
+                          // Se já tem os dados, navega normalmente
                           navigate('/order-confirmation', {
                             state: {
                               orderId: order.id,
@@ -120,7 +121,28 @@ const Historico: React.FC = () => {
                             }
                           });
                         } else {
-                          alert('Não foi possível encontrar os dados de pagamento para este pedido.');
+                          // Tenta buscar os dados de pagamento novamente (caso estejam nulos)
+                          const { data: freshData } = await supabase
+                            .from('orders')
+                            .select('*')
+                            .eq('id', order.id)
+                            .single();
+                          if (freshData && freshData.payment_id) {
+                            navigate('/order-confirmation', {
+                              state: {
+                                orderId: order.id,
+                                paymentId: freshData.payment_id,
+                                pixCode: freshData.pix_code,
+                                pixQrCode: freshData.pix_qr_code,
+                                billetUrl: freshData.billet_url,
+                                billetCode: freshData.billet_code,
+                                paymentMethod: freshData.payment_method,
+                                expiresAt: freshData.expires_at
+                              }
+                            });
+                          } else {
+                            alert('Não foi possível encontrar os dados de pagamento para este pedido. Tente gerar o pagamento novamente.');
+                          }
                         }
                       }}
                     >
