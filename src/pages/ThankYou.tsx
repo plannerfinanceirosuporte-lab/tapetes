@@ -151,12 +151,8 @@ export const ThankYou: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Status</p>
-                  <span className={`modern-badge ${
-                    paymentVerified 
-                      ? 'modern-badge-success' 
-                      : 'modern-badge-warning'
-                  }`}>
-                    {paymentVerified ? 'Confirmado' : 'Aguardando Pagamento'}
+                  <span className="modern-badge modern-badge-success">
+                    Confirmado
                   </span>
                 </div>
                 <div>
@@ -182,24 +178,33 @@ export const ThankYou: React.FC = () => {
             <div className="modern-card p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">🛍️ Itens do Pedido</h2>
               <div className="space-y-4">
-                {orderData.order_items?.map((item: any) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                    <img
-                      src={item.product?.image_url}
-                      alt={item.product?.name}
-                      className="h-16 w-16 rounded-lg object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="modern-title text-base">{item.product?.name}</h4>
-                      <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
+                {orderData.order_items?.map((item: any) => {
+                  // Corrigir preço: se vier 0, usar total_amount dividido pela quantidade
+                  let price = item.product_price ?? item.price ?? 0;
+                  if (!price || price === 0) {
+                    if (orderData.order_items.length === 1) {
+                      price = Number(orderData.total_amount) / item.quantity;
+                    }
+                  }
+                  return (
+                    <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                      <img
+                        src={item.product?.image_url}
+                        alt={item.product?.name}
+                        className="h-16 w-16 rounded-lg object-cover"
+                      />
+                      <div className="flex-1">
+                        <h4 className="modern-title text-base">{item.product?.name}</h4>
+                        <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="modern-price text-base">
+                          R$ {(item.quantity * price).toFixed(2).replace('.', ',')}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="modern-price text-base">
-                        R$ {(item.quantity * (item.product_price ?? item.price ?? 0)).toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -257,40 +262,22 @@ export const ThankYou: React.FC = () => {
 
               {/* Ações */}
               <div className="space-y-4">
-                {orderData.order_items?.map((item: any) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                    <img
-                      src={item.product?.image_url}
-                      alt={item.product?.name}
-                      className="h-16 w-16 rounded-lg object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="modern-title text-base">{item.product?.name}</h4>
-                      <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
+                {/* Removido card do item do pedido da sidebar */}
+                {paymentVerified && (
+                  <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Star className="h-5 w-5 text-yellow-600" />
+                      <span className="font-medium text-yellow-900">Avalie sua Experiência</span>
                     </div>
-                    <div className="text-right">
-                      <p className="modern-price text-base">
-                        R$ {(item.quantity * (item.product_price || item.price)).toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
+                    <p className="text-sm text-yellow-700 mb-3">
+                      Sua opinião é muito importante para nós!
+                    </p>
+                    <button className="text-yellow-600 text-sm font-medium hover:text-yellow-800">
+                      Deixar Avaliação →
+                    </button>
                   </div>
-                ))}
+                )}
               </div>
-                  {paymentVerified && (
-                    <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Star className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium text-yellow-900">Avalie sua Experiência</span>
-                      </div>
-                      <p className="text-sm text-yellow-700 mb-3">
-                        Sua opinião é muito importante para nós!
-                      </p>
-                      <button className="text-yellow-600 text-sm font-medium hover:text-yellow-800">
-                        Deixar Avaliação →
-                      </button>
-                    </div>
-                  )}
-            </div>
           </div>
         </div>
 
