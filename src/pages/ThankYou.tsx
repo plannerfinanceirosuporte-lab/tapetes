@@ -238,10 +238,7 @@ export const ThankYou: React.FC = () => {
                   <span className="font-medium text-blue-900">Entrega Estimada</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  {paymentVerified 
-                    ? '6 dias úteis'
-                    : 'Após a confirmação do pagamento'
-                  }
+                  '6 dias úteis'
                 </p>
               </div>
               {/* Ações */}
