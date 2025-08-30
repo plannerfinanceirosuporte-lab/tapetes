@@ -97,10 +97,9 @@ export const Header: React.FC = () => {
             </div>
             {/* Drawer estilizado */}
             {menuOpen && (
-              <div className="fixed inset-0 z-50 flex">
-                <div className="fixed inset-0 bg-black opacity-40" onClick={() => setMenuOpen(false)}></div>
+              <>
+                <div className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity" onClick={() => setMenuOpen(false)}></div>
                 {(() => {
-                  // Defina os links do menu aqui
                   const menuLinks = [
                     {
                       label: 'Histórico de Compras',
@@ -110,16 +109,16 @@ export const Header: React.FC = () => {
                       to: '/purchasehistory',
                     },
                   ];
-                  const drawerHeight = 32 + menuLinks.length * 56 + 48; // padding + links + rodapé
+                  const drawerHeight = 16 + menuLinks.length * 56 + 32; // padding + links + rodapé
                   return (
                     <aside
-                      className="ml-auto w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100"
-                      style={{ height: `${drawerHeight}px`, marginTop: 'auto', marginBottom: 'auto' }}
+                      className="fixed top-3 right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
+                      style={{ height: `${drawerHeight}px` }}
                     >
-                      <div className="flex items-center justify-end px-6 py-4 border-b border-gray-100">
+                      <div className="flex items-center justify-end px-6 py-3 border-b border-gray-100">
                         <button className="text-gray-400 hover:text-blue-600 text-2xl" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">×</button>
                       </div>
-                      <nav className="flex flex-col gap-2 px-6 py-4">
+                      <nav className="flex flex-col gap-2 px-6 py-2">
                         {menuLinks.map(link => (
                           <button
                             key={link.to}
@@ -131,7 +130,7 @@ export const Header: React.FC = () => {
                           </button>
                         ))}
                       </nav>
-                      <div className="px-6 py-4 border-t border-gray-100 text-xs text-gray-400">{settings?.store_name}</div>
+                      <div className="px-6 py-3 border-t border-gray-100 text-xs text-gray-400">{settings?.store_name}</div>
                     </aside>
                   );
                 })()}
@@ -142,7 +141,7 @@ export const Header: React.FC = () => {
                   }
                   .animate-slideInRight { animation: slideInRight 0.25s cubic-bezier(.4,0,.2,1); }
                 `}</style>
-              </div>
+              </>
             )}
           </div>
         </div>
