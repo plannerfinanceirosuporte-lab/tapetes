@@ -302,7 +302,6 @@ export const ThankYou: React.FC = () => {
                       </button>
                     </div>
                   )}
-              )}
             </div>
           </div>
         </div>
