@@ -34,8 +34,12 @@ export const ThankYou: React.FC = () => {
         verifyPaymentAndOrder();
       }, 1000);
     }
+    // Se o pedido já está pago, força paymentVerified para true
+    if (orderData && (orderData.status === 'confirmed' || orderData.payment_status === 'paid')) {
+      setPaymentVerified(true);
+    }
     return () => clearTimeout(retryTimeout);
-  }, [orderId, paymentId]);
+  }, [orderId, paymentId, orderData]);
 
   const verifyPaymentAndOrder = async () => {
     try {
