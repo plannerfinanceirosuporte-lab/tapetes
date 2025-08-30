@@ -210,7 +210,6 @@ export const ThankYou: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">📋 Próximos Passos</h3>
               
               <div className="space-y-4">
-                <>
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -238,7 +237,6 @@ export const ThankYou: React.FC = () => {
                       <p className="text-sm text-gray-600">Você receberá o código de rastreamento em breve</p>
                     </div>
                   </div>
-                </>
               </div>
 
               {/* Estimativa de Entrega */}
