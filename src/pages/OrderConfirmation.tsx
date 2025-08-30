@@ -10,14 +10,34 @@ export const OrderConfirmation: React.FC = () => {
   const navigate = useNavigate();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   // Pega do state (preferencial), senão da URL
+  const [orderData, setOrderData] = useState<any>(null);
   const orderId = location.state?.orderId || searchParams.get('orderId');
-  const paymentId = location.state?.paymentId || searchParams.get('paymentId');
-  const pixCode = location.state?.pixCode;
-  const pixQrCode = location.state?.pixQrCode;
-  const billetUrl = location.state?.billetUrl;
-  const billetCode = location.state?.billetCode;
-  const paymentMethod = location.state?.paymentMethod;
-  const expiresAt = location.state?.expiresAt;
+  let paymentId = location.state?.paymentId || searchParams.get('paymentId');
+  let pixCode = location.state?.pixCode;
+  let pixQrCode = location.state?.pixQrCode;
+  let billetUrl = location.state?.billetUrl;
+  let billetCode = location.state?.billetCode;
+  let paymentMethod = location.state?.paymentMethod;
+  let expiresAt = location.state?.expiresAt;
+
+  // Busca dados do pedido se não vieram no state
+  useEffect(() => {
+    if ((!pixCode && !pixQrCode && !billetUrl && !paymentId) && orderId && supabase) {
+      supabase.from('orders').select('*').eq('id', orderId).single().then(({ data }) => {
+        if (data) setOrderData(data);
+      });
+    }
+  }, [orderId]);
+
+  if (orderData) {
+    paymentId = paymentId || orderData.payment_id;
+    pixCode = pixCode || orderData.pix_code;
+    pixQrCode = pixQrCode || orderData.pix_qr_code;
+    billetUrl = billetUrl || orderData.billet_url;
+    billetCode = billetCode || orderData.billet_code;
+    paymentMethod = paymentMethod || orderData.payment_method;
+    expiresAt = expiresAt || orderData.expires_at;
+  }
 
   // Novo: status do pedido
   const [orderStatus, setOrderStatus] = useState<'pending' | 'confirmed'>(searchParams.get('verified') === 'true' ? 'confirmed' : 'pending');
@@ -93,17 +113,16 @@ export const OrderConfirmation: React.FC = () => {
     paymentId 
   });
 
-  // Se não há dados, redirecionar para home
-  if (!orderId) {
-    console.warn('⚠️ Nenhum dado de pedido encontrado, redirecionando...');
+  // Se não há dados de pagamento, mostra mensagem amigável
+  if (!orderId || (!pixCode && !pixQrCode && !billetUrl && !paymentId)) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Pedido não encontrado
+            Não foi possível encontrar os dados de pagamento
           </h1>
           <p className="text-gray-600 mb-6">
-            Não foi possível encontrar os dados do seu pedido.
+            Tente gerar o pagamento novamente.<br />Se o problema persistir, entre em contato com o suporte.
           </p>
           <Link
             to="/"
