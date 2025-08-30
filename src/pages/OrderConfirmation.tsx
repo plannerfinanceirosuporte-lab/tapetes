@@ -156,37 +156,7 @@ export const OrderConfirmation: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
   {/* Próximos Passos removido */}
-        {/* Itens do Pedido */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">🛍️ Itens do Pedido</h2>
-          <div className="space-y-4">
-            {orderItems.length === 0 ? (
-              <p className="text-gray-500">Nenhum item encontrado.</p>
-            ) : (
-              orderItems.map((item) => (
-                <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                  <img
-                    src={item.product?.image_url}
-                    alt={item.product?.name}
-                    className="h-16 w-16 rounded-lg object-cover"
-                  />
-                  <div className="flex-1">
-                    <h4 className="modern-title text-base">{item.product?.name}</h4>
-                    <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="modern-price text-base">
-                      R$ {(item.quantity * Number(item.price)).toFixed(2).replace('.', ',')}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          <div className="flex justify-end mt-4">
-            <span className="font-bold text-lg text-gray-900">Total: R$ {orderTotal.toFixed(2).replace('.', ',')}</span>
-          </div>
-        </div>
+  {/* Itens do Pedido removido */}
         <PaymentIcon className={`h-16 w-16 ${paymentInfo.color} mx-auto mb-4`} />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {paymentInfo.title}
