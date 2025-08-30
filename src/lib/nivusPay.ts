@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://pay.nivuspay.com.br/api/v1';
+const API_BASE_URL = '/api/nivus-pix-proxy';
 const SECRET_KEY = process.env.NIVUS_PAY_SECRET_KEY || 'ba4559db-f9e1-49c3-824b-55c0f2f49791';
 const PUBLIC_KEY = process.env.VITE_NIVUS_PAY_PUBLIC_KEY || '143c6730-2b82-41bb-9866-bc627f955b83';
 const UTMIFY_API_TOKEN = process.env.UTMIFY_API_TOKEN || 'U4c6cF4A3LvwwsEabTmIoTI4mQKQ0G4xNkvS';
@@ -132,7 +132,7 @@ export const createPayment = async (paymentData: PaymentData): Promise<PaymentRe
       basePayload.creditCard = { token: paymentData.creditCardToken, installments: paymentData.installments || 1 };
     }
 
-    const response = await axios.post(`${API_BASE_URL}/transaction.purchase`, basePayload, {
+    const response = await axios.post(`${API_BASE_URL}`, basePayload, {
       headers: { 'Content-Type': 'application/json', 'Authorization': SECRET_KEY },
       timeout: 30000,
     });
