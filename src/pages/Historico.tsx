@@ -22,10 +22,11 @@ const Historico: React.FC = () => {
         .from('orders')
         .select('id, created_at, status, total_amount')
         .eq('order_token', token)
+        .eq('status', 'confirmed')
         .order('created_at', { ascending: false });
       if (!error && data) {
         setOrders(data);
-        // Buscar itens de todos os pedidos
+        // Buscar itens de todos os pedidos pagos
         const orderIds = data.map((o: any) => o.id);
         if (orderIds.length > 0) {
           const { data: itemsData, error: itemsError } = await supabase
