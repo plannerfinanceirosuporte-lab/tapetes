@@ -1,29 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
-  // Memoiza a estimativa de entrega para não mudar a cada render
-  const estimatedDelivery = useMemo(() => {
-    if (!orderData || !orderData.created_at) return null;
-    function addBusinessDays(date: Date, days: number) {
-      let count = 0;
-      let result = new Date(date);
-      while (count < days) {
-        result.setDate(result.getDate() + 1);
-        if (result.getDay() !== 0 && result.getDay() !== 6) {
-          count++;
-        }
-      }
-      return result;
-    }
-    const pedidoDate = new Date(orderData.created_at);
-    const entregaDate = addBusinessDays(pedidoDate, 6);
-    let hash = 0;
-    for (let i = 0; i < orderData.id.length; i++) {
-      hash = orderData.id.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hora = 8 + Math.abs(hash) % 10;
-    const minuto = Math.abs(hash * 31) % 60;
-    entregaDate.setHours(hora, minuto, 0, 0);
-    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
-  }, [orderData]);
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Clock, Home, ShoppingBag, Star } from 'lucide-react';
 import { checkPaymentStatus } from '../lib/nivusPay';
@@ -278,7 +253,29 @@ export const ThankYou: React.FC = () => {
                   <span className="font-medium text-blue-900">Entrega Estimada</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  {estimatedDelivery || 'Carregando estimativa...'}
+                  {orderData && orderData.created_at ? ((od) => {
+                    function addBusinessDays(date: Date, days: number) {
+                      let count = 0;
+                      let result = new Date(date);
+                      while (count < days) {
+                        result.setDate(result.getDate() + 1);
+                        if (result.getDay() !== 0 && result.getDay() !== 6) {
+                          count++;
+                        }
+                      }
+                      return result;
+                    }
+                    const pedidoDate = new Date(od.created_at);
+                    const entregaDate = addBusinessDays(pedidoDate, 6);
+                    let hash = 0;
+                    for (let i = 0; i < od.id.length; i++) {
+                      hash = od.id.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    const hora = 8 + Math.abs(hash) % 10;
+                    const minuto = Math.abs(hash * 31) % 60;
+                    entregaDate.setHours(hora, minuto, 0, 0);
+                    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
+                  })(orderData) : 'Carregando estimativa...'}
                 </p>
               </div>
               {/* Ações */}
