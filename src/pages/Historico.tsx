@@ -1,12 +1,11 @@
+
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { mockProducts } from '../lib/mockData';
 import { useNavigate } from 'react-router-dom';
 
 const Historico: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [orderItems, setOrderItems] = useState<{ [orderId: string]: any[] }>({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,30 +17,24 @@ const Historico: React.FC = () => {
     }
     const fetchOrders = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      // Busca pedidos com todos os campos relevantes
+      const { data: ordersData, error } = await supabase
         .from('orders')
-        .select('id, created_at, status, total_amount')
+        .select('id, created_at, total:total_amount, status, shipping_info')
         .eq('order_token', token)
         .order('created_at', { ascending: false });
-      if (!error && data) {
-        setOrders(data);
-        // Buscar itens de todos os pedidos
-        const orderIds = data.map((o: any) => o.id);
-        if (orderIds.length > 0) {
-          const { data: itemsData, error: itemsError } = await supabase
-            .from('order_items')
-            .select('order_id, product_id, product_name, quantity, product_price')
-            .in('order_id', orderIds);
-          if (!itemsError && itemsData) {
-            // Agrupar por order_id
-            const grouped: { [orderId: string]: any[] } = {};
-            itemsData.forEach(item => {
-              if (!grouped[item.order_id]) grouped[item.order_id] = [];
-              grouped[item.order_id].push(item);
-            });
-            setOrderItems(grouped);
-          }
-        }
+      if (!error && ordersData) {
+        // Para cada pedido, busca os itens
+        const ordersWithItems = await Promise.all(
+          ordersData.map(async (order: any) => {
+            const { data: items } = await supabase
+              .from('order_items')
+              .select('product_name, product_image, quantity')
+              .eq('order_id', order.id);
+            return { ...order, items: items || [] };
+          })
+        );
+        setOrders(ordersWithItems);
       }
       setLoading(false);
     };
@@ -57,102 +50,56 @@ const Historico: React.FC = () => {
         <div className="text-center text-gray-500 bg-white rounded-lg shadow p-8">Nenhum pedido encontrado.</div>
       ) : (
         <div className="space-y-6">
-          {orders.map(order => {
-            const items = orderItems[order.id] || [];
-            return (
-              <div key={order.id} className="border rounded-xl p-5 bg-white shadow flex flex-col gap-2">
-                <div className="flex justify-between items-center mb-1">
+          {orders.map(order => (
+            <div key={order.id} className="border rounded-xl p-5 bg-white shadow flex flex-col gap-4">
+              {/* Header do pedido */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 border-b pb-2">
+                <div>
                   <span className="font-semibold text-blue-700">Pedido #{order.id.slice(-8)}</span>
-                  <span className="text-gray-500 text-sm">{new Date(order.created_at).toLocaleDateString('pt-BR')}</span>
+                  <span className="ml-3 text-gray-500 text-sm">{new Date(order.created_at).toLocaleDateString('pt-BR')}</span>
                 </div>
-                <div className="mb-1 text-sm text-gray-700">Status: <span className={`font-medium ${order.status === 'confirmed' ? 'text-green-600' : 'text-yellow-600'}`}>{order.status === 'confirmed' ? 'Pago' : 'Pendente'}</span></div>
-                <div className="mb-2">
-                  <span className="text-sm font-semibold">Entrega: </span>
-                  <span className="text-sm">
-                    {order.status === 'confirmed' ? 'Preparando Pedido Para Envio' : 'Aguardando pagamento'}
+                <div className="flex items-center gap-2 mt-1 sm:mt-0">
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${order.status === 'pago' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    {order.status === 'pago' ? 'Pago' : 'Aguardando pagamento'}
                   </span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  {items.map(item => {
-                    // Buscar imagem e nome do produto
-                    const product = mockProducts.find(p => p.id === String(item.product_id));
-                    const imageUrl = product?.image_url || item.image_url || 'https://via.placeholder.com/64x64?text=Produto';
-                    const name = product?.name || item.product_name || 'Produto';
-                    return (
-                      <div key={item.product_id} className="flex items-center gap-3 border rounded p-2 bg-gray-50">
-                        <img src={imageUrl} alt={name} className="w-16 h-16 object-cover rounded" />
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-900">{name}</div>
-                          <div className="text-xs text-gray-500">Qtd: {item.quantity}</div>
-                        </div>
-                        <div className="font-semibold text-blue-700">R$ {Number(item.product_price).toFixed(2).replace('.', ',')}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="font-bold text-lg text-blue-900">Total: R$ {Number(order.total_amount).toFixed(2).replace('.', ',')}</span>
-                  {order.status !== 'confirmed' && (
-                    <button
-                      className="ml-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded transition"
-                      onClick={async () => {
-                        if (!supabase) {
-                          alert('Supabase não configurado.');
-                          return;
-                        }
-                        const response = await supabase
-                          .from('orders')
-                          .select('*')
-                          .eq('id', order.id)
-                          .single();
-                        const data = response?.data;
-                        if (data && data.payment_id) {
-                          // Se já tem os dados, navega normalmente
-                          navigate('/order-confirmation', {
-                            state: {
-                              orderId: order.id,
-                              paymentId: data.payment_id,
-                              pixCode: data.pix_code,
-                              pixQrCode: data.pix_qr_code,
-                              billetUrl: data.billet_url,
-                              billetCode: data.billet_code,
-                              paymentMethod: data.payment_method,
-                              expiresAt: data.expires_at
-                            }
-                          });
-                        } else {
-                          // Tenta buscar os dados de pagamento novamente (caso estejam nulos)
-                          const { data: freshData } = await supabase
-                            .from('orders')
-                            .select('*')
-                            .eq('id', order.id)
-                            .single();
-                          if (freshData && freshData.payment_id) {
-                            navigate('/order-confirmation', {
-                              state: {
-                                orderId: order.id,
-                                paymentId: freshData.payment_id,
-                                pixCode: freshData.pix_code,
-                                pixQrCode: freshData.pix_qr_code,
-                                billetUrl: freshData.billet_url,
-                                billetCode: freshData.billet_code,
-                                paymentMethod: freshData.payment_method,
-                                expiresAt: freshData.expires_at
-                              }
-                            });
-                          } else {
-                            alert('Não foi possível encontrar os dados de pagamento para este pedido. Tente gerar o pagamento novamente.');
-                          }
-                        }
-                      }}
-                    >
-                      Pagar Agora
-                    </button>
-                  )}
+                  <span className="font-bold text-blue-900 text-lg">R$ {Number(order.total).toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
-            );
-          })}
+              {/* Lista de produtos */}
+              <div className="flex flex-col gap-2">
+                {order.items.map((item: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-3 border rounded p-2 bg-gray-50">
+                    <img src={item.product_image || 'https://via.placeholder.com/64x64?text=Produto'} alt={item.product_name} className="w-16 h-16 object-cover rounded" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{item.product_name}</div>
+                      <div className="text-xs text-gray-500">Qtd: {item.quantity}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Dados de envio, se houver */}
+              {order.shipping_info && (
+                <div className="bg-blue-50 rounded p-3 text-sm mt-2">
+                  <div className="font-semibold text-blue-800 mb-1">Dados de Envio:</div>
+                  {order.shipping_info.tracking_code && (
+                    <div><span className="font-semibold">Rastreamento:</span> {order.shipping_info.tracking_code}</div>
+                  )}
+                  {order.shipping_info.address && (
+                    <div><span className="font-semibold">Endereço:</span> {order.shipping_info.address}</div>
+                  )}
+                </div>
+              )}
+              {/* Botão de pagamento se aguardando */}
+              {order.status === 'aguardando_pagamento' && (
+                <button
+                  className="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-semibold transition"
+                  onClick={() => navigate(`/pagamento/${order.id}`)}
+                >
+                  Pagar Agora
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>
