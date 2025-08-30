@@ -127,6 +127,7 @@ export const Checkout: React.FC = () => {
         product_price: item.price,
         quantity: item.quantity,
         total_price: item.price * item.quantity,
+        image_url: item.image_url || '',
       }));
 
       console.log('📦 Criando itens do pedido:', orderItemsData);
