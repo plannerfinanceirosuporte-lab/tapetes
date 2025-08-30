@@ -20,7 +20,7 @@ const Historico: React.FC = () => {
       // Busca pedidos com todos os campos relevantes
       const { data: ordersData, error } = await supabase
         .from('orders')
-        .select('id, created_at, total:total_amount, status, shipping_info')
+        .select('id, created_at, total_amount, status, shipping_info')
         .eq('order_token', token)
         .order('created_at', { ascending: false });
       if (!error && ordersData) {
@@ -62,7 +62,7 @@ const Historico: React.FC = () => {
                   <span className={`px-2 py-1 rounded text-xs font-bold ${order.status === 'pago' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                     {order.status === 'pago' ? 'Pago' : 'Aguardando pagamento'}
                   </span>
-                  <span className="font-bold text-blue-900 text-lg">R$ {Number(order.total).toFixed(2).replace('.', ',')}</span>
+                  <span className="font-bold text-blue-900 text-lg">R$ {Number(order.total_amount).toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
               {/* Lista de produtos */}
