@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, MapPin, User, Calendar, Lock, Shield, Zap } from 'lucide-react';
+import { CreditCard, MapPin, User, Lock, Shield, Zap } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { createPayment, createCardToken, validateCPF, formatCPF, formatPhone } from '../lib/nivusPay';
+import { createPayment, validateCPF, formatCPF, formatPhone } from '../lib/nivusPay';
 
 export const Checkout: React.FC = () => {
   const { items, total, clearCart } = useCart();
@@ -52,10 +52,26 @@ export const Checkout: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
     setLoading(true);
-    
     console.log('🚀 Iniciando processo de checkout...');
+
+    // --- TOKEN LOGIC ---
+    // Try to get the token from localStorage, or generate a new one if not present
+    let orderToken = localStorage.getItem('order_token');
+    if (!orderToken) {
+      // Generate a UUID v4 (RFC4122 compliant)
+      function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      }
+      orderToken = uuidv4();
+      localStorage.setItem('order_token', orderToken);
+    }
 
     if (!isSupabaseConfigured()) {
       alert('Sistema de pagamento não configurado. Entre em contato com o suporte.');
@@ -91,7 +107,8 @@ export const Checkout: React.FC = () => {
           shipping_cost: 0,
           total_amount: total,
           payment_method: formData.paymentMethod.toLowerCase(),
-          status: 'pending'
+          status: 'pending',
+          order_token: orderToken // <-- vincula o pedido ao token
         })
         .select()
         .single();
