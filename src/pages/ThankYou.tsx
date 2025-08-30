@@ -289,7 +289,7 @@ export const ThankYou: React.FC = () => {
         {/* Informações Adicionais */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <InfoIcon className="inline-block h-5 w-5 text-blue-600" />
+            <Info className="inline-block h-5 w-5 text-blue-600" />
             Informações Importantes
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
