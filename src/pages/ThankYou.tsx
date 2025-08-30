@@ -1,70 +1,36 @@
 import React, { useEffect, useState, useMemo } from 'react';
+  // Memoiza a estimativa de entrega para não mudar a cada render
+  const estimatedDelivery = useMemo(() => {
+    if (!orderData || !orderData.created_at) return null;
+    function addBusinessDays(date: Date, days: number) {
+      let count = 0;
+      let result = new Date(date);
+      while (count < days) {
+        result.setDate(result.getDate() + 1);
+        if (result.getDay() !== 0 && result.getDay() !== 6) {
+          count++;
+        }
+      }
+      return result;
+    }
+    const pedidoDate = new Date(orderData.created_at);
+    const entregaDate = addBusinessDays(pedidoDate, 6);
+    let hash = 0;
+    for (let i = 0; i < orderData.id.length; i++) {
+      hash = orderData.id.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hora = 8 + Math.abs(hash) % 10;
+    const minuto = Math.abs(hash * 31) % 60;
+    entregaDate.setHours(hora, minuto, 0, 0);
+    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
+  }, [orderData]);
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { CheckCircle, Package, Truck } from 'lucide-react';
+import { CheckCircle, Package, Truck, Clock, Home, ShoppingBag, Star } from 'lucide-react';
 import { checkPaymentStatus } from '../lib/nivusPay';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useStore } from '../contexts/StoreContext';
 
 export const ThankYou: React.FC = () => {
-  // ...existing code...
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const { settings } = useStore();
-  const [loading, setLoading] = useState(true);
-  const [orderData, setOrderData] = useState<any>(null);
-  const [paymentVerified, setPaymentVerified] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-
-  // Memoiza a estimativa de entrega para não mudar a cada render
-  const estimatedDelivery = useMemo(() => {
-    if (!orderData || !orderData.created_at) return null;
-    function addBusinessDays(date: Date, days: number) {
-      let count = 0;
-      let result = new Date(date);
-      while (count < days) {
-        result.setDate(result.getDate() + 1);
-        if (result.getDay() !== 0 && result.getDay() !== 6) {
-          count++;
-        }
-      }
-      return result;
-    }
-    const pedidoDate = new Date(orderData.created_at);
-    const entregaDate = addBusinessDays(pedidoDate, 6);
-    let hash = 0;
-    for (let i = 0; i < orderData.id.length; i++) {
-      hash = orderData.id.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hora = 8 + Math.abs(hash) % 10;
-    const minuto = Math.abs(hash * 31) % 60;
-    entregaDate.setHours(hora, minuto, 0, 0);
-    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
-  }, [orderData]);
-  // Memoiza a estimativa de entrega para não mudar a cada render
-  const estimatedDelivery = useMemo(() => {
-    if (!orderData || !orderData.created_at) return null;
-    function addBusinessDays(date: Date, days: number) {
-      let count = 0;
-      let result = new Date(date);
-      while (count < days) {
-        result.setDate(result.getDate() + 1);
-        if (result.getDay() !== 0 && result.getDay() !== 6) {
-          count++;
-        }
-      }
-      return result;
-    }
-    const pedidoDate = new Date(orderData.created_at);
-    const entregaDate = addBusinessDays(pedidoDate, 6);
-    let hash = 0;
-    for (let i = 0; i < orderData.id.length; i++) {
-      hash = orderData.id.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hora = 8 + Math.abs(hash) % 10;
-    const minuto = Math.abs(hash * 31) % 60;
-    entregaDate.setHours(hora, minuto, 0, 0);
-    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
-  }, [orderData]);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { settings } = useStore();
@@ -314,6 +280,23 @@ export const ThankYou: React.FC = () => {
                 <p className="text-sm text-blue-700">
                   {estimatedDelivery || 'Carregando estimativa...'}
                 </p>
+              </div>
+              {/* Ações */}
+              <div className="space-y-4">
+                {paymentVerified && (
+                  <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Star className="h-5 w-5 text-yellow-600" />
+                      <span className="font-medium text-yellow-900">Avalie sua Experiência</span>
+                    </div>
+                    <p className="text-sm text-yellow-700 mb-3">
+                      Sua opinião é muito importante para nós!
+                    </p>
+                    <button className="text-yellow-600 text-sm font-medium hover:text-yellow-800">
+                      Deixar Avaliação →
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
