@@ -238,7 +238,7 @@ export const ThankYou: React.FC = () => {
                   <span className="font-medium text-blue-900">Entrega Estimada</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  6 dias úteis
+                  '6 dias úteis'
                 </p>
               </div>
               {/* Ações */}
