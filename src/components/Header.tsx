@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Search, Store } from 'lucide-react';
+import { ShoppingCart, Search, Store, Menu } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useStore } from '../contexts/StoreContext';
 
-export const Header: React.FC = () => {
   const { getItemCount } = useCart();
   const { settings } = useStore();
   const itemCount = getItemCount();
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <>
@@ -78,15 +78,35 @@ export const Header: React.FC = () => {
                 {settings?.store_name}
               </span>
             </Link>
-            {/* Cart */}
-            <Link to="/cart" className="cart-button ml-4">
-              <ShoppingCart className="h-5 w-5" />
-              {itemCount > 0 && (
-                <span className="cart-badge">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
+            {/* Cart e Menu */}
+            <div className="flex items-center gap-2">
+              <Link to="/cart" className="cart-button ml-2">
+                <ShoppingCart className="h-5 w-5" />
+                {itemCount > 0 && (
+                  <span className="cart-badge">{itemCount}</span>
+                )}
+              </Link>
+              <button
+                className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Abrir menu"
+                onClick={() => setMenuOpen(true)}
+              >
+                <Menu className="h-6 w-6" />
+              </button>
+            </div>
+            {/* Drawer simples */}
+            {menuOpen && (
+              <div className="fixed inset-0 z-50 flex">
+                <div className="fixed inset-0 bg-black opacity-40" onClick={() => setMenuOpen(false)}></div>
+                <div className="ml-auto w-64 bg-white h-full shadow-lg p-6 flex flex-col">
+                  <button className="self-end mb-6 text-gray-500" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">✕</button>
+                  <Link to="/purchasehistory" className="mb-4 text-blue-600 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Histórico de Compras
+                  </Link>
+                  {/* Adicione mais links aqui futuramente */}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
