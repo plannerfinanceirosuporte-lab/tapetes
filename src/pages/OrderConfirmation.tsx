@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { checkPaymentStatus } from '../lib/nivusPay';
@@ -20,7 +20,11 @@ export const OrderConfirmation: React.FC = () => {
   const expiresAt = location.state?.expiresAt;
 
   // Novo: status do pedido
-  const [orderStatus, setOrderStatus] = React.useState<'pending' | 'confirmed'>('pending');
+  const [orderStatus, setOrderStatus] = useState<'pending' | 'confirmed'>(searchParams.get('verified') === 'true' ? 'confirmed' : 'pending');
+
+  // Itens e total do pedido
+  const [orderItems, setOrderItems] = useState<any[]>([]);
+  const [orderTotal, setOrderTotal] = useState<number>(0);
 
   // Verificação automática de pagamento
   useEffect(() => {
@@ -51,6 +55,7 @@ export const OrderConfirmation: React.FC = () => {
       }
       // 3. Se pago, redireciona
       if (isMounted && status === 'confirmed') {
+        window.scrollTo({ top: 0, behavior: 'auto' });
         navigate(`/thank-you?orderId=${orderId}&paymentId=${paymentId}&verified=true`);
       }
     };
@@ -60,6 +65,23 @@ export const OrderConfirmation: React.FC = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [orderId, paymentId, navigate]);
+
+  // Buscar itens e total do pedido
+  useEffect(() => {
+    const fetchOrderItems = async () => {
+      if (!orderId || !isSupabaseConfigured()) return;
+      const { data, error } = await supabase
+        .from('order_items')
+        .select('*, product:products(*)')
+        .eq('order_id', orderId);
+      if (!error && data) {
+        setOrderItems(data);
+        const total = data.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+        setOrderTotal(total);
+      }
+    };
+    fetchOrderItems();
+  }, [orderId]);
 
   console.log('📄 Página de confirmação carregada');
   console.log('📊 Dados recebidos:', { 
@@ -178,7 +200,37 @@ export const OrderConfirmation: React.FC = () => {
             </button>
           </div>
         </div>
-        {/* ...restante do conteúdo da página... */}
+        {/* Itens do Pedido */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">🛍️ Itens do Pedido</h2>
+          <div className="space-y-4">
+            {orderItems.length === 0 ? (
+              <p className="text-gray-500">Nenhum item encontrado.</p>
+            ) : (
+              orderItems.map((item) => (
+                <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <img
+                    src={item.product?.image_url}
+                    alt={item.product?.name}
+                    className="h-16 w-16 rounded-lg object-cover"
+                  />
+                  <div className="flex-1">
+                    <h4 className="modern-title text-base">{item.product?.name}</h4>
+                    <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="modern-price text-base">
+                      R$ {(item.quantity * Number(item.price)).toFixed(2).replace('.', ',')}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="flex justify-end mt-4">
+            <span className="font-bold text-lg text-gray-900">Total: R$ {orderTotal.toFixed(2).replace('.', ',')}</span>
+          </div>
+        </div>
         <PaymentIcon className={`h-16 w-16 ${paymentInfo.color} mx-auto mb-4`} />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {paymentInfo.title}
