@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, CheckCircle2 } from 'lucide-react';
 import { supabase, Category, isSupabaseConfigured } from '../../lib/supabase';
 
 export const AdminCategories: React.FC = () => {
@@ -141,11 +141,19 @@ export const AdminCategories: React.FC = () => {
         {categories.map((category) => (
           <div
             key={category.id}
-            className={`bg-white rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2 ${selectedCategoryId === category.id ? 'border-blue-600 bg-blue-50' : 'border-transparent hover:border-blue-300'}`}
+            className={`relative rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2
+              ${selectedCategoryId === category.id
+                ? 'border-blue-700 bg-blue-100 ring-2 ring-blue-400'
+                : 'bg-white border-transparent hover:border-blue-300'}
+            `}
+            style={selectedCategoryId === category.id ? { boxShadow: '0 0 0 2px #2563eb' } : {}}
             onClick={() => setSelectedCategoryId(selectedCategoryId === category.id ? null : category.id)}
           >
+            {selectedCategoryId === category.id && (
+              <CheckCircle2 className="absolute top-2 right-2 text-blue-600 w-6 h-6" />
+            )}
             <div className="flex justify-between items-start mb-4">
-              <h3 className={`text-lg font-semibold ${selectedCategoryId === category.id ? 'text-blue-700' : 'text-gray-900'}`}>{category.name}</h3>
+              <h3 className={`text-lg font-semibold ${selectedCategoryId === category.id ? 'text-blue-800' : 'text-gray-900'}`}>{category.name}</h3>
               <div className="flex space-x-2">
                 <button
                   onClick={e => { e.stopPropagation(); handleEdit(category); }}
