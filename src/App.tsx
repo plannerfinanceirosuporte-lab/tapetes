@@ -15,6 +15,7 @@ import { Checkout } from './pages/Checkout';
 import { OrderConfirmation } from './pages/OrderConfirmation';
 import { PaymentCallback } from './pages/PaymentCallback';
 import { ThankYou } from './pages/ThankYou';
+import Historico from './pages/Historico';
 
 // Admin pages
 import { AdminLogin } from './pages/admin/Login';
@@ -43,6 +44,7 @@ function App() {
               <Route path="/order-confirmation" element={<><Header /><OrderConfirmation /></>} />
               <Route path="/payment-callback" element={<><Header /><PaymentCallback /></>} />
               <Route path="/thank-you" element={<><Header /><ThankYou /></>} />
+              <Route path="/historico" element={<><Header /><Historico /></>} />
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/*" element={
