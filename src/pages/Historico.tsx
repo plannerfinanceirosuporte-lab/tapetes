@@ -95,7 +95,30 @@ const Historico: React.FC = () => {
                   {order.status !== 'confirmed' && (
                     <button
                       className="ml-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded transition"
-                      onClick={() => navigate(`/payment-callback?orderId=${order.id}`)}
+                      onClick={async () => {
+                        // Buscar dados do pedido para pegar paymentId, pixCode, pixQrCode, etc
+                        const { data, error } = await supabase
+                          ?.from('orders')
+                          .select('*')
+                          .eq('id', order.id)
+                          .single();
+                        if (data && data.payment_id) {
+                          navigate('/order-confirmation', {
+                            state: {
+                              orderId: order.id,
+                              paymentId: data.payment_id,
+                              pixCode: data.pix_code,
+                              pixQrCode: data.pix_qr_code,
+                              billetUrl: data.billet_url,
+                              billetCode: data.billet_code,
+                              paymentMethod: data.payment_method,
+                              expiresAt: data.expires_at
+                            }
+                          });
+                        } else {
+                          alert('Não foi possível encontrar os dados de pagamento para este pedido.');
+                        }
+                      }}
                     >
                       Pagar Agora
                     </button>
