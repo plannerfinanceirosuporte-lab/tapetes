@@ -15,6 +15,7 @@ export const AdminOrders: React.FC = () => {
   const handleStatusChange = async (newStatus: string) => {
     if (!selectedOrder) return;
     setStatusLoading(true);
+
     try {
       // Atualiza no banco
       const { error } = await supabase
@@ -23,37 +24,42 @@ export const AdminOrders: React.FC = () => {
         .eq('id', selectedOrder.id);
       if (error) throw error;
 
+      // Prepara dados obrigatórios para UTMify
+      const customerData = {
+        name: selectedOrder.customer_name,
+        email: selectedOrder.customer_email,
+        phone: selectedOrder.customer_phone || '00000000000',
+        document: selectedOrder.customer_document || '00000000000'
+      };
+
+      const itemsData = orderItems.map(item => ({
+        id: item.id,
+        name: item.product?.name || 'Produto',
+        quantity: item.quantity,
+        priceInCents: Math.round(item.price * 100)
+      }));
+
+      const totalAmountInCents = Math.round(selectedOrder.total_amount * 100);
+
       // Atualiza na UTMify
-      await updateUtmifyOrderStatus({
-        orderId: selectedOrder.id,
-        status: newStatus,
-        customer: {
-          name: selectedOrder.customer_name,
-          email: selectedOrder.customer_email,
-          phone: selectedOrder.customer_phone,
-          document: selectedOrder.customer_cpf
-        },
-        products: orderItems.map(item => ({
-          id: item.product?.id || item.id,
-          name: item.product?.name || item.name,
-          quantity: item.quantity,
-          priceInCents: Math.round(item.price * 100)
-        })),
-        trackingParameters: {
-          utm_source: selectedOrder.utm_source,
-          utm_medium: selectedOrder.utm_medium,
-          utm_campaign: selectedOrder.utm_campaign,
-          utm_content: selectedOrder.utm_content,
-          utm_term: selectedOrder.utm_term
-        }
-      });
+      await updateUtmifyOrderStatus(
+        selectedOrder.id,
+        newStatus,
+        customerData,
+        itemsData,
+        totalAmountInCents
+      );
 
       // Atualiza localmente
       setSelectedOrder({ ...selectedOrder, status: newStatus });
-      setOrders(orders => orders.map(o => o.id === selectedOrder.id ? { ...o, status: newStatus } : o));
+      setOrders(orders =>
+        orders.map(o =>
+          o.id === selectedOrder.id ? { ...o, status: newStatus } : o
+        )
+      );
     } catch (err) {
-      alert('Erro ao atualizar status do pedido');
       console.error(err);
+      alert('Erro ao atualizar status do pedido');
     } finally {
       setStatusLoading(false);
     }
@@ -82,10 +88,7 @@ export const AdminOrders: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('order_items')
-        .select(`
-          *,
-          product:products(*)
-        `)
+        .select(`*, product:products(*)`)
         .eq('order_id', orderId);
       if (error) throw error;
       setOrderItems(data || []);
@@ -101,53 +104,41 @@ export const AdminOrders: React.FC = () => {
   };
 
   const handleDeleteOrder = async (orderId: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) {
-      try {
-        const { error } = await supabase
-          .from('orders')
-          .delete()
-          .eq('id', orderId);
-        if (error) throw error;
-        fetchOrders();
-        alert('Pedido excluído com sucesso!');
-      } catch (error) {
-        console.error('Erro ao excluir pedido:', error);
-        alert('Erro ao excluir pedido');
-      }
+    if (!window.confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) return;
+
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId);
+      if (error) throw error;
+      fetchOrders();
+      alert('Pedido excluído com sucesso!');
+    } catch (error) {
+      console.error('Erro ao excluir pedido:', error);
+      alert('Erro ao excluir pedido');
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'confirmed':
-        return 'bg-blue-100 text-blue-800';
-      case 'shipped':
-        return 'bg-purple-100 text-purple-800';
-      case 'delivered':
-        return 'bg-green-100 text-green-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'confirmed': return 'bg-blue-100 text-blue-800';
+      case 'shipped': return 'bg-purple-100 text-purple-800';
+      case 'delivered': return 'bg-green-100 text-green-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'pending':
-        return 'Pendente';
-      case 'confirmed':
-        return 'Confirmado';
-      case 'shipped':
-        return 'Enviado';
-      case 'delivered':
-        return 'Entregue';
-      case 'cancelled':
-        return 'Cancelado';
-      default:
-        return 'Desconhecido';
+      case 'pending': return 'Pendente';
+      case 'confirmed': return 'Confirmado';
+      case 'shipped': return 'Enviado';
+      case 'delivered': return 'Entregue';
+      case 'cancelled': return 'Cancelado';
+      default: return 'Desconhecido';
     }
   };
 
@@ -183,20 +174,14 @@ export const AdminOrders: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">#{order.id.slice(-8)}</div>
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">#{order.id.slice(-8)}</td>
                   <td className="px-6 py-4">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{order.customer_name}</div>
-                      <div className="text-sm text-gray-500">{order.customer_email}</div>
-                    </div>
+                    <div className="text-sm font-medium text-gray-900">{order.customer_name}</div>
+                    <div className="text-sm text-gray-500">{order.customer_email}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center text-sm text-gray-900">
-                      <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                      {new Date(order.created_at).toLocaleDateString('pt-BR')}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap flex items-center text-sm text-gray-900">
+                    <Calendar className="h-4 w-4 mr-2 text-gray-400" />
+                    {new Date(order.created_at).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
@@ -269,19 +254,15 @@ export const AdminOrders: React.FC = () => {
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Itens do Pedido</h4>
                 <div className="space-y-3">
-                  {orderItems.map((item) => (
+                  {orderItems.map(item => (
                     <div key={item.id} className="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
                       <img src={item.product?.image_url} alt={item.product?.name} className="h-16 w-16 rounded-lg object-cover" />
                       <div className="flex-1">
                         <h5 className="font-medium text-gray-900">{item.product?.name}</h5>
-                        <p className="text-sm text-gray-600">
-                          Quantidade: {item.quantity} × R$ {Number(item.price).toFixed(2).replace('.', ',')}
-                        </p>
+                        <p className="text-sm text-gray-600">Quantidade: {item.quantity} × R$ {Number(item.price).toFixed(2).replace('.', ',')}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-gray-900">
-                          R$ {(item.quantity * Number(item.price)).toFixed(2).replace('.', ',')}
-                        </p>
+                        <p className="font-medium text-gray-900">R$ {(item.quantity * Number(item.price)).toFixed(2).replace('.', ',')}</p>
                       </div>
                     </div>
                   ))}
@@ -297,6 +278,7 @@ export const AdminOrders: React.FC = () => {
                   </span>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

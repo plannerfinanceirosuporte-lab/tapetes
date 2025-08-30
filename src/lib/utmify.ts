@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const UTMIFY_API_TOKEN = import.meta.env.UTMIFY_API_TOKEN || 'U4c6cF4A3LvwwsEabTmIoTI4mQKQ0G4xNkvS';
 
-// 🔄 Mapeamento de status do painel → status UTMify
 const mapStatusToUtmify = (status: string): string => {
   switch (status) {
     case 'pending':
@@ -16,21 +15,10 @@ const mapStatusToUtmify = (status: string): string => {
   }
 };
 
-// 🔄 Mapeamento de status para o método de pagamento padrão
 const mapPaymentMethod = (status: string): 'pix' | 'credit_card' | 'billet' => {
-  switch (status) {
-    case 'confirmed':
-      return 'pix'; // ou 'credit_card' dependendo da sua lógica
-    case 'pending':
-      return 'pix';
-    case 'cancelled':
-      return 'pix';
-    default:
-      return 'pix';
-  }
+  return 'pix'; // ou ajuste conforme sua lógica
 };
 
-// Função para atualizar status de pedido na UTMify
 export const updateUtmifyOrderStatus = async (
   orderId: string,
   status: string,
@@ -39,29 +27,28 @@ export const updateUtmifyOrderStatus = async (
   totalAmountInCents?: number
 ) => {
   try {
-    // Campos obrigatórios para UTMify
-    const payload: any = {
+    const payload = {
       orderId,
       platform: 'MinhaLojaCustomReact',
       paymentMethod: mapPaymentMethod(status),
       status: mapStatusToUtmify(status),
       createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
-      approvedDate: status === 'confirmed' ? new Date().toISOString().slice(0, 19).replace('T', ' ') : null,
+      approvedDate: status === 'confirmed' ? new Date().toISOString().slice(0, 19).replace('T', ' ') : undefined,
       refundedAt: null,
       customer: {
         name: customer?.name || 'Cliente',
-        email: customer?.email || 'email@exemplo.com',
+        email: customer?.email || 'cliente@exemplo.com',
         phone: customer?.phone || '00000000000',
         document: customer?.document || '00000000000'
       },
-      products: items?.map(item => ({
+      products: (items || []).map(item => ({
         id: item.id,
         name: item.name,
         planId: null,
         planName: null,
         quantity: item.quantity,
         priceInCents: item.priceInCents
-      })) || [],
+      })),
       commission: {
         totalPriceInCents: totalAmountInCents || 0,
         gatewayFeeInCents: 0,
