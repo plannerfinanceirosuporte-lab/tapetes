@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Search, Store, Menu } from 'lucide-react';
+import { ShoppingCart, Search, Store } from 'lucide-react';
+import HamburgerMenu from './HamburgerMenu';
 import { useCart } from '../contexts/CartContext';
 import { useStore } from '../contexts/StoreContext';
 
@@ -87,13 +88,7 @@ export const Header: React.FC = () => {
                   <span className="cart-badge">{itemCount}</span>
                 )}
               </Link>
-              <button
-                className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Abrir menu"
-                onClick={() => setMenuOpen(true)}
-              >
-                <Menu className="h-6 w-6" />
-              </button>
+              <HamburgerMenu />
             </div>
             {/* Drawer estilizado */}
             {menuOpen && (
