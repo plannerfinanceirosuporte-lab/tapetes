@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { CheckCircle, Package, Truck, Clock, Home, ShoppingBag } from 'lucide-react';
+import { CheckCircle, Package, Truck, Clock, Home, ShoppingBag, Info, Mail, Smartphone, MessageCircle } from 'lucide-react';
 import { checkPaymentStatus } from '../lib/nivusPay';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useStore } from '../contexts/StoreContext';
@@ -172,7 +172,10 @@ export const ThankYou: React.FC = () => {
               </div>
               {/* Informações do Cliente */}
               <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">🚚 Informações de Entrega</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <Truck className="inline-block h-5 w-5 text-blue-600" />
+                  Informações de Entrega
+                </h3>
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
                   <p className="font-medium text-gray-900">{orderData.customer_name}</p>
                   <p className="text-gray-600">{orderData.customer_email}</p>
@@ -285,29 +288,44 @@ export const ThankYou: React.FC = () => {
         </div>
         {/* Informações Adicionais */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações Importantes</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <InfoIcon className="inline-block h-5 w-5 text-blue-600" />
+            Informações Importantes
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium text-gray-900 mb-2">📧 Confirmação por Email</h4>
+              <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                <Mail className="inline-block h-5 w-5 text-blue-500" />
+                Confirmação por Email
+              </h4>
               <p className="text-sm text-gray-600">
                 Enviamos um email de confirmação para <strong>{orderData.customer_email}</strong> 
                 com todos os detalhes do seu pedido.
               </p>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 mb-2">📱 Acompanhamento</h4>
+              <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                <Smartphone className="inline-block h-5 w-5 text-blue-500" />
+                Acompanhamento
+              </h4>
               <p className="text-sm text-gray-600">
                 Você receberá atualizações sobre o status do seu pedido por email e SMS.
               </p>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 mb-2">🚚 Entrega</h4>
+              <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                <Truck className="inline-block h-5 w-5 text-blue-500" />
+                Entrega
+              </h4>
               <p className="text-sm text-gray-600">
                 Frete grátis para todo Brasil. Prazo de entrega: {settings?.estimated_delivery_days || 7} dias úteis.
               </p>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 mb-2">💬 Suporte</h4>
+              <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                <MessageCircle className="inline-block h-5 w-5 text-blue-500" />
+                Suporte
+              </h4>
               <p className="text-sm text-gray-600">
                 Dúvidas? Entre em contato: {settings?.contact_email || settings?.contact_phone || 'suporte@loja.com'}
               </p>
