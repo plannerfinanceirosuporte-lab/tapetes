@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
         >
           <img
             src={settings.header_banner_url}
-                     alt="Banner com imagem do cabeçalho"
+            alt="Banner"
             style={{ width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover' }}
           />
         </div>
