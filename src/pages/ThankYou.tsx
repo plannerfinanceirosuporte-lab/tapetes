@@ -129,7 +129,7 @@ export const ThankYou: React.FC = () => {
             <div className="modern-card p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Package className="h-6 w-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-900">📦 Detalhes do Pedido</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Detalhes do Pedido</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
@@ -145,7 +145,7 @@ export const ThankYou: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-600">Status</p>
                   <span className="modern-badge modern-badge-success">
-                    Confirmado
+                    Pago
                   </span>
                 </div>
                 <div>
@@ -239,7 +239,7 @@ export const ThankYou: React.FC = () => {
                 </div>
                 <p className="text-sm text-blue-700">
                   {paymentVerified 
-                    ? (settings?.estimated_delivery_days || 7) + ' dias úteis após a confirmação'
+                    ? '6 dias úteis'
                     : 'Após a confirmação do pagamento'
                   }
                 </p>
