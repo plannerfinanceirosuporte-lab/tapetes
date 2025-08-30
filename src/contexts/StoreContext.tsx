@@ -148,11 +148,6 @@ interface StoreSettings {
   maintenance_mode: boolean;
   
   // SEO
-  meta_title: string;
-  meta_description: string;
-  meta_keywords: string;
-  google_analytics_id: string;
-  facebook_pixel_id: string;
   
   // Contato
   contact_email: string;
@@ -378,7 +373,6 @@ const defaultSettings: StoreSettings = {
 
   font_family: 'Roboto',
   heading_font: 'Montserrat',
-  heading_font: 'Montserrat',
   currency: 'BRL',
   currency_symbol: 'R$',
   language: 'pt-BR',
@@ -392,8 +386,6 @@ const defaultSettings: StoreSettings = {
   meta_title: '',
   meta_description: '',
   meta_keywords: '',
-  google_analytics_id: '',
-  facebook_pixel_id: '',
   contact_email: '',
   contact_phone: '',
   contact_whatsapp: '',
@@ -419,11 +411,6 @@ const defaultSettings: StoreSettings = {
   footer_text: '© 2024 TechStore. Todos os direitos reservados.',
   
   // SEO
-  meta_title: '',
-  meta_description: '',
-  meta_keywords: '',
-  meta_author: '',
-  meta_robots: 'index,follow',
   canonical_url: '',
   og_title: '',
   og_description: '',

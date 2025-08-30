@@ -288,18 +288,20 @@ export const ThankYou: React.FC = () => {
                   </div>
                 ))}
               </div>
-                <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Star className="h-5 w-5 text-yellow-600" />
-                    <span className="font-medium text-yellow-900">Avalie sua Experiência</span>
-                  </div>
-                  <p className="text-sm text-yellow-700 mb-3">
-                    Sua opinião é muito importante para nós!
-                  </p>
-                  <button className="text-yellow-600 text-sm font-medium hover:text-yellow-800">
-                    Deixar Avaliação →
-                  </button>
-                </div>
+                  {paymentVerified && (
+                    <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Star className="h-5 w-5 text-yellow-600" />
+                        <span className="font-medium text-yellow-900">Avalie sua Experiência</span>
+                      </div>
+                      <p className="text-sm text-yellow-700 mb-3">
+                        Sua opinião é muito importante para nós!
+                      </p>
+                      <button className="text-yellow-600 text-sm font-medium hover:text-yellow-800">
+                        Deixar Avaliação →
+                      </button>
+                    </div>
+                  )}
               )}
             </div>
           </div>
