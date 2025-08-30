@@ -14,7 +14,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify(req.body),
     });
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      data = await response.text();
+    }
+    if (!response.ok) {
+      console.error('NivusPay error:', response.status, data);
+      return res.status(response.status).json({ error: data, status: response.status });
+    }
     res.status(response.status).json(data);
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Internal server error' });
