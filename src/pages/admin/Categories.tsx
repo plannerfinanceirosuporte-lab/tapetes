@@ -141,14 +141,14 @@ export const AdminCategories: React.FC = () => {
         {categories.map((category) => (
           <div
             key={category.id}
-            className={`relative rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2
-              ${selectedCategoryId === category.id
-                ? 'border-blue-700 bg-blue-100 ring-2 ring-blue-400'
-                : 'bg-white border-transparent hover:border-blue-300'}
-            `}
-            style={selectedCategoryId === category.id ? { boxShadow: '0 0 0 2px #2563eb' } : {}}
+            className={`relative rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2`}
+            style={selectedCategoryId === category.id
+              ? { background: '#dbeafe', borderColor: '#2563eb', boxShadow: '0 0 0 2px #2563eb' }
+              : { background: '#fff', borderColor: 'transparent' }}
             onClick={() => setSelectedCategoryId(selectedCategoryId === category.id ? null : category.id)}
           >
+            {/* Debug: mostrar estado */}
+            {selectedCategoryId === category.id && <span style={{position:'absolute',top:4,left:4,fontSize:10,color:'#2563eb'}}>Selecionada</span>}
             {selectedCategoryId === category.id && (
               <CheckCircle2 className="absolute top-2 right-2 text-blue-600 w-6 h-6" />
             )}
