@@ -155,51 +155,7 @@ export const OrderConfirmation: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
-        {/* Próximos Passos */}
-        <div className="mb-8 p-4 rounded-lg border border-gray-200 bg-gray-50 text-left">
-          <div className="flex items-center mb-2">
-            <span className="text-lg mr-2">📋</span>
-            <span className="font-semibold text-gray-900">Próximos Passos</span>
-          </div>
-          <div className="flex items-center mb-2">
-            {orderStatus === 'confirmed' ? (
-              <span className="text-green-500 mr-2">✔️</span>
-            ) : (
-              <span className="text-yellow-400 mr-2">🕒</span>
-            )}
-            <div>
-              <div className="font-medium text-gray-900">
-                {orderStatus === 'confirmed' ? 'Pedido Pago' : 'Aguardando Pagamento'}
-              </div>
-              <div className="text-xs text-gray-600">
-                {orderStatus === 'confirmed'
-                  ? 'Seu pagamento foi confirmado com sucesso.'
-                  : 'Complete o pagamento para confirmar seu pedido'}
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center mb-2">
-            <span className="text-blue-500 mr-2">🚚</span>
-            <div>
-              <div className="font-medium text-gray-900">Entrega Estimada</div>
-              <div className="text-xs text-gray-600">Após a confirmação do pagamento</div>
-            </div>
-          </div>
-          <div className="flex gap-2 mt-4">
-            <Link
-              to="/"
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <span role="img" aria-label="loja">🏬</span> Voltar à Loja
-            </Link>
-            <button
-              className="flex-1 bg-gray-200 text-gray-500 py-2 px-4 rounded-lg flex items-center justify-center gap-2 cursor-not-allowed"
-              disabled
-            >
-              <span role="img" aria-label="comprar">🛒</span> Continuar Comprando
-            </button>
-          </div>
-        </div>
+  {/* Próximos Passos removido */}
         {/* Itens do Pedido */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">🛍️ Itens do Pedido</h2>
