@@ -273,8 +273,8 @@ export const ThankYou: React.FC = () => {
                   </div>
                 )}
               </div>
+            </div>
           </div>
-        </div>
 
         {/* Informações Adicionais */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
