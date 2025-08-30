@@ -12,6 +12,7 @@ export const ThankYou: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [orderData, setOrderData] = useState<any>(null);
   const [paymentVerified, setPaymentVerified] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   const orderId = searchParams.get('orderId');
   const paymentId = searchParams.get('paymentId');
@@ -23,12 +24,22 @@ export const ThankYou: React.FC = () => {
     }
 
     verifyPaymentAndOrder();
+    // Retry automático se não encontrar o pedido
+    // Tenta até 5 vezes com 1s de intervalo
+    let retryTimeout: NodeJS.Timeout;
+    if (!orderData && retryCount < 5 && !loading) {
+      retryTimeout = setTimeout(() => {
+        setRetryCount((c) => c + 1);
+        setLoading(true);
+        verifyPaymentAndOrder();
+      }, 1000);
+    }
+    return () => clearTimeout(retryTimeout);
   }, [orderId, paymentId]);
 
   const verifyPaymentAndOrder = async () => {
     try {
       console.log('🔄 Verificando pagamento e pedido...');
-      
       // Buscar dados do pedido
       if (isSupabaseConfigured() && supabase) {
         const { data: order, error } = await supabase
@@ -40,17 +51,18 @@ export const ThankYou: React.FC = () => {
               product:products(*)
             )
           `)
-
+          .eq('id', orderId)
+          .single();
+        if (error) throw error;
+        setOrderData(order);
         // Se tem payment_id, verificar status do pagamento
-        if (paymentId && order.payment_id) {
+        if (paymentId && order && order.payment_id) {
           try {
             const paymentStatus = await checkPaymentStatus(order.payment_id);
             console.log('💳 Status do pagamento:', paymentStatus);
-
             // Verificar se foi aprovado
             if (paymentStatus.status === 'approved' || paymentStatus.status === 'paid') {
               setPaymentVerified(true);
-              
               // Atualizar status do pedido para confirmado
               await supabase
                 .from('orders')
@@ -59,7 +71,6 @@ export const ThankYou: React.FC = () => {
                   payment_status: 'paid'
                 })
                 .eq('id', orderId);
-                
               console.log('✅ Pagamento aprovado e pedido confirmado!');
             }
           } catch (paymentError) {
@@ -238,7 +249,10 @@ export const ThankYou: React.FC = () => {
                   <span className="font-medium text-blue-900">Entrega Estimada</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  '6 dias úteis'
+                  {paymentVerified 
+                    ? '6 dias úteis'
+                    : 'Após a confirmação do pagamento'
+                  }
                 </p>
               </div>
               {/* Ações */}
