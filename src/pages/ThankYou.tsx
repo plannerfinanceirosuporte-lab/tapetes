@@ -38,10 +38,7 @@ export const ThankYou: React.FC = () => {
             order_items (
               *,
               product:products(*)
-            )
-          `)
-          .eq('id', orderId)
-          .single();
+            );
 
         if (error) throw error;
         setOrderData(order);
@@ -254,7 +251,7 @@ export const ThankYou: React.FC = () => {
                 </div>
                 <p className="text-sm text-blue-700">
                   {paymentVerified 
-                    ? `${settings?.estimated_delivery_days || 7} dias úteis após a confirmação`
+                    ? (settings?.estimated_delivery_days || 7) + ' dias úteis após a confirmação'
                     : 'Após a confirmação do pagamento'
                   }
                 </p>
@@ -326,4 +323,5 @@ export const ThankYou: React.FC = () => {
       </div>
     </div>
   );
+}
 };
