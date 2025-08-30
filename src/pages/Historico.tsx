@@ -31,7 +31,7 @@ const Historico: React.FC = () => {
         if (orderIds.length > 0) {
           const { data: itemsData, error: itemsError } = await supabase
             .from('order_items')
-            .select('order_id, product_id, product_name, quantity, product_price')
+            .select('order_id, product_id, product_name, quantity, product_price, image_url')
             .in('order_id', orderIds);
           if (!itemsError && itemsData) {
             // Agrupar por order_id
