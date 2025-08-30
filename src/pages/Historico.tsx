@@ -96,12 +96,16 @@ const Historico: React.FC = () => {
                     <button
                       className="ml-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded transition"
                       onClick={async () => {
-                        // Buscar dados do pedido para pegar paymentId, pixCode, pixQrCode, etc
-                        const { data, error } = await supabase
-                          ?.from('orders')
+                        if (!supabase) {
+                          alert('Supabase não configurado.');
+                          return;
+                        }
+                        const response = await supabase
+                          .from('orders')
                           .select('*')
                           .eq('id', order.id)
                           .single();
+                        const data = response?.data;
                         if (data && data.payment_id) {
                           navigate('/order-confirmation', {
                             state: {
