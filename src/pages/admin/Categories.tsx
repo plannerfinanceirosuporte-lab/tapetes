@@ -239,3 +239,5 @@ export const AdminCategories: React.FC = () => {
     </div>
   );
 };
+
+export default AdminCategories;
