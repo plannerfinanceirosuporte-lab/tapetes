@@ -19,19 +19,24 @@ export const OrderConfirmation: React.FC = () => {
   const paymentMethod = location.state?.paymentMethod;
   const expiresAt = location.state?.expiresAt;
 
+  // Novo: status do pedido
+  const [orderStatus, setOrderStatus] = React.useState<'pending' | 'confirmed'>('pending');
+
   // Verificação automática de pagamento
   useEffect(() => {
     let isMounted = true;
     if (!orderId || !paymentId) return;
     const checkStatus = async () => {
-      // 1. Verifica no Supabase
-      let orderStatus = null;
+      let status = null;
       if (isSupabaseConfigured()) {
         const { data, error } = await supabase.from('orders').select('status').eq('id', orderId).single();
-        if (!error && data) orderStatus = data.status;
+        if (!error && data) status = data.status;
+      }
+      if (status === 'confirmed') {
+        if (isMounted) setOrderStatus('confirmed');
       }
       // 2. Se não estiver pago, verifica na Nivus
-      if (orderStatus !== 'confirmed' && paymentId) {
+      if (status !== 'confirmed' && paymentId) {
         try {
           const payment = await checkPaymentStatus(paymentId);
           if (payment.status === 'APPROVED' || payment.status === 'PAID') {
@@ -39,12 +44,13 @@ export const OrderConfirmation: React.FC = () => {
             if (isSupabaseConfigured()) {
               await supabase.from('orders').update({ status: 'confirmed' }).eq('id', orderId);
             }
-            orderStatus = 'confirmed';
+            status = 'confirmed';
+            if (isMounted) setOrderStatus('confirmed');
           }
         } catch (e) { /* ignora erro */ }
       }
       // 3. Se pago, redireciona
-      if (isMounted && orderStatus === 'confirmed') {
+      if (isMounted && status === 'confirmed') {
         navigate(`/thank-you?orderId=${orderId}&paymentId=${paymentId}&verified=true`);
       }
     };
@@ -127,23 +133,65 @@ export const OrderConfirmation: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+        {/* Próximos Passos */}
+        <div className="mb-8 p-4 rounded-lg border border-gray-200 bg-gray-50 text-left">
+          <div className="flex items-center mb-2">
+            <span className="text-lg mr-2">📋</span>
+            <span className="font-semibold text-gray-900">Próximos Passos</span>
+          </div>
+          <div className="flex items-center mb-2">
+            {orderStatus === 'confirmed' ? (
+              <span className="text-green-500 mr-2">✔️</span>
+            ) : (
+              <span className="text-yellow-400 mr-2">🕒</span>
+            )}
+            <div>
+              <div className="font-medium text-gray-900">
+                {orderStatus === 'confirmed' ? 'Pedido Pago' : 'Aguardando Pagamento'}
+              </div>
+              <div className="text-xs text-gray-600">
+                {orderStatus === 'confirmed'
+                  ? 'Seu pagamento foi confirmado com sucesso.'
+                  : 'Complete o pagamento para confirmar seu pedido'}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center mb-2">
+            <span className="text-blue-500 mr-2">🚚</span>
+            <div>
+              <div className="font-medium text-gray-900">Entrega Estimada</div>
+              <div className="text-xs text-gray-600">Após a confirmação do pagamento</div>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <Link
+              to="/"
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <span role="img" aria-label="loja">🏬</span> Voltar à Loja
+            </Link>
+            <button
+              className="flex-1 bg-gray-200 text-gray-500 py-2 px-4 rounded-lg flex items-center justify-center gap-2 cursor-not-allowed"
+              disabled
+            >
+              <span role="img" aria-label="comprar">🛒</span> Continuar Comprando
+            </button>
+          </div>
+        </div>
+        {/* ...restante do conteúdo da página... */}
         <PaymentIcon className={`h-16 w-16 ${paymentInfo.color} mx-auto mb-4`} />
-        
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {paymentInfo.title}
         </h1>
-        
         <p className="text-gray-600 mb-6">
           {paymentInfo.description}
         </p>
-        
         {orderId && (
           <div className="bg-gray-100 rounded-lg p-4 mb-6">
             <p className="text-sm text-gray-600">Número do Pedido:</p>
             <p className="text-lg font-bold text-gray-900">#{orderId.slice(-8)}</p>
           </div>
         )}
-        
         {/* Mostrar dados do PIX se disponível */}
         {pixCode && (
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
@@ -172,7 +220,6 @@ export const OrderConfirmation: React.FC = () => {
             )}
           </div>
         )}
-        
         {/* Mostrar dados do Boleto se disponível */}
         {billetUrl && (
           <div className="bg-orange-50 rounded-lg p-4 mb-6">
@@ -203,7 +250,6 @@ export const OrderConfirmation: React.FC = () => {
             )}
           </div>
         )}
-        
         {/* Informações para Cartão de Crédito */}
         {paymentMethod === 'CREDIT_CARD' && (
           <div className="bg-green-50 rounded-lg p-4 mb-6">
@@ -214,9 +260,7 @@ export const OrderConfirmation: React.FC = () => {
             </p>
           </div>
         )}
-        
         <div className="space-y-3">
-          
           <Link
             to="/"
             className="w-full bg-gray-200 text-gray-900 py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2"
