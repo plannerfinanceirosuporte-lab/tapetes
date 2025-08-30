@@ -1,19 +1,91 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { checkPaymentStatus } from '../lib/nivusPay';
+  const navigate = useNavigate();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Verificação automática de pagamento
+  useEffect(() => {
+    let isMounted = true;
+    if (!orderId || !paymentId) return;
+    const checkStatus = async () => {
+      // 1. Verifica no Supabase
+      let orderStatus = null;
+      if (isSupabaseConfigured()) {
+        const { data, error } = await supabase.from('orders').select('status').eq('id', orderId).single();
+        if (!error && data) orderStatus = data.status;
+      }
+      // 2. Se não estiver pago, verifica na Nivus
+      if (orderStatus !== 'confirmed' && paymentId) {
+        try {
+          const payment = await checkPaymentStatus(paymentId);
+          if (payment.status === 'APPROVED' || payment.status === 'PAID') {
+            // Atualiza pedido no Supabase
+            if (isSupabaseConfigured()) {
+              await supabase.from('orders').update({ status: 'confirmed' }).eq('id', orderId);
+            }
+            orderStatus = 'confirmed';
+          }
+        } catch (e) { /* ignora erro */ }
+      }
+      // 3. Se pago, redireciona
+      if (isMounted && orderStatus === 'confirmed') {
+        navigate(`/thank-you?orderId=${orderId}&paymentId=${paymentId}&verified=true`);
+      }
+    };
+    intervalRef.current = setInterval(checkStatus, 5000);
+    return () => {
+      isMounted = false;
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [orderId, paymentId, navigate]);
 import { CheckCircle, Home, ShoppingBag, Clock, FileText, QrCode } from 'lucide-react';
 
 export const OrderConfirmation: React.FC = () => {
   const location = useLocation();
-  const { 
-    orderId, 
-    pixCode, 
-    pixQrCode, 
-    billetUrl, 
-    billetCode, 
-    paymentId, 
-    paymentMethod, 
-    expiresAt 
-  } = location.state || {};
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Pega do state (preferencial), senão da URL
+  const orderId = location.state?.orderId || searchParams.get('orderId');
+  const paymentId = location.state?.paymentId || searchParams.get('paymentId');
+  const pixCode = location.state?.pixCode;
+  const pixQrCode = location.state?.pixQrCode;
+  const billetUrl = location.state?.billetUrl;
+  const billetCode = location.state?.billetCode;
+  const paymentMethod = location.state?.paymentMethod;
+  const expiresAt = location.state?.expiresAt;
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!orderId || !paymentId) return;
+    const checkStatus = async () => {
+      let orderStatus = null;
+      if (isSupabaseConfigured()) {
+        const { data, error } = await supabase!.from('orders').select('status').eq('id', orderId).single();
+        if (!error && data) orderStatus = data.status;
+      }
+      if (orderStatus !== 'confirmed' && paymentId) {
+        try {
+          const payment = await checkPaymentStatus(paymentId);
+          if (payment.status === 'APPROVED' || payment.status === 'PAID') {
+            if (isSupabaseConfigured()) {
+              await supabase!.from('orders').update({ status: 'confirmed' }).eq('id', orderId);
+            }
+            orderStatus = 'confirmed';
+          }
+        } catch (e) { /* ignora erro */ }
+      }
+      if (isMounted && orderStatus === 'confirmed') {
+        navigate(`/thank-you?orderId=${orderId}&paymentId=${paymentId}&verified=true`);
+      }
+    };
+    intervalRef.current = setInterval(checkStatus, 5000);
+    return () => {
+      isMounted = false;
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [orderId, paymentId, navigate]);
 
   console.log('📄 Página de confirmação carregada');
   console.log('📊 Dados recebidos:', { 
