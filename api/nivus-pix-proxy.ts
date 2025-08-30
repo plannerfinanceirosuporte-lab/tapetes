@@ -10,7 +10,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...req.headers,
+        'Authorization': process.env.NIVUS_PAY_SECRET_KEY || req.headers['authorization'] || '',
       },
       body: JSON.stringify(req.body),
     });
