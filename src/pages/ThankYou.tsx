@@ -195,7 +195,7 @@ export const ThankYou: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className="modern-price text-base">
-                        R$ {(item.quantity * Number(item.price)).toFixed(2).replace('.', ',')}
+                        R$ {(item.quantity * (item.product_price ?? item.price ?? 0)).toFixed(2).replace('.', ',')}
                       </p>
                     </div>
                   </div>
@@ -210,47 +210,35 @@ export const ThankYou: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">📋 Próximos Passos</h3>
               
               <div className="space-y-4">
-                {paymentVerified ? (
-                  <>
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Pedido Pago</p>
-                        <p className="text-sm text-gray-600">Seu pagamento foi confirmado com sucesso</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Package className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Preparando Pedido</p>
-                        <p className="text-sm text-gray-600">Seu pedido está sendo preparado para envio</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                        <Truck className="h-4 w-4 text-purple-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Envio</p>
-                        <p className="text-sm text-gray-600">Você receberá o código de rastreamento em breve</p>
-                      </div>
-                    </div>
-                  </>
-                ) : (
+                <>
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                      <Clock className="h-4 w-4 text-yellow-600" />
+                    <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Aguardando Pagamento</p>
-                      <p className="text-sm text-gray-600">Complete o pagamento para confirmar seu pedido</p>
+                      <p className="font-medium text-gray-900">Pedido Pago</p>
+                      <p className="text-sm text-gray-600">Seu pagamento foi confirmado com sucesso</p>
                     </div>
                   </div>
-                )}
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Package className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">Preparando Pedido</p>
+                      <p className="text-sm text-gray-600">Seu pedido está sendo preparado para envio</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Truck className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">Envio</p>
+                      <p className="text-sm text-gray-600">Você receberá o código de rastreamento em breve</p>
+                    </div>
+                  </div>
+                </>
               </div>
 
               {/* Estimativa de Entrega */}
