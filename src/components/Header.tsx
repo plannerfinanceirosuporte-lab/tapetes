@@ -4,11 +4,11 @@ import { ShoppingCart, Search, Store, Menu } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useStore } from '../contexts/StoreContext';
 
+export const Header: React.FC = () => {
   const { getItemCount } = useCart();
   const { settings } = useStore();
   const itemCount = getItemCount();
   const [menuOpen, setMenuOpen] = React.useState(false);
-
   return (
     <>
       {/* Banner acima do header */}
