@@ -38,10 +38,8 @@ export const ThankYou: React.FC = () => {
             order_items (
               *,
               product:products(*)
-            );
-
-        if (error) throw error;
-        setOrderData(order);
+            )
+          `)
 
         // Se tem payment_id, verificar status do pagamento
         if (paymentId && order.payment_id) {
@@ -323,5 +321,4 @@ export const ThankYou: React.FC = () => {
       </div>
     </div>
   );
-}
 };
