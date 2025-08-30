@@ -249,10 +249,29 @@ export const ThankYou: React.FC = () => {
                   <span className="font-medium text-blue-900">Entrega Estimada</span>
                 </div>
                 <p className="text-sm text-blue-700">
-                  {paymentVerified 
-                    ? '6 dias úteis'
-                    : 'Após a confirmação do pagamento'
-                  }
+                  {paymentVerified && orderData?.created_at
+                    ? (() => {
+                        // Função para adicionar 6 dias úteis
+                        function addBusinessDays(date: Date, days: number) {
+                          let count = 0;
+                          let result = new Date(date);
+                          while (count < days) {
+                            result.setDate(result.getDate() + 1);
+                            // 0 = domingo, 6 = sábado
+                            if (result.getDay() !== 0 && result.getDay() !== 6) {
+                              count++;
+                            }
+                          }
+                          return result;
+                        }
+                        const pedidoDate = new Date(orderData.created_at);
+                        const entregaDate = addBusinessDays(pedidoDate, 6);
+                        // Hora aleatória entre 8:00 e 17:00
+                        const hora = Math.floor(Math.random() * 10) + 8;
+                        entregaDate.setHours(hora, 0, 0, 0);
+                        return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:00`;
+                      })()
+                    : 'Após a confirmação do pagamento'}
                 </p>
               </div>
               {/* Ações */}
