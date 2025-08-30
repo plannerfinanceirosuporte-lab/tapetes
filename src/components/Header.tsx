@@ -94,17 +94,31 @@ export const Header: React.FC = () => {
                 <Menu className="h-6 w-6" />
               </button>
             </div>
-            {/* Drawer simples */}
+            {/* Drawer estilizado */}
             {menuOpen && (
               <div className="fixed inset-0 z-50 flex">
                 <div className="fixed inset-0 bg-black opacity-40" onClick={() => setMenuOpen(false)}></div>
-                <div className="ml-auto w-64 bg-white h-full shadow-lg p-6 flex flex-col">
-                  <button className="self-end mb-6 text-gray-500" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">✕</button>
-                  <Link to="/purchasehistory" className="mb-4 text-blue-600 font-medium text-lg" onClick={() => setMenuOpen(false)}>
-                    Histórico de Compras
-                  </Link>
-                  {/* Adicione mais links aqui futuramente */}
-                </div>
+                <aside className="ml-auto w-72 max-w-full h-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100">
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <span className="text-xl font-bold text-blue-700">Menu</span>
+                    <button className="text-gray-400 hover:text-blue-600 text-2xl" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">×</button>
+                  </div>
+                  <nav className="flex-1 flex flex-col gap-2 px-6 py-4">
+                    <Link to="/purchasehistory" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-blue-700 font-medium text-base transition-colors" onClick={() => setMenuOpen(false)}>
+                      <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 6h18M9 6v12m6-12v12M4 6l1.5 14a2 2 0 002 2h9a2 2 0 002-2L20 6"/></svg>
+                      Histórico de Compras
+                    </Link>
+                    {/* Adicione mais links aqui futuramente */}
+                  </nav>
+                  <div className="px-6 py-4 border-t border-gray-100 text-xs text-gray-400">{settings?.store_name}</div>
+                </aside>
+                <style>{`
+                  @keyframes slideInRight {
+                    from { transform: translateX(100%); }
+                    to { transform: translateX(0); }
+                  }
+                  .animate-slideInRight { animation: slideInRight 0.25s cubic-bezier(.4,0,.2,1); }
+                `}</style>
               </div>
             )}
           </div>
