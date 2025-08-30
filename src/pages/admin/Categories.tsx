@@ -142,7 +142,7 @@ export const AdminCategories: React.FC = () => {
           <div
             key={category.id}
             className={`bg-white rounded-lg shadow-md p-6 cursor-pointer transition-colors border-2 ${selectedCategoryId === category.id ? 'border-blue-600 bg-blue-50' : 'border-transparent hover:border-blue-300'}`}
-            onClick={() => setSelectedCategoryId(category.id)}
+            onClick={() => setSelectedCategoryId(selectedCategoryId === category.id ? null : category.id)}
           >
             <div className="flex justify-between items-start mb-4">
               <h3 className={`text-lg font-semibold ${selectedCategoryId === category.id ? 'text-blue-700' : 'text-gray-900'}`}>{category.name}</h3>
