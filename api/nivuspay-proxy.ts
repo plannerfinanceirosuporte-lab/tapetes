@@ -35,7 +35,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         data: error.response?.data,
         status: error.response?.status,
         headers: error.response?.headers,
-        stack: error.stack
+        stack: error.stack,
+        payload: req.body
       }
     });
   }
