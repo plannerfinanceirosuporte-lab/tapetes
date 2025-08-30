@@ -122,7 +122,6 @@ export const ThankYou: React.FC = () => {
             }
           </p>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Informações do Pedido */}
           <div className="lg:col-span-2 space-y-6">
@@ -132,7 +131,6 @@ export const ThankYou: React.FC = () => {
                 <Package className="h-6 w-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-900">📦 Detalhes do Pedido</h2>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
                   <p className="text-sm text-gray-600">Número do Pedido</p>
@@ -157,7 +155,6 @@ export const ThankYou: React.FC = () => {
                   </p>
                 </div>
               </div>
-
               {/* Informações do Cliente */}
               <div className="border-t pt-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">🚚 Informações de Entrega</h3>
@@ -168,13 +165,11 @@ export const ThankYou: React.FC = () => {
                 </div>
               </div>
             </div>
-
             {/* Itens do Pedido */}
             <div className="modern-card p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">🛍️ Itens do Pedido</h2>
               <div className="space-y-4">
                 {orderData.order_items?.map((item: any) => {
-                  // Corrigir preço: se vier 0, usar total_amount dividido pela quantidade
                   let price = item.product_price ?? item.price ?? 0;
                   if (!price || price === 0) {
                     if (orderData.order_items.length === 1) {
@@ -203,42 +198,39 @@ export const ThankYou: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Sidebar com Próximos Passos */}
           <div className="lg:col-span-1">
             <div className="modern-card p-6 sticky top-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">📋 Próximos Passos</h3>
-              
               <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Pedido Pago</p>
-                      <p className="text-sm text-gray-600">Seu pagamento foi confirmado com sucesso</p>
-                    </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Package className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Preparando Pedido</p>
-                      <p className="text-sm text-gray-600">Seu pedido está sendo preparado para envio</p>
-                    </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Pedido Pago</p>
+                    <p className="text-sm text-gray-600">Seu pagamento foi confirmado com sucesso</p>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Truck className="h-4 w-4 text-purple-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Envio</p>
-                      <p className="text-sm text-gray-600">Você receberá o código de rastreamento em breve</p>
-                    </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Package className="h-4 w-4 text-blue-600" />
                   </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Preparando Pedido</p>
+                    <p className="text-sm text-gray-600">Seu pedido está sendo preparado para envio</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Truck className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Envio</p>
+                    <p className="text-sm text-gray-600">Você receberá o código de rastreamento em breve</p>
+                  </div>
+                </div>
               </div>
-
               {/* Estimativa de Entrega */}
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
@@ -252,10 +244,8 @@ export const ThankYou: React.FC = () => {
                   }
                 </p>
               </div>
-
               {/* Ações */}
               <div className="space-y-4">
-                {/* Removido card do item do pedido da sidebar */}
                 {paymentVerified && (
                   <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
                     <div className="flex items-center space-x-2 mb-2">
@@ -273,11 +263,10 @@ export const ThankYou: React.FC = () => {
               </div>
             </div>
           </div>
-
+        </div>
         {/* Informações Adicionais */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações Importantes</h3>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h4 className="font-medium text-gray-900 mb-2">📧 Confirmação por Email</h4>
@@ -286,21 +275,18 @@ export const ThankYou: React.FC = () => {
                 com todos os detalhes do seu pedido.
               </p>
             </div>
-            
             <div>
               <h4 className="font-medium text-gray-900 mb-2">📱 Acompanhamento</h4>
               <p className="text-sm text-gray-600">
                 Você receberá atualizações sobre o status do seu pedido por email e SMS.
               </p>
             </div>
-            
             <div>
               <h4 className="font-medium text-gray-900 mb-2">🚚 Entrega</h4>
               <p className="text-sm text-gray-600">
                 Frete grátis para todo Brasil. Prazo de entrega: {settings?.estimated_delivery_days || 7} dias úteis.
               </p>
             </div>
-            
             <div>
               <h4 className="font-medium text-gray-900 mb-2">💬 Suporte</h4>
               <p className="text-sm text-gray-600">
@@ -309,7 +295,6 @@ export const ThankYou: React.FC = () => {
             </div>
           </div>
         </div>
-
         {/* Footer da Página */}
         <div className="mt-8 text-center">
           <p className="text-gray-500 text-sm">
