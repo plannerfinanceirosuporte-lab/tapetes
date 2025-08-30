@@ -22,7 +22,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     if (!response.ok) {
       console.error('NivusPay error:', response.status, data);
-      return res.status(response.status).json({ error: data, status: response.status });
+      // Tenta retornar o erro de forma legível para o frontend
+      if (typeof data === 'object') {
+        return res.status(response.status).json({ error: data, status: response.status });
+      } else {
+        return res.status(response.status).send(data);
+      }
     }
     res.status(response.status).json(data);
   } catch (error: any) {
