@@ -29,10 +29,10 @@ import { AdminSettings } from './pages/admin/Settings';
 
 function App() {
   return (
-    <StoreProvider>
-      <AuthProvider>
-        <CartProvider>
-          <Router>
+    <Router>
+      <StoreProvider>
+        <AuthProvider>
+          <CartProvider>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<><Header /><Home /></>} />
@@ -59,10 +59,10 @@ function App() {
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Routes>
-          </Router>
-        </CartProvider>
-      </AuthProvider>
-    </StoreProvider>
+          </CartProvider>
+        </AuthProvider>
+      </StoreProvider>
+    </Router>
   );
 }
 
