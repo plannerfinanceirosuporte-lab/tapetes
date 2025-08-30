@@ -23,8 +23,11 @@ const HamburgerMenu: React.FC = () => {
         <>
           <div className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity" onClick={() => setOpen(false)}></div>
           <aside
-            className="fixed top-3 right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
-            style={{ height: `${drawerHeight}px` }}
+            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
+            style={{
+              height: `${drawerHeight}px`,
+              top: 'calc(var(--header-height, 56px) + 8px)', // 8px de espaço abaixo do header
+            }}
           >
             <div className="flex items-center justify-end px-6 py-3 border-b border-gray-100">
               <button className="text-gray-400 hover:text-blue-600 text-2xl" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
