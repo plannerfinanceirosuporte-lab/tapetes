@@ -121,27 +121,64 @@ const Historico: React.FC = () => {
                             }
                           });
                         } else {
-                          // Tenta buscar os dados de pagamento novamente (caso estejam nulos)
-                          const { data: freshData } = await supabase
+                          // Se não tem dados de pagamento, gera um novo pagamento
+                          // Buscar dados do pedido e itens
+                          const { data: orderData } = await supabase
                             .from('orders')
                             .select('*')
                             .eq('id', order.id)
                             .single();
-                          if (freshData && freshData.payment_id) {
-                            navigate('/order-confirmation', {
-                              state: {
-                                orderId: order.id,
-                                paymentId: freshData.payment_id,
-                                pixCode: freshData.pix_code,
-                                pixQrCode: freshData.pix_qr_code,
-                                billetUrl: freshData.billet_url,
-                                billetCode: freshData.billet_code,
-                                paymentMethod: freshData.payment_method,
-                                expiresAt: freshData.expires_at
-                              }
-                            });
-                          } else {
-                            alert('Não foi possível encontrar os dados de pagamento para este pedido. Tente gerar o pagamento novamente.');
+                          const { data: itemsData } = await supabase
+                            .from('order_items')
+                            .select('*')
+                            .eq('order_id', order.id);
+                          if (!orderData || !itemsData) {
+                            alert('Não foi possível encontrar os dados do pedido para gerar o pagamento.');
+                            return;
+                          }
+                          // Chama a API de pagamento (PIX, boleto, etc)
+                          try {
+                            const paymentPayload = {
+                              amount: orderData.total_amount,
+                              customerName: orderData.customer_name,
+                              customerEmail: orderData.customer_email,
+                              customerCpf: orderData.customer_cpf,
+                              customerPhone: orderData.customer_phone,
+                              orderId: orderData.id,
+                              items: itemsData,
+                              paymentMethod: orderData.payment_method || 'PIX',
+                            };
+                            // Importa a função dinamicamente para evitar problemas de import recursivo
+                            const { createPayment } = await import('../lib/nivusPay');
+                            const paymentResult = await createPayment(paymentPayload);
+                            if (paymentResult.success) {
+                              // Atualiza o pedido com os dados do pagamento
+                              await supabase.from('orders').update({
+                                payment_id: paymentResult.paymentId,
+                                payment_method: orderData.payment_method || 'PIX',
+                                pix_code: paymentResult.pixCode,
+                                pix_qr_code: paymentResult.pixQrCode,
+                                billet_url: paymentResult.billetUrl,
+                                billet_code: paymentResult.billetCode,
+                                expires_at: paymentResult.expiresAt
+                              }).eq('id', order.id);
+                              navigate('/order-confirmation', {
+                                state: {
+                                  orderId: order.id,
+                                  paymentId: paymentResult.paymentId,
+                                  pixCode: paymentResult.pixCode,
+                                  pixQrCode: paymentResult.pixQrCode,
+                                  billetUrl: paymentResult.billetUrl,
+                                  billetCode: paymentResult.billetCode,
+                                  paymentMethod: orderData.payment_method || 'PIX',
+                                  expiresAt: paymentResult.expiresAt
+                                }
+                              });
+                            } else {
+                              alert('Erro ao gerar pagamento: ' + (paymentResult.error || 'Tente novamente.'));
+                            }
+                          } catch (err) {
+                            alert('Erro ao gerar pagamento. Tente novamente.');
                           }
                         }
                       }}
