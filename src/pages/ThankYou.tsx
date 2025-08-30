@@ -217,11 +217,10 @@ export const ThankYou: React.FC = () => {
                         <CheckCircle className="h-4 w-4 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">Pagamento Confirmado</p>
-                        <p className="text-sm text-gray-600">Seu pagamento foi processado com sucesso</p>
+                        <p className="font-medium text-gray-900">Pedido Pago</p>
+                        <p className="text-sm text-gray-600">Seu pagamento foi confirmado com sucesso</p>
                       </div>
                     </div>
-                    
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                         <Package className="h-4 w-4 text-blue-600" />
@@ -231,7 +230,6 @@ export const ThankYou: React.FC = () => {
                         <p className="text-sm text-gray-600">Seu pedido está sendo preparado para envio</p>
                       </div>
                     </div>
-                    
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                         <Truck className="h-4 w-4 text-purple-600" />
@@ -270,26 +268,26 @@ export const ThankYou: React.FC = () => {
               </div>
 
               {/* Ações */}
-              <div className="mt-6 space-y-3">
-                <Link
-                  to="/"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
-                >
-                  <Home className="h-5 w-5" />
-                  <span>Voltar à Loja</span>
-                </Link>
-                
-                <Link
-                  to="/products"
-                  className="w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2"
-                >
-                  <ShoppingBag className="h-5 w-5" />
-                  <span>Continuar Comprando</span>
-                </Link>
+              <div className="space-y-4">
+                {orderData.order_items?.map((item: any) => (
+                  <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                    <img
+                      src={item.product?.image_url}
+                      alt={item.product?.name}
+                      className="h-16 w-16 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <h4 className="modern-title text-base">{item.product?.name}</h4>
+                      <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="modern-price text-base">
+                        R$ {(item.quantity * (item.product_price || item.price)).toFixed(2).replace('.', ',')}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              {/* Avaliação */}
-              {paymentVerified && (
                 <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
                     <Star className="h-5 w-5 text-yellow-600" />
