@@ -265,11 +265,18 @@ export const ThankYou: React.FC = () => {
                       }
                       return result;
                     }
+                    // Gera um horário fixo pseudoaleatório baseado no id do pedido
                     const pedidoDate = new Date(orderData.created_at);
                     const entregaDate = addBusinessDays(pedidoDate, 6);
-                    const hora = Math.floor(Math.random() * 10) + 8;
-                    entregaDate.setHours(hora, 0, 0, 0);
-                    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:00`;
+                    // Usa parte do id para gerar hora/minuto fixos para cada pedido
+                    let hash = 0;
+                    for (let i = 0; i < orderData.id.length; i++) {
+                      hash = orderData.id.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    const hora = 8 + Math.abs(hash) % 10; // 8h até 17h
+                    const minuto = Math.abs(hash * 31) % 60;
+                    entregaDate.setHours(hora, minuto, 0, 0);
+                    return `Receba até ${entregaDate.toLocaleDateString('pt-BR')} às ${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
                   })() : 'Carregando estimativa...'}
                 </p>
               </div>
