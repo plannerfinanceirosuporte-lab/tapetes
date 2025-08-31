@@ -71,6 +71,7 @@ const HamburgerMenu: React.FC = () => {
               'fixed top-0 right-0 h-full z-50 bg-white shadow-2xl flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
+              'pt-6', // padding-top para afastar do banner
               open ? 'translate-x-0' : 'translate-x-full',
               'sm:w-[320px]'
             )}
