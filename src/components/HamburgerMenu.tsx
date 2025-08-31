@@ -5,8 +5,8 @@ import { ShoppingCart, Menu, History } from 'lucide-react';
 const HamburgerMenu: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  // Menu sempre fixo no topo, logo abaixo do header
-  const menuTop = 68; // ajuste conforme altura do header
+  // Menu sempre fixo logo abaixo do header (header 56px + 16px gap)
+  const menuTop = 56 + 16; // ajuste conforme altura real do header
   const menuLinks = [
   { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-800" /> },
     // Adicione mais links aqui se quiser
@@ -39,7 +39,6 @@ const HamburgerMenu: React.FC = () => {
               left: 'auto',
               bottom: 'auto',
               background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
-              paddingTop: '16px', // padding top extra
             }}
           >
             <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
