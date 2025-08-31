@@ -84,7 +84,7 @@ const HamburgerMenu: React.FC = () => {
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-center justify-between mb-6 pb-2 border-b border-blue-100">
+            <div className="flex items-center justify-between mb-6 pb-2 border-b border-blue-100 pt-[48px]">
               <span className="font-bold text-blue-900 text-xl tracking-tight font-serif">Menu</span>
               <button
                 className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition focus:outline-none"
