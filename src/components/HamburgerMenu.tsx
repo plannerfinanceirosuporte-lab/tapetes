@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, History } from 'lucide-react';
 
 const HamburgerMenu: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  // Menu sempre fixo logo abaixo do header (header + gap)
-  const menuTop = 80; // ajuste conforme altura real do header
+  // Estado para controlar a posição do menu
+  const [menuTop, setMenuTop] = useState(80); // valor inicial
   const menuLinks = [
   { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-800" /> },
     // Adicione mais links aqui se quiser
@@ -14,6 +14,15 @@ const HamburgerMenu: React.FC = () => {
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
 
   const handleOpenMenu = () => {
+    // Detecta a altura real do header ao abrir
+    const header = document.querySelector('header');
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      // rect.bottom é relativo à viewport
+      setMenuTop(rect.bottom + 8); // 8px gap
+    } else {
+      setMenuTop(80);
+    }
     setOpen(true);
   };
 
@@ -35,7 +44,7 @@ const HamburgerMenu: React.FC = () => {
             style={{
               height: `${drawerHeight + 40}px`,
               position: 'fixed',
-              top: 'calc(56px + 16px)', // 56px header + 16px gap
+              top: `${menuTop}px`,
               right: 0,
               left: 'auto',
               bottom: 'auto',
