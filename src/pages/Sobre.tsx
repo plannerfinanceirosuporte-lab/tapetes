@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Footer from '../components/Footer';
 
 const Sobre: React.FC = () => {
   // Removido: useStore não é mais necessário
@@ -14,7 +13,7 @@ const Sobre: React.FC = () => {
           <p className="mb-4">Na Tapetes & Co., acreditamos que um tapete é mais do que um objeto de decoração; é o elo que une ambientes e inspira histórias. É por isso que cada tapete em nosso catálogo é escolhido a dedo, seguindo critérios rigorosos de qualidade, sustentabilidade e design. Para nós, cada peça é uma obra de arte que merece ser o coração do seu lar. Nossa missão é oferecer a você uma experiência de compra única e transparente, com a credibilidade de uma família que respira tapetes e o compromisso de levar para sua casa um produto que irá não apenas decorar, mas também enriquecer a sua vida.</p>
         </div>
       </div>
-  <Footer />
+  {/* Footer removido conforme solicitado */}
     </div>
   );
 };
