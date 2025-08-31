@@ -35,7 +35,7 @@ const HamburgerMenu: React.FC = () => {
             style={{
               height: `${drawerHeight + 40}px`,
               position: 'fixed',
-              top: 80,
+              top: 'calc(56px + 16px)', // 56px header + 16px gap
               right: 0,
               left: 'auto',
               bottom: 'auto',
