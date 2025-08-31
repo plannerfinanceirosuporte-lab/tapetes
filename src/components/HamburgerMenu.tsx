@@ -1,71 +1,115 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, History } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Menu, History, Percent, Mail, X } from 'lucide-react';
+import clsx from 'clsx';
+
+interface MenuLink {
+  label: string;
+  to: string;
+  icon: React.ReactNode;
+}
+
+const menuLinks: MenuLink[] = [
+  { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5" /> },
+  { label: 'Ofertas', to: '/ofertas', icon: <Percent className="h-5 w-5" /> },
+  { label: 'Contato', to: '/contato', icon: <Mail className="h-5 w-5" /> },
+  // Adicione mais links facilmente aqui
+];
 
 const HamburgerMenu: React.FC = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  // Estado para controlar a posição do menu
-  const [menuTop, setMenuTop] = useState(80); // valor inicial
-  const menuLinks = [
-  { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-800" /> },
-    // Adicione mais links aqui se quiser
-  ];
-  const drawerHeight = 16 + menuLinks.length * 56 + 32;
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleOpenMenu = () => {
-    // Detecta a altura real do header sticky ao abrir
-    const header = document.querySelector('header');
-    if (header) {
-      // rect.bottom é a base do header na viewport
-      setMenuTop(header.getBoundingClientRect().bottom);
-    } else {
-      setMenuTop(80);
+  // Fechar ao clicar fora
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
     }
-    setOpen(true);
-  };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
 
+  // Bloquear scroll do body quando aberto
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   return (
-    <>
+    <React.Fragment>
       <button
-        className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label="Abrir menu"
-        onClick={handleOpenMenu}
+        onClick={() => setOpen(true)}
       >
         <Menu className="h-6 w-6" />
       </button>
+      {/* Overlay */}
       {open && (
-        <>
-          {/* Sem overlay escuro ou desfoque */}
-          <aside
-            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l-2 border-blue-200 z-50"
-            style={{
-              height: `${drawerHeight + 40}px`,
-              position: 'fixed',
-              top: `${menuTop}px`,
-              right: 0,
-              left: 'auto',
-              bottom: 'auto',
-              background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
-              margin: 0,
-              zIndex: 50,
-            }}
+        <React.Fragment>
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar menu"
+          />
+          {/* Menu lateral */}
+          <div
+            ref={menuRef}
+            className={clsx(
+              'fixed top-0 right-0 h-full z-50 bg-white shadow-2xl flex flex-col',
+              'transition-transform duration-300 ease-in-out',
+              'w-4/5 max-w-xs',
+              open ? 'translate-x-0' : 'translate-x-full',
+              'sm:w-[320px]'
+            )}
+            style={{ maxWidth: 320 }}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
           >
-            <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
               <span className="font-semibold text-blue-800 text-lg tracking-tight">Menu</span>
-              <button className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
+              <button
+                className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition focus:outline-none"
+                onClick={() => setOpen(false)}
+                aria-label="Fechar menu"
+              >
+                <X className="h-7 w-7" />
+              </button>
             </div>
-            <nav className="flex flex-col gap-2 px-4 py-4 flex-1">
+            <nav className="flex flex-col gap-2 px-4 py-6 flex-1">
               {menuLinks.map(link => (
-                <button
+                <a
                   key={link.to}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/80 hover:bg-blue-100 text-blue-800 font-medium text-base transition-all w-full text-left shadow-sm border border-transparent hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  onClick={() => { setOpen(false); navigate(link.to); }}
+                  href={link.to}
+                  className="flex items-center gap-3 px-4 py-4 rounded-xl text-lg font-medium text-blue-900 hover:bg-blue-50 hover:text-blue-700 transition-colors w-full"
+                  tabIndex={0}
                 >
-                  {link.icon && <span>{link.icon}</span>}
+                  <span className="text-blue-700">{link.icon}</span>
                   <span>{link.label}</span>
-                </button>
+                </a>
+              ))}
+            </nav>
+          </div>
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
+};
+export default HamburgerMenu;
+export default HamburgerMenu;
+      </>
+    );
+  };
+
+  export default HamburgerMenu;
               ))}
             </nav>
           </aside>
