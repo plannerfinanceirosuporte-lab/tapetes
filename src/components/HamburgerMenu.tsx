@@ -18,7 +18,7 @@ const menuLinks: MenuLink[] = [
 const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [menuTop, setMenuTop] = useState(0);
+  // Remove menuTop, menu sempre abre do topo
 
   // Fechar ao clicar fora
   useEffect(() => {
@@ -42,15 +42,8 @@ const HamburgerMenu: React.FC = () => {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  // Ao abrir, detecta a altura do header e posiciona o menu logo abaixo
+  // Ao abrir, menu sempre do topo
   const handleOpen = () => {
-    const header = document.querySelector('header');
-    if (header) {
-      const rect = header.getBoundingClientRect();
-      setMenuTop(rect.bottom + window.scrollY);
-    } else {
-      setMenuTop(0);
-    }
     setOpen(true);
   };
 
@@ -75,13 +68,13 @@ const HamburgerMenu: React.FC = () => {
           <div
             ref={menuRef}
             className={clsx(
-              'fixed right-0 z-50 bg-white shadow-2xl flex flex-col',
+              'fixed top-0 right-0 h-full z-50 bg-white shadow-2xl flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
               open ? 'translate-x-0' : 'translate-x-full',
               'sm:w-[320px]'
             )}
-            style={{ maxWidth: 320, top: menuTop, height: `calc(100vh - ${menuTop}px)` }}
+            style={{ maxWidth: 320 }}
             tabIndex={-1}
             role="dialog"
             aria-modal="true"
