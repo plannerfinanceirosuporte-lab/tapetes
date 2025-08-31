@@ -8,7 +8,7 @@ const HamburgerMenu: React.FC = () => {
   const [menuTop, setMenuTop] = useState<number>(68); // fallback default
   const headerRef = useRef<HTMLElement | null>(null);
   const menuLinks = [
-    { label: 'Histórico de Compras', to: '/historico', icon: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 6h18M9 6v12m6-12v12M4 6l1.5 14a2 2 0 002 2h9a2 2 0 002-2L20 6"/></svg> },
+    { label: 'Histórico de Compras', to: '/historico' },
     // Adicione mais links aqui se quiser
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
@@ -24,8 +24,6 @@ const HamburgerMenu: React.FC = () => {
     }
   }, [open]);
 
-  // Nome da loja para rodapé
-  const storeName = document.title || 'Minha Loja';
 
   return (
     <>
@@ -59,14 +57,10 @@ const HamburgerMenu: React.FC = () => {
                   className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/80 hover:bg-blue-100 text-blue-800 font-medium text-base transition-all w-full text-left shadow-sm border border-transparent hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={() => { setOpen(false); navigate(link.to); }}
                 >
-                  <span className="text-blue-500">{link.icon}</span>
-                  <span>{link.label}</span>
+                  {link.label}
                 </button>
               ))}
             </nav>
-            <div className="px-6 py-2 border-t border-blue-100 text-xs text-blue-400 bg-white/70 rounded-bl-2xl text-center tracking-wide select-none">
-              {storeName}
-            </div>
           </aside>
           <style>{`
             @keyframes slideInRight {
