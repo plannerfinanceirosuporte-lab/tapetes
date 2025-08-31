@@ -28,11 +28,11 @@ const HamburgerMenu: React.FC = () => {
   return (
     <>
       <button
-        className="ml-2 p-2 rounded-full bg-gradient-to-tr from-blue-100 to-blue-50 shadow hover:from-blue-200 hover:to-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         aria-label="Abrir menu"
         onClick={() => setOpen(true)}
       >
-  <Menu className="h-6 w-6" />
+        <Menu className="h-6 w-6" />
       </button>
       {open && (
         <>
