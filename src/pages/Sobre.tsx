@@ -17,10 +17,15 @@ const Sobre: React.FC = () => {
           <p className="mb-4">Na Tapetes & Co., acreditamos que um tapete é mais do que um objeto de decoração; é o elo que une ambientes e inspira histórias. É por isso que cada tapete em nosso catálogo é escolhido a dedo, seguindo critérios rigorosos de qualidade, sustentabilidade e design. Para nós, cada peça é uma obra de arte que merece ser o coração do seu lar. Nossa missão é oferecer a você uma experiência de compra única e transparente, com a credibilidade de uma família que respira tapetes e o compromisso de levar para sua casa um produto que irá não apenas decorar, mas também enriquecer a sua vida.</p>
         </div>
       </div>
-      {/* Footer */}
-      <footer className="mt-auto w-full bg-gray-900 py-6">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <p className="text-gray-200 text-sm">{settings?.footer_text || '© 2025 Tapetes & Co. Todos os direitos reservados.'}</p>
+      {/* Footer igual ao da loja */}
+      <footer className="mt-auto w-full bg-gray-900 py-8">
+        <div className="max-w-md mx-auto px-4 text-center">
+          {settings?.logo_url && (
+            <img src={settings.logo_url} alt="Logo Tapetes & Co." className="mx-auto mb-4 h-10" />
+          )}
+          <p className="text-gray-200 text-base mb-4">{settings?.store_slogan || 'Os melhores tapetes para sua casa, com qualidade garantida e preços competitivos.'}</p>
+          <hr className="border-gray-700 mb-4" />
+          <p className="text-gray-300 text-sm">© 2025 Tapetes & CO. Todos os direitos reservados. Loja especializada em bem-estar!</p>
         </div>
       </footer>
     </div>
