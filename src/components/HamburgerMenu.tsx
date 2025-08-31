@@ -71,12 +71,13 @@ const HamburgerMenu: React.FC = () => {
               'fixed top-0 right-0 h-full z-[9999] bg-white flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
-              'pt-6 px-5 pb-8', // padding interno
+              'px-5 pb-8', // padding interno, sem padding-top
               'rounded-l-3xl', // borda arredondada à esquerda
               'shadow-xl', // sombra mais suave
               'border-l border-blue-100', // borda sutil à esquerda
               open ? 'translate-x-0' : 'translate-x-full',
-              'sm:w-[320px]'
+              'sm:w-[320px]',
+              'z-[99999]'
             )}
             style={{ maxWidth: 320 }}
             tabIndex={-1}
