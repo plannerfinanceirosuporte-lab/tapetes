@@ -8,7 +8,7 @@ const HamburgerMenu: React.FC = () => {
   const [menuTop, setMenuTop] = useState<number>(68); // fallback default
   const headerRef = useRef<HTMLElement | null>(null);
   const menuLinks = [
-    { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-400" /> },
+  { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-800" /> },
     // Adicione mais links aqui se quiser
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
