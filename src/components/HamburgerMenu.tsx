@@ -104,24 +104,3 @@ const HamburgerMenu: React.FC = () => {
 };
 
 export default HamburgerMenu;
-    );
-  };
-
-  export default HamburgerMenu;
-              ))}
-            </nav>
-          </aside>
-          <style>{`
-            @keyframes slideInRight {
-              from { transform: translateX(100%); }
-              to { transform: translateX(0); }
-            }
-            .animate-slideInRight { animation: slideInRight 0.25s cubic-bezier(.4,0,.2,1); }
-          `}</style>
-        </>
-      )}
-    </>
-  );
-};
-
-export default HamburgerMenu;
