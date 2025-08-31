@@ -47,7 +47,7 @@ const HamburgerMenu: React.FC = () => {
     const header = document.querySelector('header');
     if (header) {
       const rect = header.getBoundingClientRect();
-      setMenuTop(rect.bottom);
+      setMenuTop(rect.top);
     } else {
       setMenuTop(0);
     }
