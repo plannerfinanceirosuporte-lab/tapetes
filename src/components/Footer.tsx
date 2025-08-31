@@ -1,21 +1,42 @@
+
 import React from 'react';
 import { useStore } from '../contexts/StoreContext';
+import { Store, Phone, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const { settings } = useStore();
   return (
-    <footer className="bg-gray-900 w-full py-8 mt-auto">
-      <div className="max-w-md mx-auto px-4 text-center">
-        {settings?.logo_url && (
-          <img src={settings.logo_url} alt="Logo Tapetes & Co." className="mx-auto mb-4 h-10" />
-        )}
-        <p className="text-gray-200 text-base mb-4">
-          {settings?.store_slogan || 'Tapetes & CO: Conforto e design aos seus pés.'}
-        </p>
-        <hr className="border-gray-700 mb-4" />
-        <p className="text-gray-300 text-sm">
-          {settings?.footer_text || '© 2025 Tapetes & CO. Todos os direitos reservados. Loja especializada em bem-estar!'}
-        </p>
+    <footer className="bg-gray-900 w-full py-12 mt-auto">
+      <div className="max-w-2xl mx-auto px-4 text-center">
+        <div className="flex flex-col items-center mb-6">
+          {settings?.logo_url ? (
+            <img src={settings.logo_url} alt={settings.store_name} className="h-12 w-auto max-w-48 object-contain mb-2" />
+          ) : (
+            <Store className="h-10 w-10 text-blue-400 mb-2" />
+          )}
+          <span className="text-2xl font-bold text-gray-100 mb-2">{settings?.store_name}</span>
+          <p className="text-gray-300 mb-2 leading-relaxed text-lg">{settings?.store_slogan || settings?.store_description}</p>
+        </div>
+        <hr className="border-gray-700 mb-6" />
+        <div className="mb-6">
+          {(settings?.contact_phone || settings?.contact_email) && (
+            <div className="flex flex-col items-center gap-2 text-gray-400">
+              {settings?.contact_phone && (
+                <div className="flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-blue-400" />
+                  <span>{settings.contact_phone}</span>
+                </div>
+              )}
+              {settings?.contact_email && (
+                <div className="flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-blue-400" />
+                  <span>{settings.contact_email}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <p className="text-gray-400 text-sm mb-2">{settings?.footer_text || '© 2025 Tapetes & CO. Todos os direitos reservados. Loja especializada em bem-estar!'}</p>
       </div>
     </footer>
   );
