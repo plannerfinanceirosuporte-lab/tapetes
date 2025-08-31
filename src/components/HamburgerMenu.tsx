@@ -14,12 +14,11 @@ const HamburgerMenu: React.FC = () => {
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
 
   const handleOpenMenu = () => {
-    // Detecta a altura real do header ao abrir
+    // Detecta a altura real do header sticky ao abrir
     const header = document.querySelector('header');
     if (header) {
-      const rect = header.getBoundingClientRect();
-      // rect.bottom é relativo à viewport
-      setMenuTop(rect.bottom + 8); // 8px gap
+      // rect.bottom é a base do header na viewport
+      setMenuTop(header.getBoundingClientRect().bottom);
     } else {
       setMenuTop(80);
     }
@@ -43,8 +42,8 @@ const HamburgerMenu: React.FC = () => {
             className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l-2 border-blue-200 z-50"
             style={{
               height: `${drawerHeight + 40}px`,
-              position: 'sticky',
-              top: 0, // gruda no topo igual ao header
+              position: 'fixed',
+              top: `${menuTop}px`,
               right: 0,
               left: 'auto',
               bottom: 'auto',
