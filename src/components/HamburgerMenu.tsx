@@ -60,7 +60,7 @@ const HamburgerMenu: React.FC = () => {
       {open && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300"
+            className="fixed inset-0 z-[9998] bg-black bg-opacity-50 transition-opacity duration-300"
             onClick={() => setOpen(false)}
             aria-label="Fechar menu"
           />
@@ -68,7 +68,7 @@ const HamburgerMenu: React.FC = () => {
           <div
             ref={menuRef}
             className={clsx(
-              'fixed top-0 right-0 h-full z-50 bg-white flex flex-col',
+              'fixed top-0 right-0 h-full z-[9999] bg-white flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
               'pt-6 px-5 pb-8', // padding interno
