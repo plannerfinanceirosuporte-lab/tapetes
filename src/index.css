@@ -1,6 +1,6 @@
 /* Fixar altura do banner para header e menu */
 .responsive-banner {
-  --header-banner-height: 40px;
+  --header-banner-height: 48px;
   height: var(--header-banner-height);
 }
 @media (hover: none) and (pointer: coarse) {
