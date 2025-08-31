@@ -79,7 +79,7 @@ const HamburgerMenu: React.FC = () => {
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
               'px-5 pb-8', // padding interno
-              'rounded-bl-3xl rounded-tl-none', // apenas canto inferior esquerdo arredondado
+              '', // sem bordas arredondadas
               'shadow-xl', // sombra mais suave
               'border-l border-blue-100', // borda sutil à esquerda
               open ? 'translate-x-0' : 'translate-x-full',
