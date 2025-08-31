@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import React, { useState, useRef, useEffect } from 'react';
 import { Menu, History, Percent, Mail, X } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -43,7 +42,7 @@ const HamburgerMenu: React.FC = () => {
   }, [open]);
 
   return (
-    <React.Fragment>
+    <>
       <button
         className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label="Abrir menu"
@@ -53,7 +52,7 @@ const HamburgerMenu: React.FC = () => {
       </button>
       {/* Overlay */}
       {open && (
-        <React.Fragment>
+        <>
           <div
             className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300"
             onClick={() => setOpen(false)}
@@ -98,14 +97,13 @@ const HamburgerMenu: React.FC = () => {
               ))}
             </nav>
           </div>
-        </React.Fragment>
+        </>
       )}
-    </React.Fragment>
+    </>
   );
 };
+
 export default HamburgerMenu;
-export default HamburgerMenu;
-      </>
     );
   };
 
