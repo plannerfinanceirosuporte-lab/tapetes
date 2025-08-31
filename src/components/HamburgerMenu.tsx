@@ -8,7 +8,7 @@ const HamburgerMenu: React.FC = () => {
   const [menuTop, setMenuTop] = useState<number>(68); // fallback default
   const headerRef = useRef<HTMLElement | null>(null);
   const menuLinks = [
-    { label: 'Histórico de Compras', to: '/historico' },
+    { label: 'Histórico de Compras', to: '/historico', icon: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 6h18M9 6v12m6-12v12M4 6l1.5 14a2 2 0 002 2h9a2 2 0 002-2L20 6"/></svg> },
     // Adicione mais links aqui se quiser
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
@@ -24,40 +24,49 @@ const HamburgerMenu: React.FC = () => {
     }
   }, [open]);
 
+  // Nome da loja para rodapé
+  const storeName = document.title || 'Minha Loja';
+
   return (
     <>
       <button
-        className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="ml-2 p-2 rounded-full bg-gradient-to-tr from-blue-100 to-blue-50 shadow hover:from-blue-200 hover:to-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         aria-label="Abrir menu"
         onClick={() => setOpen(true)}
       >
-        <Menu className="h-6 w-6" />
+        <Menu className="h-6 w-6 text-blue-700" />
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity" onClick={() => setOpen(false)}></div>
+          <div className="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity backdrop-blur-sm" onClick={() => setOpen(false)}></div>
           <aside
-            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
+            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l-2 border-blue-200 z-50"
             style={{
-              height: `${drawerHeight}px`,
+              height: `${drawerHeight + 40}px`,
               top: `${menuTop}px`,
               bottom: 'auto',
+              background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
             }}
           >
-            <div className="flex items-center justify-end px-6 py-3 border-b border-gray-100">
-              <button className="text-gray-400 hover:text-blue-600 text-2xl" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
+            <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
+              <span className="font-semibold text-blue-800 text-lg tracking-tight">Menu</span>
+              <button className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
             </div>
-            <nav className="flex flex-col gap-2 px-6 py-2">
+            <nav className="flex flex-col gap-2 px-4 py-4 flex-1">
               {menuLinks.map(link => (
                 <button
                   key={link.to}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-blue-700 font-medium text-base transition-colors w-full text-left"
+                  className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/80 hover:bg-blue-100 text-blue-800 font-medium text-base transition-all w-full text-left shadow-sm border border-transparent hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={() => { setOpen(false); navigate(link.to); }}
                 >
-                  {link.label}
+                  <span className="text-blue-500">{link.icon}</span>
+                  <span>{link.label}</span>
                 </button>
               ))}
             </nav>
+            <div className="px-6 py-2 border-t border-blue-100 text-xs text-blue-400 bg-white/70 rounded-bl-2xl text-center tracking-wide select-none">
+              {storeName}
+            </div>
           </aside>
           <style>{`
             @keyframes slideInRight {
