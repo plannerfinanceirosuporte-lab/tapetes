@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
 
       {settings?.header_banner_url && (
         <div
-          className="responsive-banner mb-0 md:mb-4"
+          className="responsive-banner"
           style={{
             position: 'fixed',
             top: 0,
@@ -25,17 +25,19 @@ export const Header: React.FC = () => {
             width: '100vw',
             zIndex: 50,
             background: 'var(--gray-100)',
+            margin: 0,
+            padding: 0,
           }}
         >
           <img
             src={settings.header_banner_url}
             alt="Banner"
-            style={{ width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover' }}
+            style={{ width: '100%', minWidth: '100%', display: 'block', objectFit: 'cover', margin: 0, padding: 0 }}
           />
         </div>
       )}
 
-  <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky" style={{ top: 'var(--header-banner-height, 56px)', zIndex: 40 }}>
+  <header className="w-full bg-white shadow-sm px-4 py-4 pt-4 sticky" style={{ top: 'var(--header-banner-height, 56px)', zIndex: 40, margin: 0, padding: 0 }}>
     <div className="modern-container">
       <div className="flex flex-row items-center justify-between w-full" style={{minHeight: '56px', paddingTop: '8px', paddingBottom: '8px'}}>
         {/* Desktop layout: logo left, search center, cart right */}
