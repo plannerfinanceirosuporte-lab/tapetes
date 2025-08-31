@@ -39,6 +39,7 @@ const HamburgerMenu: React.FC = () => {
               left: 'auto',
               bottom: 'auto',
               background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
+              paddingTop: '16px', // padding top extra
             }}
           >
             <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
