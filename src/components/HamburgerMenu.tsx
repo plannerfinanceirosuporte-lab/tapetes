@@ -72,7 +72,8 @@ const HamburgerMenu: React.FC = () => {
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
               open ? 'translate-x-0' : 'translate-x-full',
-              'sm:w-[320px]'
+              'sm:w-[320px]',
+              'pt-[40px]'
             )}
             style={{ maxWidth: 320 }}
             tabIndex={-1}
