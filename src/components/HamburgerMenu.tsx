@@ -10,7 +10,6 @@ interface MenuLink {
 
 const menuLinks: MenuLink[] = [
   { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5" /> },
-  { label: 'Ofertas', to: '/ofertas', icon: <Percent className="h-5 w-5" /> },
   { label: 'Contato', to: '/contato', icon: <Mail className="h-5 w-5" /> },
   { label: 'Sobre Nós', to: '/sobre', icon: <Menu className="h-5 w-5" /> },
   { label: 'Política de Troca e Devolução', to: '/politicadevolucao', icon: <Percent className="h-5 w-5" /> },
