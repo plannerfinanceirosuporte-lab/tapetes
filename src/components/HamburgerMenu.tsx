@@ -32,7 +32,7 @@ const HamburgerMenu: React.FC = () => {
         aria-label="Abrir menu"
         onClick={() => setOpen(true)}
       >
-        <Menu className="h-6 w-6 text-blue-700" />
+  <Menu className="h-6 w-6" />
       </button>
       {open && (
         <>
