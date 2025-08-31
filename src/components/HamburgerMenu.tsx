@@ -28,31 +28,33 @@ const HamburgerMenu: React.FC = () => {
   return (
     <>
       <button
-        className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="ml-2 p-2 rounded-full bg-gradient-to-tr from-blue-100 to-blue-50 shadow hover:from-blue-200 hover:to-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         aria-label="Abrir menu"
         onClick={() => setOpen(true)}
       >
-        <Menu className="h-6 w-6" />
+        <Menu className="h-6 w-6 text-blue-700" />
       </button>
       {open && (
         <>
           {/* Sem overlay escuro ou desfoque */}
           <aside
-            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
+            className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l-2 border-blue-200 z-50"
             style={{
-              height: `${drawerHeight}px`,
+              height: `${drawerHeight + 40}px`,
               top: `${menuTop}px`,
               bottom: 'auto',
+              background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
             }}
           >
-            <div className="flex items-center justify-end px-6 py-3 border-b border-gray-100">
-              <button className="text-gray-400 hover:text-blue-600 text-2xl" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
+            <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
+              <span className="font-semibold text-blue-800 text-lg tracking-tight">Menu</span>
+              <button className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition" onClick={() => setOpen(false)} aria-label="Fechar menu">×</button>
             </div>
-            <nav className="flex flex-col gap-2 px-6 py-2">
+            <nav className="flex flex-col gap-2 px-4 py-4 flex-1">
               {menuLinks.map(link => (
                 <button
                   key={link.to}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-blue-700 font-medium text-base transition-colors w-full text-left"
+                  className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/80 hover:bg-blue-100 text-blue-800 font-medium text-base transition-all w-full text-left shadow-sm border border-transparent hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={() => { setOpen(false); navigate(link.to); }}
                 >
                   {link.label}
