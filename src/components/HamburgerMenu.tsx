@@ -17,8 +17,8 @@ const menuLinks: MenuLink[] = [
 
 const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
-  // Remove menuTop, menu sempre abre do topo
 
   // Fechar ao clicar fora
   useEffect(() => {
@@ -42,8 +42,15 @@ const HamburgerMenu: React.FC = () => {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  // Ao abrir, menu sempre do topo
+  // Ao abrir, detecta a altura do header fixo e posiciona o menu logo abaixo
   const handleOpen = () => {
+    const header = document.querySelector('header');
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      setMenuTop(rect.bottom + window.scrollY);
+    } else {
+      setMenuTop(0);
+    }
     setOpen(true);
   };
 
@@ -68,18 +75,17 @@ const HamburgerMenu: React.FC = () => {
           <div
             ref={menuRef}
             className={clsx(
-              'fixed top-0 right-0 h-full z-[9999] bg-white flex flex-col',
+              'fixed right-0 z-[99999] bg-white flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
-              'px-5 pb-8', // padding interno, sem padding-top
+              'px-5 pb-8', // padding interno
               'rounded-l-3xl', // borda arredondada à esquerda
               'shadow-xl', // sombra mais suave
               'border-l border-blue-100', // borda sutil à esquerda
               open ? 'translate-x-0' : 'translate-x-full',
-              'sm:w-[320px]',
-              'z-[99999]'
+              'sm:w-[320px]'
             )}
-            style={{ maxWidth: 320 }}
+            style={{ maxWidth: 320, top: menuTop, height: `calc(100vh - ${menuTop}px)` }}
             tabIndex={-1}
             role="dialog"
             aria-modal="true"
