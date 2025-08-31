@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
             <Store className="h-10 w-10 text-blue-400 mb-2" />
           )}
           <span className="text-2xl font-bold text-gray-100 mb-2">{settings?.store_name}</span>
-          <p className="text-gray-300 mb-2 leading-relaxed text-lg">{settings?.store_slogan || settings?.store_description}</p>
+          <p className="text-gray-300 mb-2 leading-relaxed text-lg">{settings?.store_description}</p>
         </div>
         <hr className="border-gray-700 mb-6" />
         <div className="mb-6">
