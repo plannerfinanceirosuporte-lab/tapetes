@@ -43,13 +43,14 @@ const HamburgerMenu: React.FC = () => {
             className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l-2 border-blue-200 z-50"
             style={{
               height: `${drawerHeight + 40}px`,
-              position: 'fixed',
-              top: `${menuTop}px`,
+              position: 'sticky',
+              top: 0, // gruda no topo igual ao header
               right: 0,
               left: 'auto',
               bottom: 'auto',
               background: 'linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%)',
               margin: 0,
+              zIndex: 50,
             }}
           >
             <div className="flex items-center justify-between px-6 py-3 border-b border-blue-100 bg-white/80 rounded-tl-2xl">
