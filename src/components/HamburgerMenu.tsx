@@ -13,16 +13,17 @@ const HamburgerMenu: React.FC = () => {
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
 
-  useEffect(() => {
-    // Try to find the header element and set menu top position
+  const handleOpenMenu = () => {
     const header = document.querySelector('header');
     if (header) {
       const rect = header.getBoundingClientRect();
-      setMenuTop(rect.bottom + 12 + window.scrollY); // 12px gap
+      // rect.bottom é relativo à viewport, então somamos o scrollY para obter a posição absoluta
+      setMenuTop(rect.bottom + 12 + window.scrollY);
     } else {
-      setMenuTop(68); // fallback
+      setMenuTop(68);
     }
-  }, [open]);
+    setOpen(true);
+  };
 
 
   return (
@@ -30,7 +31,7 @@ const HamburgerMenu: React.FC = () => {
       <button
         className="ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         aria-label="Abrir menu"
-        onClick={() => setOpen(true)}
+        onClick={handleOpenMenu}
       >
         <Menu className="h-6 w-6" />
       </button>
