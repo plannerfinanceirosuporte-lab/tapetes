@@ -68,10 +68,13 @@ const HamburgerMenu: React.FC = () => {
           <div
             ref={menuRef}
             className={clsx(
-              'fixed top-0 right-0 h-full z-50 bg-white shadow-2xl flex flex-col',
+              'fixed top-0 right-0 h-full z-50 bg-white flex flex-col',
               'transition-transform duration-300 ease-in-out',
               'w-4/5 max-w-xs',
-              'pt-6', // padding-top para afastar do banner
+              'pt-6 px-5 pb-8', // padding interno
+              'rounded-l-3xl', // borda arredondada à esquerda
+              'shadow-xl', // sombra mais suave
+              'border-l border-blue-100', // borda sutil à esquerda
               open ? 'translate-x-0' : 'translate-x-full',
               'sm:w-[320px]'
             )}
@@ -80,8 +83,8 @@ const HamburgerMenu: React.FC = () => {
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <span className="font-semibold text-blue-800 text-lg tracking-tight">Menu</span>
+            <div className="flex items-center justify-between mb-6 pb-2 border-b border-blue-100">
+              <span className="font-bold text-blue-900 text-xl tracking-tight font-serif">Menu</span>
               <button
                 className="text-blue-400 hover:text-blue-700 text-2xl font-bold transition focus:outline-none"
                 onClick={() => setOpen(false)}
@@ -90,12 +93,12 @@ const HamburgerMenu: React.FC = () => {
                 <X className="h-7 w-7" />
               </button>
             </div>
-            <nav className="flex flex-col gap-2 px-4 py-6 flex-1">
+            <nav className="flex flex-col gap-3 flex-1">
               {menuLinks.map(link => (
                 <a
                   key={link.to}
                   href={link.to}
-                  className="flex items-center gap-3 px-4 py-4 rounded-xl text-lg font-medium text-blue-900 hover:bg-blue-50 hover:text-blue-700 transition-colors w-full"
+                  className="flex items-center gap-4 px-4 py-4 rounded-2xl text-lg font-semibold text-blue-900 font-sans shadow-sm hover:bg-blue-100 hover:text-blue-800 transition-colors w-full border border-transparent hover:border-blue-200"
                   tabIndex={0}
                 >
                   <span className="text-blue-700">{link.icon}</span>
