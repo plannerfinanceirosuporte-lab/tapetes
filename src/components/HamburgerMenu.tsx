@@ -1,15 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu } from 'lucide-react';
 
 const HamburgerMenu: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState<number>(68); // fallback default
+  const headerRef = useRef<HTMLElement | null>(null);
   const menuLinks = [
     { label: 'Histórico de Compras', to: '/historico' },
     // Adicione mais links aqui se quiser
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
+
+  useEffect(() => {
+    // Try to find the header element and set menu top position
+    const header = document.querySelector('header');
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      setMenuTop(rect.bottom + 12 + window.scrollY); // 12px gap
+    } else {
+      setMenuTop(68); // fallback
+    }
+  }, [open]);
+
   return (
     <>
       <button
@@ -26,7 +40,7 @@ const HamburgerMenu: React.FC = () => {
             className="fixed right-0 w-72 max-w-full bg-white shadow-2xl flex flex-col animate-slideInRight rounded-l-2xl border-l border-blue-100 z-50"
             style={{
               height: `${drawerHeight}px`,
-              top: 'calc(56px + 12px)', // 56px header + 12px de espaço
+              top: `${menuTop}px`,
               bottom: 'auto',
             }}
           >
