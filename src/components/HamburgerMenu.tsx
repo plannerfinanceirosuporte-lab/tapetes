@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu } from 'lucide-react';
+import { ShoppingCart, Menu, History } from 'lucide-react';
 
 const HamburgerMenu: React.FC = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const HamburgerMenu: React.FC = () => {
   const [menuTop, setMenuTop] = useState<number>(68); // fallback default
   const headerRef = useRef<HTMLElement | null>(null);
   const menuLinks = [
-    { label: 'Histórico de Compras', to: '/historico' },
+    { label: 'Histórico de Compras', to: '/historico', icon: <History className="h-5 w-5 text-blue-400" /> },
     // Adicione mais links aqui se quiser
   ];
   const drawerHeight = 16 + menuLinks.length * 56 + 32;
@@ -57,7 +57,8 @@ const HamburgerMenu: React.FC = () => {
                   className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/80 hover:bg-blue-100 text-blue-800 font-medium text-base transition-all w-full text-left shadow-sm border border-transparent hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={() => { setOpen(false); navigate(link.to); }}
                 >
-                  {link.label}
+                  {link.icon && <span>{link.icon}</span>}
+                  <span>{link.label}</span>
                 </button>
               ))}
             </nav>
