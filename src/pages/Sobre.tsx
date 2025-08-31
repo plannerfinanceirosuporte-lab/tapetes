@@ -3,13 +3,10 @@ import React from 'react';
 import Footer from '../components/Footer';
 
 const Sobre: React.FC = () => {
-  const { settings } = useStore();
+  // Removido: useStore não é mais necessário
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <div className="max-w-3xl w-full mx-auto px-4 py-10 flex flex-col items-center">
-        {settings?.about_image_url && (
-          <img src={settings.about_image_url} alt="Sobre Tapetes & Co." className="mb-8 rounded-xl shadow-lg w-full max-w-md object-cover" />
-        )}
         <h1 className="text-4xl font-bold text-blue-900 mb-6 font-serif text-center">Sobre Nós</h1>
         <div className="text-lg text-blue-900 leading-relaxed font-sans bg-white rounded-xl shadow p-6">
           <p className="mb-4">A Tapetes & Co. é a materialização de um sonho que começou a ser tecido há mais de três décadas, com a paixão e o talento de nossa família, a família Silva. Tudo teve início na icônica Rua Augusta, em São Paulo, onde nosso avô, um artesão autodidata, abriu uma pequena oficina de restauração de tapetes. Foi ali, em meio a fibras de seda e lã, que ele não apenas consertava obras de arte, mas também absorvia a história e a alma de cada peça. Essa herança de respeito pelo ofício e pela qualidade inigualável é o DNA da nossa marca.</p>
