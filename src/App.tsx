@@ -17,6 +17,9 @@ import { PaymentCallback } from './pages/PaymentCallback';
 import { ThankYou } from './pages/ThankYou';
 import Historico from './pages/Historico';
 import Sobre from './pages/Sobre';
+import PoliticaDevolucao from './pages/PoliticaDevolucao';
+import PoliticaPrivacidade from './pages/PoliticaPrivacidade';
+import Faq from './pages/Faq';
 
 // Admin pages
 import { AdminLogin } from './pages/admin/Login';
@@ -47,6 +50,9 @@ function App() {
               <Route path="/thank-you" element={<><Header /><ThankYou /></>} />
               <Route path="/historico" element={<><Header /><Historico /></>} />
               <Route path="/sobre" element={<><Header /><Sobre /></>} />
+              <Route path="/politicadevolucao" element={<><Header /><PoliticaDevolucao /></>} />
+              <Route path="/politicaprivacidade" element={<><Header /><PoliticaPrivacidade /></>} />
+              <Route path="/faq" element={<><Header /><Faq /></>} />
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/*" element={
