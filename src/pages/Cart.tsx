@@ -1,4 +1,5 @@
 import React from 'react';
+import CartIllustration from '../components/CartIllustration';
 import { Link } from 'react-router-dom';
 import { Plus, Minus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
