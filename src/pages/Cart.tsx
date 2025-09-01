@@ -33,9 +33,12 @@ export const Cart: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="modern-container">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">🛒 Carrinho de Compras</h1>
-          <p className="text-gray-600">Revise seus itens antes de finalizar a compra</p>
+        <div className="mb-8 flex items-center gap-4">
+          <CartIllustration className="h-12 w-12" />
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Carrinho de Compras</h1>
+            <p className="text-gray-600">Revise seus itens antes de finalizar a compra</p>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
