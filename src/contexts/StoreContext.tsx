@@ -906,7 +906,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         subscription.unsubscribe();
       };
     }
-  }, [settings]);
+  }, []);
 
   const value = {
     settings,

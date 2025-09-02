@@ -43,7 +43,7 @@ export const ThankYou: React.FC = () => {
 
   const verifyPaymentAndOrder = async () => {
     try {
-  // console.log('🔄 Verificando pagamento e pedido...');
+      console.log('🔄 Verificando pagamento e pedido...');
       // Buscar dados do pedido
       if (isSupabaseConfigured() && supabase) {
         const { data: order, error } = await supabase
@@ -63,7 +63,7 @@ export const ThankYou: React.FC = () => {
         if (paymentId && order && order.payment_id) {
           try {
             const paymentStatus = await checkPaymentStatus(order.payment_id);
-            // console.log('💳 Status do pagamento:', paymentStatus);
+            console.log('💳 Status do pagamento:', paymentStatus);
             // Verificar se foi aprovado
             if (paymentStatus.status === 'approved' || paymentStatus.status === 'paid') {
               setPaymentVerified(true);
@@ -75,7 +75,7 @@ export const ThankYou: React.FC = () => {
                   payment_status: 'paid'
                 })
                 .eq('id', orderId);
-              // console.log('✅ Pagamento aprovado e pedido confirmado!');
+              console.log('✅ Pagamento aprovado e pedido confirmado!');
             }
           } catch (paymentError) {
             console.warn('⚠️ Erro ao verificar pagamento:', paymentError);
