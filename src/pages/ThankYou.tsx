@@ -24,21 +24,10 @@ export const ThankYou: React.FC = () => {
     }
 
     verifyPaymentAndOrder();
-    // Retry automático se não encontrar o pedido
-    // Tenta até 5 vezes com 1s de intervalo
-    let retryTimeout: NodeJS.Timeout;
-    if (!orderData && retryCount < 5 && !loading) {
-      retryTimeout = setTimeout(() => {
-        setRetryCount((c) => c + 1);
-        setLoading(true);
-        verifyPaymentAndOrder();
-      }, 1000);
-    }
     // Se o pedido já está pago, força paymentVerified para true
     if (orderData && (orderData.status === 'confirmed' || orderData.payment_status === 'paid')) {
       setPaymentVerified(true);
     }
-    return () => clearTimeout(retryTimeout);
   }, [orderId, paymentId, orderData]);
 
   const verifyPaymentAndOrder = async () => {
