@@ -142,7 +142,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
         <div className="product-actions mb-2 flex">
           <button
-            onClick={e => { e.stopPropagation(); handleAddToCart(e); }}
+            onClick={e => {
+              e.stopPropagation();
+              if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+                (window as any).gtag('event', 'conversion', {'send_to': 'AW-17476381584/cDpeCLyQ-pIbEJDXsY1B'});
+              }
+              handleAddToCart(e);
+            }}
             className="btn-primary flex-1"
           >
             <ShoppingCart className="h-4 w-4" />
