@@ -18,7 +18,7 @@ export const Home: React.FC = () => {
     fetchCategories();
     
     if (import.meta.env.DEV) {
-  // console.log('🔧 Supabase Status:', getSupabaseStatus());
+      console.log('🔧 Supabase Status:', getSupabaseStatus());
       if (!isSupabaseConfigured()) {
         console.warn('⚠️ Supabase não configurado. Usando dados de demonstração.');
         console.info('📖 Veja SUPABASE_INTEGRATION.md para instruções de configuração.');

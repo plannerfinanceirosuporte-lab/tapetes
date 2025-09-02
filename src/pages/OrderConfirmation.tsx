@@ -103,8 +103,15 @@ export const OrderConfirmation: React.FC = () => {
     fetchOrderItems();
   }, [orderId]);
 
-  // console.log('📄 Página de confirmação carregada');
-  // console.log('📊 Dados recebidos:', { orderId, pixCode, pixQrCode, billetUrl, paymentMethod, paymentId });
+  console.log('📄 Página de confirmação carregada');
+  console.log('📊 Dados recebidos:', { 
+    orderId, 
+    pixCode: !!pixCode, 
+    pixQrCode: !!pixQrCode, 
+    billetUrl: !!billetUrl,
+    paymentMethod,
+    paymentId 
+  });
 
   // Se não há dados de pagamento, mostra mensagem amigável
   if (!orderId || (!pixCode && !pixQrCode && !billetUrl && !paymentId)) {
