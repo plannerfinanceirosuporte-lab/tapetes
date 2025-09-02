@@ -103,8 +103,8 @@ export const OrderConfirmation: React.FC = () => {
     fetchOrderItems();
   }, [orderId]);
 
-  console.log('📄 Página de confirmação carregada');
-  console.log('📊 Dados recebidos:', { 
+  // console.log('📄 Página de confirmação carregada');
+  // console.log('📊 Dados recebidos:', { 
     orderId, 
     pixCode: !!pixCode, 
     pixQrCode: !!pixQrCode, 

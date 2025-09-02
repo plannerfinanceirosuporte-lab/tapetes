@@ -19,10 +19,10 @@ export const AdminLogin: React.FC = () => {
     setLoading(true);
     setError('');
 
-    console.log('🔄 Tentando fazer login com:', email);
+  // console.log('🔄 Tentando fazer login com:', email);
     try {
       await signIn(email, password);
-      console.log('✅ Login realizado com sucesso');
+  // console.log('✅ Login realizado com sucesso');
     } catch (error: any) {
       console.error('❌ Erro no login:', error);
       setError(error.message || 'Erro ao fazer login');

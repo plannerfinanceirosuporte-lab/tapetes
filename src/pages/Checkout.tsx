@@ -55,7 +55,7 @@ export const Checkout: React.FC = () => {
 
     e.preventDefault();
     setLoading(true);
-    console.log('🚀 Iniciando processo de checkout...');
+  // console.log('🚀 Iniciando processo de checkout...');
 
     // --- TOKEN LOGIC ---
     // Try to get the token from localStorage, or generate a new one if not present
@@ -84,15 +84,15 @@ export const Checkout: React.FC = () => {
         throw new Error('CPF inválido');
       }
       
-      console.log('📝 Dados do formulário:', formData);
-      console.log('🛒 Itens do carrinho:', items);
-      console.log('💰 Total:', total);
+  // console.log('📝 Dados do formulário:', formData);
+  // console.log('🛒 Itens do carrinho:', items);
+  // console.log('💰 Total:', total);
       
       if (!supabase) {
         throw new Error('Supabase não está configurado');
       }
 
-      console.log('📦 Criando pedido no Supabase...');
+  // console.log('📦 Criando pedido no Supabase...');
       
       const fullAddress = `${formData.street}, ${formData.number}${formData.complement ? ', ' + formData.complement : ''}, ${formData.neighborhood}, ${formData.city} - ${formData.state}, CEP: ${formData.zipCode}`;
       
@@ -118,7 +118,7 @@ export const Checkout: React.FC = () => {
         throw new Error(`Erro ao criar pedido: ${orderError.message}`);
       }
 
-      console.log('✅ Pedido criado com ID:', orderData.id);
+  // console.log('✅ Pedido criado com ID:', orderData.id);
 
       const orderItemsData = items.map(item => ({
         order_id: orderData.id,
@@ -130,7 +130,7 @@ export const Checkout: React.FC = () => {
         image_url: item.image_url || '',
       }));
 
-      console.log('📦 Criando itens do pedido:', orderItemsData);
+  // console.log('📦 Criando itens do pedido:', orderItemsData);
 
       const { error: itemsError } = await supabase
         .from('order_items')
@@ -142,9 +142,9 @@ export const Checkout: React.FC = () => {
         throw new Error(`Erro ao criar itens do pedido: ${itemsError.message}`);
       }
 
-      console.log('✅ Itens do pedido criados com sucesso');
+  // console.log('✅ Itens do pedido criados com sucesso');
 
-      console.log('💳 Processando pagamento com Nivus Pay...');
+  // console.log('💳 Processando pagamento com Nivus Pay...');
       
       const paymentData = {
         amount: total,
@@ -158,10 +158,10 @@ export const Checkout: React.FC = () => {
       };
 
       const paymentResult = await createPayment(paymentData);
-      console.log('Resultado do pagamento:', paymentResult);
+  // console.log('Resultado do pagamento:', paymentResult);
 
       if (paymentResult.success) {
-        console.log('✅ Pagamento criado com sucesso!');
+  // console.log('✅ Pagamento criado com sucesso!');
         
         clearCart();
         
@@ -175,7 +175,7 @@ export const Checkout: React.FC = () => {
             .eq('id', orderData.id);
         }
         
-        console.log('🔄 Redirecionando para confirmação com pedido:', orderData.id);
+  // console.log('🔄 Redirecionando para confirmação com pedido:', orderData.id);
         
         navigate('/order-confirmation', { 
           state: { 
