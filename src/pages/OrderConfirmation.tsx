@@ -186,7 +186,7 @@ export const OrderConfirmation: React.FC = () => {
         {orderId && (
           <div className="bg-gray-100 rounded-lg p-4 mb-6">
             <p className="text-sm text-gray-600">Número do Pedido:</p>
-            <p className="text-lg font-bold text-gray-900">#{orderId.slice(-8)}</p>
+            <p className="text-lg font-bold text-gray-900" id="order-number">#{orderId.slice(-8)}</p>
           </div>
         )}
         {/* Mostrar dados do PIX se disponível */}
@@ -258,6 +258,11 @@ export const OrderConfirmation: React.FC = () => {
           </div>
         )}
         <div className="space-y-3">
+          <div className="mb-4">
+            <span className="text-lg font-bold text-gray-900" id="order-total">
+              R$ {orderTotal.toFixed(2).replace('.', ',')}
+            </span>
+          </div>
           <Link
             to="/"
             className="w-full bg-gray-200 text-gray-900 py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2"
