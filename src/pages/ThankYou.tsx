@@ -119,6 +119,18 @@ export const ThankYou: React.FC = () => {
     );
   }
 
+  useEffect(() => {
+    if (paymentVerified && orderData) {
+      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        (window as any).gtag('event', 'conversion', {
+          'send_to': 'AW-17476381584/V4jaCKDrkJMbEJDXsY1B',
+          'value': 1.0,
+          'currency': 'BRL',
+          'transaction_id': orderData.id || ''
+        });
+      }
+    }
+  }, [paymentVerified, orderData]);
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
