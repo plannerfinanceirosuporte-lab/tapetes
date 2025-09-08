@@ -4,6 +4,7 @@ import { CreditCard, MapPin, User, Lock, Shield, Zap } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { createPayment, validateCPF, formatCPF, formatPhone } from '../lib/nivusPay';
+import { fbPixelEvent } from '../lib/fbPixel';
 
 export const Checkout: React.FC = () => {
   const { items, total, clearCart } = useCart();
@@ -52,9 +53,16 @@ export const Checkout: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-
     e.preventDefault();
     setLoading(true);
+    // Meta Pixel: Início do checkout
+    fbPixelEvent('InitiateCheckout', {
+      value: total,
+      currency: 'BRL',
+      num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+      contents: items.map(item => ({ id: item.id, quantity: item.quantity, item_price: item.price })),
+      content_ids: items.map(item => item.id),
+    });
     console.log('🚀 Iniciando processo de checkout...');
 
     // --- TOKEN LOGIC ---
@@ -83,6 +91,14 @@ export const Checkout: React.FC = () => {
       if (!validateCPF(formData.customerCpf)) {
         throw new Error('CPF inválido');
       }
+      // Meta Pixel: Adição de info de pagamento
+      fbPixelEvent('AddPaymentInfo', {
+        value: total,
+        currency: 'BRL',
+        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+        contents: items.map(item => ({ id: item.id, quantity: item.quantity, item_price: item.price })),
+        content_ids: items.map(item => item.id),
+      });
       
       console.log('📝 Dados do formulário:', formData);
       console.log('🛒 Itens do carrinho:', items);
