@@ -1,4 +1,3 @@
-import { fbPixelEvent } from '../lib/fbPixel';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Plus, Minus, Heart, Share2, Truck, Shield, RotateCcw, Zap } from 'lucide-react';
@@ -120,15 +119,6 @@ export const ProductPage: React.FC = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
-      console.log('🛒 Chamando AddToCart'); // ADICIONE ESTA LINHA
-      fbPixelEvent('AddToCart', {
-        content_ids: [product.id],
-        content_name: product.name,
-        value: product.price * quantity,
-        currency: 'BRL',
-        contents: [{ id: product.id, quantity, item_price: product.price }],
-        num_items: quantity,
-      });
       setQuantity(1);
     }
   };

@@ -13,7 +13,6 @@ interface ProductCardProps {
 }
 
 import { useNavigate } from 'react-router-dom';
-import { fbPixelEvent } from '../lib/fbPixel';
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
@@ -72,14 +71,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     addToCart(product);
-    fbPixelEvent('AddToCart', {
-      content_ids: [product.id],
-      content_name: product.name,
-      value: product.price,
-      currency: 'BRL',
-      contents: [{ id: product.id, quantity: 1, item_price: product.price }],
-      num_items: 1,
-    });
   };
 
   return (
@@ -153,6 +144,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <button
             onClick={e => {
               e.stopPropagation();
+              if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+                (window as any).gtag('event', 'conversion', {'send_to': 'AW-17476381584/cDpeCLyQ-pIbEJDXsY1B'});
+              }
               handleAddToCart(e);
             }}
             className="btn-primary flex-1"

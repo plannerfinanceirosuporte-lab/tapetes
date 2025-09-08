@@ -1,4 +1,3 @@
-import { fbPixelEvent } from '../lib/fbPixel';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -99,14 +98,6 @@ export const OrderConfirmation: React.FC = () => {
         setOrderItems(data);
         const total = data.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
         setOrderTotal(total);
-        // Meta Pixel: Evento de compra
-        fbPixelEvent('Purchase', {
-          value: total,
-          currency: 'BRL',
-          num_items: data.reduce((sum: number, item: any) => sum + item.quantity, 0),
-          contents: data.map((item: any) => ({ id: item.product_id, quantity: item.quantity, item_price: item.price })),
-          content_ids: data.map((item: any) => item.product_id),
-        });
       }
     };
     fetchOrderItems();
