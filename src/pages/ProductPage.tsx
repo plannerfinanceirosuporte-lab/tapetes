@@ -120,6 +120,7 @@ export const ProductPage: React.FC = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
+      console.log('🛒 Chamando AddToCart'); // ADICIONE ESTA LINHA
       fbPixelEvent('AddToCart', {
         content_ids: [product.id],
         content_name: product.name,
