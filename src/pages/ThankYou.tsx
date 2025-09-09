@@ -13,6 +13,7 @@ export const ThankYou: React.FC = () => {
   const [orderData, setOrderData] = useState<any>(null);
   const [paymentVerified, setPaymentVerified] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [eventTriggered, setEventTriggered] = useState(false);
 
   const orderId = searchParams.get('orderId');
   const paymentId = searchParams.get('paymentId');
@@ -37,17 +38,18 @@ export const ThankYou: React.FC = () => {
     // Se o pedido já está pago, força paymentVerified para true
     if (orderData && (orderData.status === 'confirmed' || orderData.payment_status === 'paid')) {
       setPaymentVerified(true);
-      // Evento Facebook Pixel Purchase
-      if (window.fbq) {
+      // Evento Facebook Pixel Purchase (dispara apenas uma vez)
+      if (window.fbq && !eventTriggered) {
         window.fbq('track', 'Purchase', {
-          value: orderData.total_amount,
-          currency: 'BRL'
+          value: orderData.total_amount, // Valor total da compra
+          currency: 'BRL' // Moeda brasileira
         });
+        setEventTriggered(true); // Marca que o evento foi disparado
       }
     }
 
     return () => clearTimeout(retryTimeout);
-  }, [orderId, paymentId, orderData]);
+  }, [orderId, paymentId, orderData, eventTriggered]);
 
   const verifyPaymentAndOrder = async () => {
     try {
