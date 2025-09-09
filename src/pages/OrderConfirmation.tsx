@@ -103,15 +103,7 @@ export const OrderConfirmation: React.FC = () => {
     fetchOrderItems();
   }, [orderId]);
 
-  console.log('📄 Página de confirmação carregada');
-  console.log('📊 Dados recebidos:', { 
-    orderId, 
-    pixCode: !!pixCode, 
-    pixQrCode: !!pixQrCode, 
-    billetUrl: !!billetUrl,
-    paymentMethod,
-    paymentId 
-  });
+
 
   // Se não há dados de pagamento, mostra mensagem amigável
   if (!orderId || (!pixCode && !pixQrCode && !billetUrl && !paymentId)) {
@@ -136,52 +128,18 @@ export const OrderConfirmation: React.FC = () => {
     );
   }
 
-  const getPaymentMethodInfo = () => {
-    switch (paymentMethod) {
-      case 'PIX':
-        return {
-          title: 'Pagamento via PIX',
-          description: 'Complete o pagamento via PIX para confirmar seu pedido.',
-          icon: QrCode,
-          color: 'text-blue-600'
-        };
-      case 'CREDIT_CARD':
-        return {
-          title: 'Pagamento com Cartão',
-          description: 'Seu pagamento está sendo processado.',
-          icon: CheckCircle,
-          color: 'text-green-600'
-        };
-      case 'BILLET':
-        return {
-          title: 'Boleto Bancário',
-          description: 'Pague o boleto até o vencimento para confirmar seu pedido.',
-          icon: FileText,
-          color: 'text-orange-600'
-        };
-      default:
-        return {
-          title: 'Pedido Confirmado',
-          description: 'Você receberá um email de confirmação em breve.',
-          icon: CheckCircle,
-          color: 'text-green-600'
-        };
-    }
-  };
-
-  const paymentInfo = getPaymentMethodInfo();
-  const PaymentIcon = paymentInfo.icon;
+  // ...existing code...
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
   {/* Próximos Passos removido */}
   {/* Itens do Pedido removido */}
-        <PaymentIcon className={`h-16 w-16 ${paymentInfo.color} mx-auto mb-4`} />
+        <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          {paymentInfo.title}
+          Pedido Confirmado
         </h1>
         <p className="text-gray-600 mb-6">
-          {paymentInfo.description}
+          Você receberá um email de confirmação em breve.
         </p>
         {orderId && (
           <div className="bg-gray-100 rounded-lg p-4 mb-6">
